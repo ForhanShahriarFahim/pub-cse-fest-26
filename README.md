@@ -9,17 +9,18 @@ Languages: C, C++, Java, Python.
 | # | Tier | Topic | Type | Status |
 |---|------|-------|------|--------|
 | 01 | Giveaway | Arithmetic, ceiling division, `long long` | Custom | Approved ([Fest T-Shirts](problems/01-fest-tshirts)) |
-| 02 | Giveaway | Basic strings and conditionals | Custom | Drafted ([Fest ID Checker](problems/02-fest-id-checker)) |
-| 03 | Easy | Basic implementation and simulation | Custom | — |
-| 04 | Easy | Sorting + greedy | Classic | — |
-| 05 | Easy–Medium | Prefix sums or frequency counting | Custom | — |
-| 06 | Medium | Number theory (GCD or sieve) | Classic | — |
-| 07 | Medium | Grid BFS on a PUB campus map | Custom | — |
-| 08 | Medium | Binary search on the answer | Classic | — |
-| 09 | Medium–Hard | DP with a twist | Classic | — |
-| 10 | Hard | Dijkstra with extra state, or DSU | Custom | — |
+| 02 | Giveaway | Basic strings and conditionals | Custom | Approved ([Fest ID Checker](problems/02-fest-id-checker)) |
+| 03 | Easy | Implementation: grid simulation | Custom | Drafted ([Lab Robot](problems/03-lab-robot)) |
+| 04 | Easy | Implementation: ICPC scoreboard | Custom | — |
+| 05 | Easy | Sorting + greedy | Classic | — |
+| 06 | Easy–Medium | Prefix sums or frequency counting | Custom | — |
+| 07 | Medium | Number theory (GCD or sieve) | Classic | — |
+| 08 | Medium | Grid BFS on a PUB campus map | Custom | — |
+| 09 | Medium | Binary search on the answer | Classic | — |
+| 10 | Medium–Hard | DP with a twist | Classic | — |
+| 11 | Hard | Dijkstra with extra state, or DSU | Custom | — |
 
-Contest order: the two giveaways first, then the rest shuffled.
+11 problems in total; we may drop one later. Contest order: the two giveaways first, then the rest shuffled.
 
 ## Checking a problem
 

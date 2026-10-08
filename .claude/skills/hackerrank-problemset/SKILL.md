@@ -30,7 +30,12 @@ problems/NN-slug/
   tests/input/inputNN.txt, tests/output/outputNN.txt
   tests.zip           # what gets uploaded to HackerRank (built by tools/check.py)
   editorial.md        # short solution idea + complexity
+  draw_*.py, *.png    # optional illustration (Pillow), drawn FROM sample.txt so it can't drift
 ```
+
+Images: draw them with a script that reads the sample, so the picture always matches the
+data. Look at the PNG before shipping. On HackerRank, upload the PNG in the statement
+editor where `![...](file.png)` appears.
 
 ## Statement format (HackerRank sections)
 

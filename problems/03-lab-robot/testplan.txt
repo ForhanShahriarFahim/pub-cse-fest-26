@@ -1,0 +1,13 @@
+file sample.txt
+gen one 1 50
+gen line 2 1 100 1000
+gen line 3 100 1 1000
+gen boxed 4 10 10 500
+gen random 5 8 8 60 20
+gen random 6 30 40 2000 25
+gen random 7 100 100 100000 0
+gen random 8 100 100 100000 20
+gen random 9 100 100 100000 45
+gen random 10 100 100 100000 70
+gen snake 11 100 100 100000
+gen snake 12 37 53 100000
