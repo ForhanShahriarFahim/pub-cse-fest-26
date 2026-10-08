@@ -8,6 +8,7 @@ order in which it was first reached. Right: the same walk as a step table with a
 running count of different cells. Everything is computed from sample.txt.
 """
 import os
+import shutil
 import subprocess
 from html import escape
 
@@ -212,15 +213,93 @@ def draw(grid, moves):
             f'<rect width="100%" height="100%" fill="#ffffff"/>' + "".join(out) + "</svg>")
 
 
+def draw_simple(grid, moves):
+    """Grid only: visited cells shaded, one arrow per move, a cross per ignored command."""
+    n, m = len(grid), len(grid[0])
+    order, _, arrows, bumps, end = simulate(grid, moves)
+    start = next(iter(order))
+    gw, gh = m * CELL, n * CELL
+    out = []
+    for j in range(m):
+        out.append(text(GX + j * CELL + CELL / 2, GY - 22, str(j + 1), 13, MUTED, 500, "middle"))
+    for i in range(n):
+        out.append(text(GX - 18, GY + i * CELL + CELL / 2, str(i + 1), 13, MUTED, 500, "middle"))
+    for i in range(n):
+        for j in range(m):
+            x, y = GX + j * CELL, GY + i * CELL
+            if grid[i][j] == "#":
+                out.append(f'<rect x="{x}" y="{y}" width="{CELL}" height="{CELL}" fill="{DESK}" stroke="#ffffff" stroke-width="1.5"/>')
+                out.append(text(x + CELL / 2, y + CELL / 2 + 1, "#", 18, DESK_INK, 700, "middle", MONO))
+            else:
+                fill = VISITED if (i, j) in order else FREE
+                out.append(f'<rect x="{x}" y="{y}" width="{CELL}" height="{CELL}" fill="{fill}" stroke="{LINE}" stroke-width="1"/>')
+    out.append(f'<rect x="{GX}" y="{GY}" width="{gw}" height="{gh}" fill="none" stroke="{INK}" stroke-width="2"/>')
+
+    undirected = {}
+    for a, b in arrows:
+        undirected[frozenset((a, b))] = undirected.get(frozenset((a, b)), 0) + 1
+    for a, b in arrows:
+        (x1, y1), (x2, y2) = center(a), center(b)
+        dx, dy = (x2 - x1) / CELL, (y2 - y1) / CELL
+        off = 6 if undirected[frozenset((a, b))] > 1 else 0
+        ox, oy = -dy * off, dx * off
+        trim_a = 17 if a in (start, end) else 3
+        trim_b = 18 if b in (start, end) else 5
+        out.append(arrow(x1 + dx * trim_a + ox, y1 + dy * trim_a + oy,
+                         x2 - dx * trim_b + ox, y2 - dy * trim_b + oy, MOVE))
+    for cell, ch in bumps:
+        cx, cy = center(cell)
+        di, dj = STEP[ch]
+        out.append(cross(cx + dj * CELL / 2, cy + di * CELL / 2, BAD, 7))
+
+    sx, sy = center(start)
+    out.append(f'<circle cx="{sx}" cy="{sy}" r="14" fill="{START}"/>')
+    out.append(text(sx, sy + 0.5, "S", 14, "#ffffff", 700, "middle"))
+    ex, ey = center(end)
+    out.append(f'<circle cx="{ex}" cy="{ey}" r="14" fill="{MOVE}"/>')
+    out.append(text(ex, ey + 0.5, "E", 14, "#ffffff", 700, "middle"))
+
+    ly = GY + gh + 30
+    lx = GX
+
+    def item(mark, mark_w, label):
+        nonlocal lx
+        out.append(mark(lx))
+        out.append(text(lx + mark_w + 7, ly, label, 13, INK))
+        lx += mark_w + 7 + len(label) * 6.3 + 22
+
+    item(lambda x: f'<circle cx="{x + 9}" cy="{ly}" r="9" fill="{START}"/>' + text(x + 9, ly + 0.5, "S", 10, "#ffffff", 700, "middle"), 18, "start")
+    item(lambda x: f'<circle cx="{x + 9}" cy="{ly}" r="9" fill="{MOVE}"/>' + text(x + 9, ly + 0.5, "E", 10, "#ffffff", 700, "middle"), 18, "end")
+    item(lambda x: arrow(x, ly, x + 26, ly, MOVE, 2.8), 26, "move")
+    item(lambda x: cross(x + 7, ly, BAD, 6), 14, "ignored")
+    item(lambda x: f'<rect x="{x}" y="{ly - 8}" width="16" height="16" fill="{VISITED}" stroke="{LINE}"/>', 16, "visited")
+    ry = ly + 28
+    out.append(text(GX, ry, f"Ends at row {end[0] + 1}, column {end[1] + 1} · {len(order)} different cells", 14, INK, 600))
+
+    width = max(GX + gw, lx) + 16
+    height = ry + 20
+    label = (f"Robu's walk for the sample: it ends at row {end[0] + 1}, column {end[1] + 1}, "
+             f"after standing on {len(order)} different cells; three commands are ignored.")
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
+            f'width="{width:.0f}" height="{height:.0f}" role="img" aria-label="{escape(label)}">'
+            f'<rect width="100%" height="100%" fill="#ffffff"/>' + "".join(out) + "</svg>")
+
+
+# Which style becomes sample.png (the file the statement uses).
+STATEMENT_STYLE = "detailed"
+
+
 def main():
     lines = open(os.path.join(HERE, "sample.txt")).read().split("\n")
     n, _ = map(int, lines[0].split())
     grid, moves = lines[1:1 + n], lines[2 + n].strip()
-    svg = draw(grid, moves)
-    svg_path = os.path.join(HERE, "sample.svg")
-    open(svg_path, "w").write(svg)
     tool = os.path.join(HERE, "..", "..", "tools", "svg2png.js")
-    subprocess.run(["node", tool, svg_path, os.path.join(HERE, "sample.png"), "2"], check=True)
+    for style, fn in (("detailed", draw), ("simple", draw_simple)):
+        svg_path = os.path.join(HERE, f"sample_{style}.svg")
+        open(svg_path, "w").write(fn(grid, moves))
+        subprocess.run(["node", tool, svg_path, os.path.join(HERE, f"sample_{style}.png"), "2"], check=True)
+    shutil.copy(os.path.join(HERE, f"sample_{STATEMENT_STYLE}.png"), os.path.join(HERE, "sample.png"))
+    print(f"sample.png = {STATEMENT_STYLE} style")
 
 
 if __name__ == "__main__":
