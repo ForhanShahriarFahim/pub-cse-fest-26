@@ -6,8 +6,8 @@ Languages: C, C++, Java, Python.
 
 ## Problem index
 
-**Fastest way to set up HackerRank:** open `setter-desk.html` (published as a private
-claude.ai page). It has a Copy button for every form field of every problem, the
+**Fastest way to set up HackerRank:** open the [Setter Desk](https://claude.ai/artifact/JZv37yopiRX5wVkJzKDxRo)
+(`setter-desk.html`, a private claude.ai page). It has a Copy button for every form field of every problem, the
 sample preview, the test list, the pictures and the editorials. Rebuild it with
 `python3 tools/build_desk.py` after `tools/check.py` passes.
 

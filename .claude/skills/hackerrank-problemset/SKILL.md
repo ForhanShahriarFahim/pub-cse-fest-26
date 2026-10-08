@@ -58,7 +58,8 @@ Rules: no floating-point output unless a custom checker is set up; exactly one c
 output per input (otherwise a custom checker is required); give a modulus when answers
 are huge. Update the problem index table in README.md whenever a problem is added,
 renumbered or approved, then run `python3 tools/build_desk.py` and republish
-`setter-desk.html` (the copy-paste page the user works from) to the same artifact URL.
+`setter-desk.html` (the copy-paste page the user works from) to the same artifact URL:
+https://claude.ai/artifact/JZv37yopiRX5wVkJzKDxRo
 
 ## Testing checklist
 
