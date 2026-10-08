@@ -50,9 +50,10 @@ def problem(pdir, status, branch):
     sample_in = open(os.path.join(pdir, "tests", "input", "input00.txt")).read()
     sample_out = open(os.path.join(pdir, "tests", "output", "output00.txt")).read()
     images = []
-    for png in sorted(glob.glob(os.path.join(pdir, "*.png"))):
-        data = base64.b64encode(open(png, "rb").read()).decode()
-        images.append({"name": os.path.basename(png), "data": f"data:image/png;base64,{data}"})
+    # Only the pictures the statement asks to upload (other PNGs are drafts/alternatives).
+    for name in re.findall(r"UPLOAD (\S+) HERE", s["Problem Statement"]["blocks"][0]):
+        data = base64.b64encode(open(os.path.join(pdir, name), "rb").read()).decode()
+        images.append({"name": name, "data": f"data:image/png;base64,{data}"})
     raw = f"{REPO}/raw/{branch}/problems/{slug}"
     return {
         "num": num,
