@@ -40,7 +40,7 @@ After all commands are done, report:
 1. Robu's final position (row and column), and
 2. how many **different** cells Robu has stood on, **including the starting cell**.
 
-The picture below shows Robu's walk for Sample Input 0, command by command.
+The picture below shows Robu's walk for Sample Input 0.
 
 ![Robu's walk in Sample Input 0](UPLOAD sample.png HERE)
 ~~~

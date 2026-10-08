@@ -214,9 +214,9 @@ def draw(grid, moves):
 
 
 def draw_simple(grid, moves):
-    """Grid only: visited cells shaded, one arrow per move, a cross per ignored command."""
+    """Grid only: visited cells shaded and one arrow per move (ignored commands are not drawn)."""
     n, m = len(grid), len(grid[0])
-    order, _, arrows, bumps, end = simulate(grid, moves)
+    order, _, arrows, _, end = simulate(grid, moves)
     start = next(iter(order))
     gw, gh = m * CELL, n * CELL
     out = []
@@ -247,11 +247,6 @@ def draw_simple(grid, moves):
         trim_b = 18 if b in (start, end) else 5
         out.append(arrow(x1 + dx * trim_a + ox, y1 + dy * trim_a + oy,
                          x2 - dx * trim_b + ox, y2 - dy * trim_b + oy, MOVE))
-    for cell, ch in bumps:
-        cx, cy = center(cell)
-        di, dj = STEP[ch]
-        out.append(cross(cx + dj * CELL / 2, cy + di * CELL / 2, BAD, 7))
-
     sx, sy = center(start)
     out.append(f'<circle cx="{sx}" cy="{sy}" r="14" fill="{START}"/>')
     out.append(text(sx, sy + 0.5, "S", 14, "#ffffff", 700, "middle"))
@@ -271,7 +266,6 @@ def draw_simple(grid, moves):
     item(lambda x: f'<circle cx="{x + 9}" cy="{ly}" r="9" fill="{START}"/>' + text(x + 9, ly + 0.5, "S", 10, "#ffffff", 700, "middle"), 18, "start")
     item(lambda x: f'<circle cx="{x + 9}" cy="{ly}" r="9" fill="{MOVE}"/>' + text(x + 9, ly + 0.5, "E", 10, "#ffffff", 700, "middle"), 18, "end")
     item(lambda x: arrow(x, ly, x + 26, ly, MOVE, 2.8), 26, "move")
-    item(lambda x: cross(x + 7, ly, BAD, 6), 14, "ignored")
     item(lambda x: f'<rect x="{x}" y="{ly - 8}" width="16" height="16" fill="{VISITED}" stroke="{LINE}"/>', 16, "visited")
     ry = ly + 28
     out.append(text(GX, ry, f"Ends at row {end[0] + 1}, column {end[1] + 1} · {len(order)} different cells", 14, INK, 600))
@@ -279,7 +273,7 @@ def draw_simple(grid, moves):
     width = max(GX + gw, lx) + 16
     height = ry + 20
     label = (f"Robu's walk for the sample: it ends at row {end[0] + 1}, column {end[1] + 1}, "
-             f"after standing on {len(order)} different cells; three commands are ignored.")
+             f"after standing on {len(order)} different cells.")
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
             f'width="{width:.0f}" height="{height:.0f}" role="img" aria-label="{escape(label)}">'
             f'<rect width="100%" height="100%" fill="#ffffff"/>' + "".join(out) + "</svg>")
