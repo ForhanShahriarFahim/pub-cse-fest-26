@@ -5,8 +5,8 @@
 ## Problem Statement
 
 PUB CSE Fest-26 is just around the corner! The organizing committee of
-Pundra University of Science & Technology has promised that **everyone** involved
-in the programming contest will get one fest T-shirt.
+PUB CSE has promised that **everyone** involved in the programming contest
+will get one fest T-shirt.
 
 This year there are **N** teams, and every team has exactly **3** members.
 There are also **V** volunteers and **J** judges. Each contestant, volunteer and
