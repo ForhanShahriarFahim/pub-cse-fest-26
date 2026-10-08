@@ -286,7 +286,7 @@ def draw_simple(grid, moves):
 
 
 # Which style becomes sample.png (the file the statement uses).
-STATEMENT_STYLE = "detailed"
+STATEMENT_STYLE = "simple"
 
 
 def main():
