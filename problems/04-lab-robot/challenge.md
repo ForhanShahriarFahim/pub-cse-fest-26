@@ -40,9 +40,7 @@ After all commands are done, report:
 1. Robu's final position (row and column), and
 2. how many **different** cells Robu has stood on, **including the starting cell**.
 
-The picture below shows Robu's walk for Sample Input 0. **S** is the start and
-**E** is where Robu ends. The orange line is the path, the shaded cells are the
-visited cells, and a red ✕ marks an ignored command.
+The picture below shows Robu's walk for Sample Input 0, command by command.
 
 ![Robu's walk in Sample Input 0](UPLOAD sample.png HERE)
 ~~~
