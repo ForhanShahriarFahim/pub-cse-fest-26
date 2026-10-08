@@ -57,7 +57,8 @@ to paste (use ```` ```markdown ```` inside rich fields, `~~~` outside):
 Rules: no floating-point output unless a custom checker is set up; exactly one correct
 output per input (otherwise a custom checker is required); give a modulus when answers
 are huge. Update the problem index table in README.md whenever a problem is added,
-renumbered or approved.
+renumbered or approved, then run `python3 tools/build_desk.py` and republish
+`setter-desk.html` (the copy-paste page the user works from) to the same artifact URL.
 
 ## Testing checklist
 

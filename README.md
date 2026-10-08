@@ -6,6 +6,11 @@ Languages: C, C++, Java, Python.
 
 ## Problem index
 
+**Fastest way to set up HackerRank:** open `setter-desk.html` (published as a private
+claude.ai page). It has a Copy button for every form field of every problem, the
+sample preview, the test list, the pictures and the editorials. Rebuild it with
+`python3 tools/build_desk.py` after `tools/check.py` passes.
+
 Each problem folder has:
 - **HackerRank form** (`challenge.md`): copy-paste blocks in the same order as *Manage Challenges → Create Challenge*.
 - **Editorial** (`editorial.md`).
@@ -13,7 +18,7 @@ Each problem folder has:
 
 | # | Problem | Tier · Topic | HackerRank form | Editorial | Test cases | Status |
 |---|---------|--------------|-----------------|-----------|------------|--------|
-| 01 | Welcome to Fest-26 | Giveaway · printing | [challenge](problems/01-welcome/challenge.md) | [editorial](problems/01-welcome/editorial.md) | [tests.zip](problems/01-welcome/tests.zip) (2) | Drafted |
+| 01 | Welcome to CSE Fest-26 | Giveaway · printing | [challenge](problems/01-welcome/challenge.md) | [editorial](problems/01-welcome/editorial.md) | [tests.zip](problems/01-welcome/tests.zip) (2) | Drafted |
 | 02 | Fest T-Shirts | Giveaway · arithmetic, `long long` | [challenge](problems/02-fest-tshirts/challenge.md) | [editorial](problems/02-fest-tshirts/editorial.md) | [tests.zip](problems/02-fest-tshirts/tests.zip) (8) | Approved |
 | 03 | Fest ID Checker | Giveaway · strings, conditionals | [challenge](problems/03-fest-id-checker/challenge.md) | [editorial](problems/03-fest-id-checker/editorial.md) | [tests.zip](problems/03-fest-id-checker/tests.zip) (6) | Approved |
 | 04 | Lab Robot | Easy · implementation, grid simulation | [challenge](problems/04-lab-robot/challenge.md) | [editorial](problems/04-lab-robot/editorial.md) | [tests.zip](problems/04-lab-robot/tests.zip) (13) + [image](problems/04-lab-robot/sample.png) | Drafted |

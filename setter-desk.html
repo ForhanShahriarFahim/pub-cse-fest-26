@@ -1,0 +1,268 @@
+<title>CSE Fest-26 Setter Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: problem index rail on the left; on the right the HackerRank form itself (label column + field column), so each row maps to one box on the HackerRank page. Stacks on phones. */
+:root {
+  --bg: #f4f5f9;
+  --surface: #ffffff;
+  --ink: #1a1f31;
+  --muted: #5b6277;
+  --line: #dde1eb;
+  --accent: #2747c9;
+  --accent-ink: #ffffff;
+  --code-bg: #f1f3f9;
+  --ok: #17794b;
+  --ok-bg: #e2f3e9;
+  --wait: #8a5a00;
+  --wait-bg: #fbf0d9;
+  --font-display: "Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10131d; --surface: #181c29; --ink: #e6e8f1; --muted: #9ba2b9; --line: #2a3044;
+    --accent: #8aa2ff; --accent-ink: #0c0f1c; --code-bg: #131725; --ok: #63d39d; --ok-bg: #14301f;
+    --wait: #f0b85c; --wait-bg: #33270f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10131d; --surface: #181c29; --ink: #e6e8f1; --muted: #9ba2b9; --line: #2a3044;
+  --accent: #8aa2ff; --accent-ink: #0c0f1c; --code-bg: #131725; --ok: #63d39d; --ok-bg: #14301f;
+  --wait: #f0b85c; --wait-bg: #33270f; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--font-body); }
+a { color: var(--accent); }
+button, .btn { font: 500 13px/1 var(--font-body); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 24px 48px; }
+.top { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between; margin-bottom: 20px; }
+.top h1 { font: 700 26px/1.15 var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+.top p { margin: 0; color: var(--muted); font-size: 13px; }
+.top code { font-family: var(--font-mono); font-size: 12px; }
+
+.shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 24px; align-items: start; }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); display: flex; flex-direction: column; gap: 4px; }
+.rail .cap { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px 10px; }
+.pick { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: center; text-align: left; width: 100%;
+  background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 9px 10px; color: var(--ink); cursor: pointer; }
+.pick:hover { background: var(--surface); border-color: var(--line); }
+.pick[aria-current="true"] { background: var(--surface); border-color: var(--accent); }
+.pick .num { font: 500 13px/1 var(--font-mono); display: flex; align-items: center; gap: 6px; grid-row: span 2; }
+.pick .nm { font-weight: 600; font-size: 14px; line-height: 1.25; overflow-wrap: anywhere; }
+.pick .sub { font-size: 12px; color: var(--muted); line-height: 1.3; }
+.balloon { width: 11px; height: 14px; border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%; border: 1px solid rgba(0,0,0,.25); flex: none; }
+
+.pill { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; }
+.pill.ok { color: var(--ok); background: var(--ok-bg); }
+.pill.wait { color: var(--wait); background: var(--wait-bg); }
+
+main { min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+.phead { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.phead h2 { margin: 0; font: 700 24px/1.2 var(--font-display); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; text-wrap: balance; }
+.phead h2 .no { font: 500 15px/1 var(--font-mono); color: var(--muted); }
+.phead .tier { color: var(--muted); font-size: 14px; margin-top: 4px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 8px; text-decoration: none; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+.sect h3 { font: 600 13px/1 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.form { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.row { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 8px 20px; padding: 16px 20px; border-top: 1px solid var(--line); }
+.row:first-child { border-top: 0; }
+.label { font-weight: 600; padding-top: 6px; }
+.label small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.label small.over { color: #c2261b; font-weight: 600; }
+.field { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.note { font-size: 13px; color: var(--ink); background: var(--wait-bg); border-radius: 8px; padding: 9px 12px; }
+.note p { margin: 0; }
+.box { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--code-bg); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 6px 6px 12px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.bar .kind { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+.copy { border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 6px; padding: 7px 14px; cursor: pointer; min-width: 78px; }
+.copy.done { background: var(--ok); border-color: var(--ok); color: var(--surface); }
+pre { margin: 0; padding: 12px; font: 13px/1.55 var(--font-mono); white-space: pre-wrap; overflow-wrap: anywhere; max-height: 420px; overflow: auto; }
+
+.prose { font-size: 14px; }
+.prose p { margin: 0 0 8px; }
+.prose ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.prose code, .note code { font-family: var(--font-mono); font-size: 12.5px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; }
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-weight: 600; color: var(--muted); font-size: 12px; }
+td.src { font-family: var(--font-mono); font-size: 12px; white-space: normal; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+figure img { border: 1px solid var(--line); border-radius: 8px; background: #fff; max-width: 100%; height: auto; align-self: flex-start; }
+figcaption { font-size: 13px; color: var(--muted); }
+details summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; }
+.links a { font-family: var(--font-mono); font-size: 13px; }
+
+@media (max-width: 860px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .rail .cap { grid-column: 1 / -1; }
+  .row { grid-template-columns: minmax(0, 1fr); }
+  .label { padding-top: 0; }
+  .split { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>CSE Fest-26 Setter Desk</h1>
+    <p id="build"></p>
+  </header>
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Problems"><p class="cap">Problems</p></nav>
+    <main id="main"></main>
+  </div>
+</div>
+
+<script>
+const DATA = {"problems": [{"num": "01", "slug": "01-welcome", "name": "Welcome to CSE Fest-26", "tier": "Giveaway: printing", "status": "Drafted", "fields": [{"name": "Challenge Name", "note": "", "text": "Welcome to CSE Fest-26"}, {"name": "Description", "note": "", "text": "Print the two-line welcome message of PUB CSE Fest-26."}, {"name": "Problem Statement", "note": "", "text": "The opening ceremony of **PUB CSE Fest-26** starts in a few minutes, and the\nbig screen in the contest hall needs a welcome message.\n\nWrite a program that prints the following **two lines** exactly as shown:\n\n```\nWelcome to PUB CSE Fest-26!\nCode. Compete. Celebrate.\n```\n\nUppercase and lowercase letters, spaces, the hyphen `-`, the exclamation mark\n`!` and the full stops `.` must all match exactly. Do not print anything else."}, {"name": "Input Format", "note": "", "text": "There is no input for this problem."}, {"name": "Constraints", "note": "", "text": "There are no constraints, because the program reads no input."}, {"name": "Output Format", "note": "", "text": "Print exactly two lines:\n\n- Line 1: `Welcome to PUB CSE Fest-26!`\n- Line 2: `Code. Compete. Celebrate.`"}, {"name": "Tags", "note": "", "text": "Basic Programming, Printing, Giveaway"}], "testsNote": "- Upload `tests.zip` (2 test cases; both have empty input).\n- Mark **test case 0** as **Sample**.\n- Explanation for test case 0:", "explanation": "The program reads nothing and prints the two lines of the welcome message.", "settings": "- Languages: C, C++, Java, Python 3\n- Time and memory limit: keep HackerRank's defaults (C/C++ 2 s, Java 8 4 s, Python 3 longer).\n  The reference solutions in every language finish each test in under 0.3 s.\n- Scoring: binary (all or nothing)", "tests": [{"id": "00", "source": "file sample.txt", "bytes": 0}, {"id": "01", "source": "file sample.txt", "bytes": 0}], "sampleIn": "", "sampleOut": "Welcome to PUB CSE Fest-26!\nCode. Compete. Celebrate.\n", "images": [], "editorial": "# Editorial: Welcome to CSE Fest-26 (Giveaway)\n\n**Idea.** Print the two lines. No input needs to be read.\n\n```c\nprintf(\"Welcome to PUB CSE Fest-26!\\n\");\nprintf(\"Code. Compete. Celebrate.\\n\");\n```\n\nThe same program in each language is in `sol.c`, `sol.cpp`, `Solution.java` and `sol.py`.\n\n**Traps (each one is caught by the official tests):**\n\n| Mistake | Wrong output |\n|---|---|\n| Both sentences on one line | `Welcome to PUB CSE Fest-26! Code. Compete. Celebrate.` |\n| Missing `!` | `Welcome to PUB CSE Fest-26` |\n| Wrong capitalisation | `welcome to pub cse fest-26!` |\n| `2026` instead of `26` | `Welcome to PUB CSE Fest-2026!` |\n| Submitting the template's `Hello, World!` | `Hello, World!` |\n| Only the first line | (second line missing) |\n| Dropping the full stops | `Code Compete Celebrate` |\n\n**Complexity:** O(1).\n", "zipUrl": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/raw/claude/wizardly-planck-f21sjz/problems/01-welcome/tests.zip", "folderUrl": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/tree/claude/wizardly-planck-f21sjz/problems/01-welcome", "solutions": {"sol.c": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/01-welcome/sol.c", "sol.cpp": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/01-welcome/sol.cpp", "Solution.java": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/01-welcome/Solution.java", "sol.py": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/01-welcome/sol.py"}}, {"num": "02", "slug": "02-fest-tshirts", "name": "Fest T-Shirts", "tier": "Giveaway: arithmetic", "status": "Approved", "fields": [{"name": "Challenge Name", "note": "", "text": "Fest T-Shirts"}, {"name": "Description", "note": "", "text": "Find how many packs of T-shirts the PUB CSE Fest committee must buy, and the total cost."}, {"name": "Problem Statement", "note": "", "text": "PUB CSE Fest-26 is just around the corner! The organizing committee of\nPUB CSE has promised that **everyone** involved in the programming contest\nwill get one fest T-shirt.\n\nThis year there are **N** teams, and every team has exactly **3** members.\nThere are also **V** volunteers and **J** judges. Each contestant, volunteer and\njudge gets exactly one T-shirt.\n\nThe supplier does not sell single T-shirts. T-shirts come only in packs of\n**K**, and each pack costs **C** taka. The committee wants to buy the **minimum\nnumber of packs** so that there is at least one T-shirt for every person\n(leftover T-shirts are fine).\n\nFor each scenario, find the number of packs the committee must buy and the\ntotal cost in taka."}, {"name": "Input Format", "note": "", "text": "The first line contains an integer **T**, the number of scenarios.\n\nEach of the next **T** lines contains five space-separated integers **N V J K C**."}, {"name": "Constraints", "note": "", "text": "- 1 ≤ T ≤ 10⁴\n- 1 ≤ N ≤ 10⁹\n- 0 ≤ V, J ≤ 10⁹\n- 1 ≤ K ≤ 10⁹\n- 1 ≤ C ≤ 10⁹"}, {"name": "Output Format", "note": "", "text": "For each scenario, print one line with two space-separated integers: the minimum\nnumber of packs and the total cost in taka."}, {"name": "Tags", "note": "", "text": "Math, Implementation, Giveaway"}], "testsNote": "- Upload `tests.zip` (8 test cases).\n- Mark **test case 0** as **Sample**.\n- Explanation for test case 0:", "explanation": "- **Scenario 1:** 2 teams have 6 contestants. With 3 volunteers and 2 judges,\n  11 people need T-shirts. Two packs of 5 give only 10 T-shirts, so 3 packs are\n  needed, costing 3 × 120 = 360 taka.\n- **Scenario 2:** 10 teams have 30 contestants, and there are no volunteers or\n  judges. Four packs of 7 give only 28 T-shirts, so 5 packs are needed, costing\n  5 × 450 = 2250 taka.\n- **Scenario 3:** 3 + 1 + 1 = 5 people, and one pack of 5 is exactly enough.", "settings": "- Languages: C, C++, Java, Python 3\n- Time and memory limit: keep HackerRank's defaults (C/C++ 2 s, Java 8 4 s, Python 3 longer).\n  The reference solutions in every language finish each test in under 0.3 s.\n- Scoring: binary (all or nothing)", "tests": [{"id": "00", "source": "file sample.txt", "bytes": 40}, {"id": "01", "source": "gen edge 1", "bytes": 396}, {"id": "02", "source": "gen random 2 10", "bytes": 353}, {"id": "03", "source": "gen random 3 10000", "bytes": 295658}, {"id": "04", "source": "gen divisible 4 10000", "bytes": 332227}, {"id": "05", "source": "gen big 5 10000", "bytes": 438950}, {"id": "06", "source": "gen floatkill 6 10000", "bytes": 424963}, {"id": "07", "source": "gen max 7 10000", "bytes": 460006}], "sampleIn": "3\n2 3 2 5 120\n10 0 0 7 450\n1 1 1 5 1000\n", "sampleOut": "3 360\n5 2250\n1 1000\n", "images": [], "editorial": "# Editorial: Fest T-Shirts (Giveaway)\n\n**Idea.** The number of people is P = 3N + V + J. We need the smallest number of\npacks `x` with `x * K >= P`, which is the ceiling of P / K. The answer is\n`x` and `x * C`.\n\n**Integer ceiling without floating point:** `x = (P + K - 1) / K`.\n\n**Traps (each one is caught by the official tests):**\n\n| Mistake | Why it fails |\n|---|---|\n| Using `int` | P can be up to 5·10⁹, and the cost up to 5·10¹⁸. Use `long long` (C/C++) or `long` (Java). It still fits, since 5·10¹⁸ < 9.22·10¹⁸. |\n| Computing `packs * C` in `int` | Even 3 packs × 10⁹ taka overflows 32-bit. |\n| `P / K` (floor) | It buys too few packs when K does not divide P. |\n| `P / K + 1` | It buys one pack too many when K divides P (Sample 3). |\n| `ceil((float)P / K)` | `float` has only 24 bits of precision. `double` happens to be exact here, but integer arithmetic is the safe habit. |\n| Forgetting that a team has 3 members | Sample 1 already catches this. |\n\n**Complexity:** O(1) per scenario, O(T) overall.\n", "zipUrl": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/raw/claude/wizardly-planck-f21sjz/problems/02-fest-tshirts/tests.zip", "folderUrl": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/tree/claude/wizardly-planck-f21sjz/problems/02-fest-tshirts", "solutions": {"sol.c": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/02-fest-tshirts/sol.c", "sol.cpp": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/02-fest-tshirts/sol.cpp", "Solution.java": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/02-fest-tshirts/Solution.java", "sol.py": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/02-fest-tshirts/sol.py"}}, {"num": "03", "slug": "03-fest-id-checker", "name": "Fest ID Checker", "tier": "Giveaway: strings and conditionals", "status": "Approved", "fields": [{"name": "Challenge Name", "note": "", "text": "Fest ID Checker"}, {"name": "Description", "note": "", "text": "Check whether each contestant ID follows the PUB CSE Fest-26 format CSE-YY-NNNN."}, {"name": "Problem Statement", "note": "", "text": "Every contestant at PUB CSE Fest-26 wears an ID card. Some students typed\ntheir IDs carelessly in the registration form, so the volunteers at the entry\ndesk need a program to check them.\n\nA **valid** ID has the form `CSE-YY-NNNN` and follows **all** of these rules:\n\n1. It is exactly **11** characters long.\n2. The first three characters are `CSE`, in **uppercase**.\n3. The 4th and the 7th characters are both a hyphen `-`.\n4. `YY` (the 5th and 6th characters) are two digits, and together they form the\n   batch year, which must be between **20** and **26** (inclusive).\n5. `NNNN` (the 8th to 11th characters) are four digits, and they are **not** `0000`.\n\nAny ID that breaks at least one rule is **invalid**."}, {"name": "Input Format", "note": "", "text": "The first line contains an integer **T**, the number of IDs.\n\nEach of the next **T** lines contains one ID string **S**."}, {"name": "Constraints", "note": "", "text": "- 1 ≤ T ≤ 1000\n- 1 ≤ length of S ≤ 20\n- S consists of printable ASCII characters and contains **no spaces**."}, {"name": "Output Format", "note": "", "text": "For each ID, print `VALID` if it follows all the rules, otherwise print `INVALID`\n(in uppercase, exactly as shown). Print each answer on its own line."}, {"name": "Tags", "note": "", "text": "Strings, Implementation, Giveaway"}], "testsNote": "- Upload `tests.zip` (6 test cases).\n- Mark **test case 0** as **Sample**.\n- Explanation for test case 0:", "explanation": "- `CSE-26-1042` follows all five rules.\n- `cse-26-1042` is invalid because `CSE` must be uppercase (rule 2).\n- `CSE-19-0420` is invalid because batch 19 is outside 20 to 26 (rule 4).\n- `CSE-24-0000` is invalid because the last four digits are `0000` (rule 5).\n- `CSE-22-12345` has 12 characters (rule 1).\n- `CSE-20-0001` is valid: batch 20 is allowed, and `0001` is not `0000`.", "settings": "- Languages: C, C++, Java, Python 3\n- Time and memory limit: keep HackerRank's defaults (C/C++ 2 s, Java 8 4 s, Python 3 longer).\n  The reference solutions in every language finish each test in under 0.3 s.\n- Scoring: binary (all or nothing)", "tests": [{"id": "00", "source": "file sample.txt", "bytes": 75}, {"id": "01", "source": "gen edge 1", "bytes": 671}, {"id": "02", "source": "gen random 2 20", "bytes": 231}, {"id": "03", "source": "gen random 3 1000", "bytes": 11966}, {"id": "04", "source": "gen random 4 1000", "bytes": 12014}, {"id": "05", "source": "gen valid 5 1000", "bytes": 12005}], "sampleIn": "6\nCSE-26-1042\ncse-26-1042\nCSE-19-0420\nCSE-24-0000\nCSE-22-12345\nCSE-20-0001\n", "sampleOut": "VALID\nINVALID\nINVALID\nINVALID\nINVALID\nVALID\n", "images": [], "editorial": "# Editorial: Fest ID Checker (Giveaway)\n\n**Idea.** Read each ID as a string and check the five rules one by one, in the\norder they are written. Check the **length first**, because every other rule\nuses fixed positions (indices 0 to 10 in 0-based indexing).\n\n```\nlength == 11\ns[0..2] == \"CSE\"\ns[3] == '-' and s[6] == '-'\ns[4], s[5], s[7], s[8], s[9], s[10] are all digits\n20 <= (s[4]-'0')*10 + (s[5]-'0') <= 26\ns[7..10] != \"0000\"\n```\n\n**Traps (each one is caught by the official tests):**\n\n| Mistake | Example that catches it |\n|---|---|\n| Not checking that the length is exactly 11 | `CSE-22-12345` (sample) |\n| Comparing `CSE` case-insensitively | `cse-26-1042` (sample) |\n| Off-by-one on the year range (`<` vs `<=`) | `CSE-19-...`, `CSE-26-...` |\n| Forgetting the `0000` rule | `CSE-24-0000` (sample) |\n| Not checking the hyphens | `CSE_23_1234` |\n| Checking digits only in the serial, not in the year | `CSE-1:-1234`: `':' - '0'` is 10, so the \"year\" becomes 20 and passes the range check |\n| Reading characters past the end of a short string | `C`, `CSE-` (in C/C++ this is undefined behaviour; check the length first) |\n\n**Complexity:** O(|S|) per ID.\n", "zipUrl": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/raw/claude/wizardly-planck-f21sjz/problems/03-fest-id-checker/tests.zip", "folderUrl": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/tree/claude/wizardly-planck-f21sjz/problems/03-fest-id-checker", "solutions": {"sol.c": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/03-fest-id-checker/sol.c", "sol.cpp": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/03-fest-id-checker/sol.cpp", "Solution.java": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/03-fest-id-checker/Solution.java", "sol.py": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/03-fest-id-checker/sol.py"}}, {"num": "04", "slug": "04-lab-robot", "name": "Lab Robot", "tier": "Easy: implementation", "status": "Drafted", "fields": [{"name": "Challenge Name", "note": "", "text": "Lab Robot"}, {"name": "Description", "note": "", "text": "Simulate a robot walking through the contest lab and count the cells it visits."}, {"name": "Problem Statement", "note": "Before you paste: put the cursor on the `![...]` line, click the **image** button\nin the editor toolbar, and upload `sample.png` from this folder. Then delete the\nplaceholder line.", "text": "During PUB CSE Fest-26, the robotics club lends the contest hall a small robot\nnamed **Robu**, which carries water bottles to the teams.\n\nThe contest lab is a grid of **N** rows and **M** columns. Rows are numbered\n1 to N from **top** to **bottom**, and columns 1 to M from **left** to\n**right**. Each cell is one of:\n\n- `.`: free floor\n- `#`: a computer desk, which Robu cannot enter\n- `S`: free floor where Robu starts (there is exactly one `S`)\n\nRobu receives a string of **K** commands, one character each:\n`U` (up one row), `D` (down one row), `L` (left one column), `R` (right one column).\n\nRobu executes the commands **in order**. If a command would move it **outside the\nlab** or **into a desk**, Robu ignores that command and stays where it is, then\ncontinues with the next command.\n\nAfter all commands are done, report:\n\n1. Robu's final position (row and column), and\n2. how many **different** cells Robu has stood on, **including the starting cell**.\n\nThe picture below shows Robu's walk for Sample Input 0. **S** is the start and\n**E** is where Robu ends. The orange line is the path, the shaded cells are the\nvisited cells, and a red ✕ marks an ignored command.\n\n![Robu's walk in Sample Input 0](UPLOAD sample.png HERE)"}, {"name": "Input Format", "note": "", "text": "- The first line contains two integers **N** and **M**.\n- Each of the next **N** lines contains a string of **M** characters describing\n  one row of the lab, from row 1 to row N.\n- The next line contains an integer **K**.\n- The last line contains a string of **K** characters, the commands."}, {"name": "Constraints", "note": "", "text": "- 1 ≤ N, M ≤ 100\n- Each grid character is `.`, `#` or `S`, and there is exactly one `S`.\n- 1 ≤ K ≤ 10⁵\n- Each command is `U`, `D`, `L` or `R`."}, {"name": "Output Format", "note": "", "text": "Print two lines:\n\n- The first line contains two integers: Robu's final row and column.\n- The second line contains one integer: the number of different cells Robu has stood on."}, {"name": "Tags", "note": "", "text": "Implementation, Simulation, Grid"}], "testsNote": "- Upload `tests.zip` (13 test cases).\n- Mark **test case 0** as **Sample**.\n- Explanation for test case 0:", "explanation": "Robu starts at (1, 1).\n\n- `U` is ignored, because it would leave the lab.\n- `R R` moves it to (1, 3). The next `R` is ignored, because (1, 4) is a desk.\n- `D D` moves it to (3, 3), and `R R` to (3, 5).\n- `U` moves it to (2, 5), and `D D` moves it back through (3, 5) to (4, 5).\n- The final `L` is ignored, because (4, 4) is a desk.\n\nRobu ends at row 4, column 5. The cells it stood on are (1,1), (1,2), (1,3),\n(2,3), (3,3), (3,4), (3,5), (2,5) and (4,5). That is **9** different cells;\n(3, 5) was visited twice but is counted once.", "settings": "- Languages: C, C++, Java, Python 3\n- Time and memory limit: keep HackerRank's defaults (C/C++ 2 s, Java 8 4 s, Python 3 longer).\n  The reference solutions in every language finish each test in under 0.3 s.\n- Scoring: binary (all or nothing)", "tests": [{"id": "00", "source": "file sample.txt", "bytes": 60}, {"id": "01", "source": "gen one 1 50", "bytes": 60}, {"id": "02", "source": "gen line 2 1 100 1000", "bytes": 1113}, {"id": "03", "source": "gen line 3 100 1 1000", "bytes": 1212}, {"id": "04", "source": "gen boxed 4 10 10 500", "bytes": 621}, {"id": "05", "source": "gen random 5 8 8 60 20", "bytes": 140}, {"id": "06", "source": "gen random 6 30 40 2000 25", "bytes": 3242}, {"id": "07", "source": "gen random 7 100 100 100000 0", "bytes": 110116}, {"id": "08", "source": "gen random 8 100 100 100000 20", "bytes": 110116}, {"id": "09", "source": "gen random 9 100 100 100000 45", "bytes": 110116}, {"id": "10", "source": "gen random 10 100 100 100000 70", "bytes": 110116}, {"id": "11", "source": "gen snake 11 100 100 100000", "bytes": 110116}, {"id": "12", "source": "gen snake 12 37 53 100000", "bytes": 102012}], "sampleIn": "5 7\nS..#...\n.#.#.#.\n.#.....\n...#.#.\n##.....\n12\nURRRDDRRUDDL\n", "sampleOut": "4 5\n9\n", "images": [{"name": "sample.png", "data": "data:image/png;base64,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"}], "editorial": "# Editorial: Lab Robot (Easy, implementation)\n\n**Idea.** Simulate the commands exactly as written.\n\n1. Find the `S` cell; that is the current position `(x, y)` (0-based in code).\n2. Keep a boolean array `seen[N][M]`. Mark the start as seen and set `count = 1`.\n3. For each command, compute the target cell `(nx, ny)`.\n   - If it is outside the grid or a `#`, skip the command (`continue`, **not** `break`).\n   - Otherwise move there. If the cell was not seen before, mark it and increase `count`.\n4. Print `x+1 y+1` and `count`.\n\n**Traps (each one is caught by the official tests):**\n\n| Mistake | Effect |\n|---|---|\n| Counting every move instead of distinct cells | Revisited cells are counted twice. |\n| Not counting the starting cell | The answer is too small by 1. |\n| Letting Robu walk through desks | The path changes. |\n| `break` on the first blocked command | Later commands are lost. |\n| Printing 0-based coordinates | The position is off by one. |\n| Swapping `U` and `D` | Row 1 is the **top** row, so `U` decreases the row number. |\n| Printing column before row | The output order is wrong. |\n| Indexing `grid[nx][ny]` before the bounds check | A crash, or garbage, at the border. |\n\n**Complexity:** O(N·M + K) time and O(N·M) memory.\n", "zipUrl": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/raw/claude/wizardly-planck-f21sjz/problems/04-lab-robot/tests.zip", "folderUrl": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/tree/claude/wizardly-planck-f21sjz/problems/04-lab-robot", "solutions": {"sol.c": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/04-lab-robot/sol.c", "sol.cpp": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/04-lab-robot/sol.cpp", "Solution.java": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/04-lab-robot/Solution.java", "sol.py": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26/blob/claude/wizardly-planck-f21sjz/problems/04-lab-robot/sol.py"}}], "commit": "88e1945", "branch": "claude/wizardly-planck-f21sjz", "repo": "https://github.com/ForhanShahriarFahim/pub-cse-fest-26"};
+const BALLOONS = ["#e53935", "#fb8c00", "#fdd835", "#43a047", "#1e88e5", "#8e24aa",
+                  "#ec407a", "#00897b", "#6d4c41", "#546e7a", "#f5f5f5", "#c0a000"];
+const KIND = { "Challenge Name": "Plain text", "Description": "Plain text", "Tags": "Plain text" };
+
+const esc = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function inline(s) {
+  return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+}
+// Small renderer for the notes in challenge.md: paragraphs and "- " lists with indented continuations.
+function prose(md) {
+  const out = []; let list = null, para = [];
+  const flushPara = () => { if (para.length) { out.push("<p>" + inline(para.join(" ")) + "</p>"); para = []; } };
+  const flushList = () => { if (list) { out.push("<ul>" + list.map(li => "<li>" + inline(li) + "</li>").join("") + "</ul>"); list = null; } };
+  for (const line of md.split("\n")) {
+    if (/^- /.test(line)) { flushPara(); (list = list || []).push(line.slice(2)); }
+    else if (/^\s+\S/.test(line) && list) { list[list.length - 1] += " " + line.trim(); }
+    else if (!line.trim()) { flushPara(); flushList(); }
+    else { flushList(); para.push(line.trim()); }
+  }
+  flushPara(); flushList();
+  return out.join("");
+}
+
+const copyTexts = [];
+function copyBox(text, kind) {
+  const id = copyTexts.push(text) - 1;
+  return `<div class="box"><div class="bar"><span class="kind">${esc(kind)}</span>` +
+    `<button class="copy" type="button" data-copy="${id}">Copy</button></div><pre>${esc(text) || "&nbsp;"}</pre></div>`;
+}
+
+document.addEventListener("click", async e => {
+  const btn = e.target.closest("button.copy");
+  if (!btn) return;
+  const text = copyTexts[+btn.dataset.copy];
+  const done = msg => { btn.textContent = msg; btn.classList.add("done");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("done"); }, 1600); };
+  try {
+    await navigator.clipboard.writeText(text);
+    done("Copied");
+  } catch (err) {
+    const pre = btn.closest(".box").querySelector("pre");
+    const range = document.createRange(); range.selectNodeContents(pre);
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(range);
+    let ok = false; try { ok = document.execCommand("copy"); } catch (_) {}
+    done(ok ? "Copied" : "Press Ctrl+C");
+  }
+});
+
+function statusPill(s) { return `<span class="pill ${s === "Approved" ? "ok" : "wait"}">${esc(s)}</span>`; }
+function balloon(i) { return `<span class="balloon" style="background:${BALLOONS[i % BALLOONS.length]}" aria-hidden="true"></span>`; }
+function kb(n) { return n < 1024 ? `${n} B` : `${(n / 1024).toFixed(1)} KB`; }
+
+function render(idx) {
+  copyTexts.length = 0;
+  const p = DATA.problems[idx];
+  document.querySelectorAll(".pick").forEach((b, i) => b.setAttribute("aria-current", i === idx ? "true" : "false"));
+
+  const rows = p.fields.map(f => {
+    let hint = "";
+    if (f.name === "Description") {
+      const n = [...f.text].length;
+      hint = `<small class="${n > 140 ? "over" : ""}">${n} / 140 characters</small>`;
+    }
+    const note = f.note ? `<div class="note">${prose(f.note)}</div>` : "";
+    return `<div class="row"><div class="label">${esc(f.name)}${hint}</div>` +
+      `<div class="field">${note}${copyBox(f.text, KIND[f.name] || "Markdown")}</div></div>`;
+  }).join("");
+
+  const testRows = p.tests.map(t => `<tr><td>${t.id}</td><td>${t.id === "00" ? statusPill("Sample") : "Hidden"}</td>` +
+    `<td>${kb(t.bytes)}</td><td class="src">${esc(t.source)}</td></tr>`).join("");
+
+  const pics = p.images.length ? `<section class="sect"><h3>Pictures</h3><div class="card">` +
+    p.images.map(im => `<figure><img src="${im.data}" alt="${esc(im.name)}"><figcaption><code>${esc(im.name)}</code>: upload it with the editor's image button where the Problem Statement says <code>UPLOAD ${esc(im.name)} HERE</code>. Right-click the picture and choose "Save image as", or get it from the <a href="${p.folderUrl}" target="_blank" rel="noopener">problem folder</a>.</figcaption></figure>`).join("") +
+    `</div></section>` : "";
+
+  const sols = Object.entries(p.solutions).map(([f, u]) => `<a href="${u}" target="_blank" rel="noopener">${esc(f)}</a>`).join("");
+
+  document.getElementById("main").innerHTML = `
+    <section class="phead">
+      <div>
+        <h2>${balloon(idx)}<span class="no">${p.num}</span> ${esc(p.name)} ${statusPill(p.status)}</h2>
+        <div class="tier">${esc(p.tier)}</div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="${p.zipUrl}" target="_blank" rel="noopener">Download tests.zip</a>
+        <a class="btn" href="${p.folderUrl}" target="_blank" rel="noopener">Problem folder</a>
+      </div>
+    </section>
+
+    <section class="sect"><h3>Create Challenge form</h3><div class="form">${rows}</div></section>
+
+    <section class="sect"><h3>Test Cases tab</h3>
+      <div class="form">
+        <div class="row"><div class="label">Steps</div><div class="field prose">${prose(p.testsNote)}</div></div>
+        <div class="row"><div class="label">Test cases<small>${p.tests.length} in tests.zip</small></div>
+          <div class="field tablewrap"><table><thead><tr><th>#</th><th>Type</th><th>Input size</th><th>How it was made</th></tr></thead><tbody>${testRows}</tbody></table></div></div>
+        <div class="row"><div class="label">Sample preview<small>HackerRank should show exactly this</small></div>
+          <div class="field split">
+            <div class="box"><div class="bar"><span class="kind">Sample Input 0</span></div><pre>${p.sampleIn ? esc(p.sampleIn) : "(empty: this problem has no input)"}</pre></div>
+            <div class="box"><div class="bar"><span class="kind">Sample Output 0</span></div><pre>${esc(p.sampleOut)}</pre></div>
+          </div></div>
+        <div class="row"><div class="label">Explanation<small>for test case 0</small></div><div class="field">${copyBox(p.explanation, "Markdown")}</div></div>
+      </div>
+    </section>
+
+    <section class="sect"><h3>Settings</h3><div class="card prose">${prose(p.settings)}</div></section>
+    ${pics}
+    <section class="sect"><h3>For judges</h3><div class="card">
+      <p class="prose" style="margin:0 0 10px">Reference solutions (submit one on HackerRank to confirm the setup): </p>
+      <div class="links">${sols}</div>
+      <details style="margin-top:14px"><summary>Editorial</summary>${copyBox(p.editorial, "Markdown")}</details>
+    </div></section>`;
+  try { localStorage.setItem("desk-problem", p.num); } catch (_) {}
+  if (location.hash !== "#p" + p.num) history.replaceState(null, "", "#p" + p.num);
+}
+
+function start() {
+  const rail = document.getElementById("rail");
+  DATA.problems.forEach((p, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "pick";
+    b.innerHTML = `<span class="num">${balloon(i)}${p.num}</span><span class="nm">${esc(p.name)}</span>` +
+      `<span class="sub">${esc(p.tier)} · ${esc(p.status)}</span>`;
+    b.addEventListener("click", () => { render(i); window.scrollTo({ top: 0 }); });
+    rail.appendChild(b);
+  });
+  document.getElementById("build").innerHTML =
+    `${DATA.problems.length} problems · branch <code>${esc(DATA.branch)}</code> · commit <code>${esc(DATA.commit)}</code>`;
+  let want = (location.hash.match(/^#p(\d\d)$/) || [])[1];
+  if (!want) { try { want = localStorage.getItem("desk-problem"); } catch (_) {} }
+  const idx = Math.max(0, DATA.problems.findIndex(p => p.num === want));
+  render(idx);
+}
+start();
+</script>
