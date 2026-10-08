@@ -8,8 +8,8 @@ Languages: C, C++, Java, Python.
 
 | # | Tier | Topic | Type | Status |
 |---|------|-------|------|--------|
-| 01 | Giveaway | Arithmetic, ceiling division, `long long` | Custom | Drafted ([Fest T-Shirts](problems/01-fest-tshirts)) |
-| 02 | Giveaway | Basic strings and conditionals | Custom | — |
+| 01 | Giveaway | Arithmetic, ceiling division, `long long` | Custom | Approved ([Fest T-Shirts](problems/01-fest-tshirts)) |
+| 02 | Giveaway | Basic strings and conditionals | Custom | Drafted ([Fest ID Checker](problems/02-fest-id-checker)) |
 | 03 | Easy | Basic implementation and simulation | Custom | — |
 | 04 | Easy | Sorting + greedy | Classic | — |
 | 05 | Easy–Medium | Prefix sums or frequency counting | Custom | — |
