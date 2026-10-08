@@ -46,8 +46,8 @@ Each of the next **T** lines contains one ID string **S**.
 
 ## Output Format
 ~~~markdown
-For each ID, print `VALID` if it follows all the rules, otherwise print `INVALID`.
-Print each answer on its own line.
+For each ID, print `VALID` if it follows all the rules, otherwise print `INVALID`
+(in uppercase, exactly as shown). Print each answer on its own line.
 ~~~
 
 ## Tags
@@ -70,5 +70,6 @@ Strings, Implementation, Giveaway
 
 ## Settings
 - Languages: C, C++, Java, Python 3
-- Time and memory limit: HackerRank default
+- Time and memory limit: keep HackerRank's defaults (C/C++ 2 s, Java 8 4 s, Python 3 longer).
+  The reference solutions in every language finish each test in under 0.3 s.
 - Scoring: binary (all or nothing)

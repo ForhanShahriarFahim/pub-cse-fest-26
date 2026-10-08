@@ -1,10 +1,10 @@
-# 01 · Welcome to Fest-26 (Giveaway: printing)
+# 01 · Welcome to CSE Fest-26 (Giveaway: printing)
 
 Copy each block into the matching field of **HackerRank → Manage Challenges → Create Challenge**.
 
 ## Challenge Name
 ~~~
-Welcome to Fest-26
+Welcome to CSE Fest-26
 ~~~
 
 ## Description
@@ -25,7 +25,7 @@ Code. Compete. Celebrate.
 ```
 
 Uppercase and lowercase letters, spaces, the hyphen `-`, the exclamation mark
-`!` and the full stops `.` must all match exactly.
+`!` and the full stops `.` must all match exactly. Do not print anything else.
 ~~~
 
 ## Input Format
@@ -61,5 +61,6 @@ The program reads nothing and prints the two lines of the welcome message.
 
 ## Settings
 - Languages: C, C++, Java, Python 3
-- Time and memory limit: HackerRank default
+- Time and memory limit: keep HackerRank's defaults (C/C++ 2 s, Java 8 4 s, Python 3 longer).
+  The reference solutions in every language finish each test in under 0.3 s.
 - Scoring: binary (all or nothing)

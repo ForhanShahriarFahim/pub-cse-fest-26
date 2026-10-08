@@ -1,0 +1,268 @@
+<title>CSE Fest-26 Setter Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: problem index rail on the left; on the right the HackerRank form itself (label column + field column), so each row maps to one box on the HackerRank page. Stacks on phones. */
+:root {
+  --bg: #f4f5f9;
+  --surface: #ffffff;
+  --ink: #1a1f31;
+  --muted: #5b6277;
+  --line: #dde1eb;
+  --accent: #2747c9;
+  --accent-ink: #ffffff;
+  --code-bg: #f1f3f9;
+  --ok: #17794b;
+  --ok-bg: #e2f3e9;
+  --wait: #8a5a00;
+  --wait-bg: #fbf0d9;
+  --font-display: "Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10131d; --surface: #181c29; --ink: #e6e8f1; --muted: #9ba2b9; --line: #2a3044;
+    --accent: #8aa2ff; --accent-ink: #0c0f1c; --code-bg: #131725; --ok: #63d39d; --ok-bg: #14301f;
+    --wait: #f0b85c; --wait-bg: #33270f; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10131d; --surface: #181c29; --ink: #e6e8f1; --muted: #9ba2b9; --line: #2a3044;
+  --accent: #8aa2ff; --accent-ink: #0c0f1c; --code-bg: #131725; --ok: #63d39d; --ok-bg: #14301f;
+  --wait: #f0b85c; --wait-bg: #33270f; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--font-body); }
+a { color: var(--accent); }
+button, .btn { font: 500 13px/1 var(--font-body); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 24px 48px; }
+.top { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between; margin-bottom: 20px; }
+.top h1 { font: 700 26px/1.15 var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+.top p { margin: 0; color: var(--muted); font-size: 13px; }
+.top code { font-family: var(--font-mono); font-size: 12px; }
+
+.shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 24px; align-items: start; }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); display: flex; flex-direction: column; gap: 4px; }
+.rail .cap { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px 10px; }
+.pick { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: center; text-align: left; width: 100%;
+  background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 9px 10px; color: var(--ink); cursor: pointer; }
+.pick:hover { background: var(--surface); border-color: var(--line); }
+.pick[aria-current="true"] { background: var(--surface); border-color: var(--accent); }
+.pick .num { font: 500 13px/1 var(--font-mono); display: flex; align-items: center; gap: 6px; grid-row: span 2; }
+.pick .nm { font-weight: 600; font-size: 14px; line-height: 1.25; overflow-wrap: anywhere; }
+.pick .sub { font-size: 12px; color: var(--muted); line-height: 1.3; }
+.balloon { width: 11px; height: 14px; border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%; border: 1px solid rgba(0,0,0,.25); flex: none; }
+
+.pill { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; }
+.pill.ok { color: var(--ok); background: var(--ok-bg); }
+.pill.wait { color: var(--wait); background: var(--wait-bg); }
+
+main { min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+.phead { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.phead h2 { margin: 0; font: 700 24px/1.2 var(--font-display); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; text-wrap: balance; }
+.phead h2 .no { font: 500 15px/1 var(--font-mono); color: var(--muted); }
+.phead .tier { color: var(--muted); font-size: 14px; margin-top: 4px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 8px; text-decoration: none; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+.sect h3 { font: 600 13px/1 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.form { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.row { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 8px 20px; padding: 16px 20px; border-top: 1px solid var(--line); }
+.row:first-child { border-top: 0; }
+.label { font-weight: 600; padding-top: 6px; }
+.label small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.label small.over { color: #c2261b; font-weight: 600; }
+.field { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.note { font-size: 13px; color: var(--ink); background: var(--wait-bg); border-radius: 8px; padding: 9px 12px; }
+.note p { margin: 0; }
+.box { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--code-bg); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 6px 6px 12px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.bar .kind { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+.copy { border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); border-radius: 6px; padding: 7px 14px; cursor: pointer; min-width: 78px; }
+.copy.done { background: var(--ok); border-color: var(--ok); color: var(--surface); }
+pre { margin: 0; padding: 12px; font: 13px/1.55 var(--font-mono); white-space: pre-wrap; overflow-wrap: anywhere; max-height: 420px; overflow: auto; }
+
+.prose { font-size: 14px; }
+.prose p { margin: 0 0 8px; }
+.prose ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.prose code, .note code { font-family: var(--font-mono); font-size: 12.5px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; }
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-weight: 600; color: var(--muted); font-size: 12px; }
+td.src { font-family: var(--font-mono); font-size: 12px; white-space: normal; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+figure img { border: 1px solid var(--line); border-radius: 8px; background: #fff; max-width: 100%; height: auto; align-self: flex-start; }
+figcaption { font-size: 13px; color: var(--muted); }
+details summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; }
+.links a { font-family: var(--font-mono); font-size: 13px; }
+
+@media (max-width: 860px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .rail .cap { grid-column: 1 / -1; }
+  .row { grid-template-columns: minmax(0, 1fr); }
+  .label { padding-top: 0; }
+  .split { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>CSE Fest-26 Setter Desk</h1>
+    <p id="build"></p>
+  </header>
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Problems"><p class="cap">Problems</p></nav>
+    <main id="main"></main>
+  </div>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+const BALLOONS = ["#e53935", "#fb8c00", "#fdd835", "#43a047", "#1e88e5", "#8e24aa",
+                  "#ec407a", "#00897b", "#6d4c41", "#546e7a", "#f5f5f5", "#c0a000"];
+const KIND = { "Challenge Name": "Plain text", "Description": "Plain text", "Tags": "Plain text" };
+
+const esc = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function inline(s) {
+  return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+}
+// Small renderer for the notes in challenge.md: paragraphs and "- " lists with indented continuations.
+function prose(md) {
+  const out = []; let list = null, para = [];
+  const flushPara = () => { if (para.length) { out.push("<p>" + inline(para.join(" ")) + "</p>"); para = []; } };
+  const flushList = () => { if (list) { out.push("<ul>" + list.map(li => "<li>" + inline(li) + "</li>").join("") + "</ul>"); list = null; } };
+  for (const line of md.split("\n")) {
+    if (/^- /.test(line)) { flushPara(); (list = list || []).push(line.slice(2)); }
+    else if (/^\s+\S/.test(line) && list) { list[list.length - 1] += " " + line.trim(); }
+    else if (!line.trim()) { flushPara(); flushList(); }
+    else { flushList(); para.push(line.trim()); }
+  }
+  flushPara(); flushList();
+  return out.join("");
+}
+
+const copyTexts = [];
+function copyBox(text, kind) {
+  const id = copyTexts.push(text) - 1;
+  return `<div class="box"><div class="bar"><span class="kind">${esc(kind)}</span>` +
+    `<button class="copy" type="button" data-copy="${id}">Copy</button></div><pre>${esc(text) || "&nbsp;"}</pre></div>`;
+}
+
+document.addEventListener("click", async e => {
+  const btn = e.target.closest("button.copy");
+  if (!btn) return;
+  const text = copyTexts[+btn.dataset.copy];
+  const done = msg => { btn.textContent = msg; btn.classList.add("done");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("done"); }, 1600); };
+  try {
+    await navigator.clipboard.writeText(text);
+    done("Copied");
+  } catch (err) {
+    const pre = btn.closest(".box").querySelector("pre");
+    const range = document.createRange(); range.selectNodeContents(pre);
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(range);
+    let ok = false; try { ok = document.execCommand("copy"); } catch (_) {}
+    done(ok ? "Copied" : "Press Ctrl+C");
+  }
+});
+
+function statusPill(s) { return `<span class="pill ${s === "Approved" ? "ok" : "wait"}">${esc(s)}</span>`; }
+function balloon(i) { return `<span class="balloon" style="background:${BALLOONS[i % BALLOONS.length]}" aria-hidden="true"></span>`; }
+function kb(n) { return n < 1024 ? `${n} B` : `${(n / 1024).toFixed(1)} KB`; }
+
+function render(idx) {
+  copyTexts.length = 0;
+  const p = DATA.problems[idx];
+  document.querySelectorAll(".pick").forEach((b, i) => b.setAttribute("aria-current", i === idx ? "true" : "false"));
+
+  const rows = p.fields.map(f => {
+    let hint = "";
+    if (f.name === "Description") {
+      const n = [...f.text].length;
+      hint = `<small class="${n > 140 ? "over" : ""}">${n} / 140 characters</small>`;
+    }
+    const note = f.note ? `<div class="note">${prose(f.note)}</div>` : "";
+    return `<div class="row"><div class="label">${esc(f.name)}${hint}</div>` +
+      `<div class="field">${note}${copyBox(f.text, KIND[f.name] || "Markdown")}</div></div>`;
+  }).join("");
+
+  const testRows = p.tests.map(t => `<tr><td>${t.id}</td><td>${t.id === "00" ? statusPill("Sample") : "Hidden"}</td>` +
+    `<td>${kb(t.bytes)}</td><td class="src">${esc(t.source)}</td></tr>`).join("");
+
+  const pics = p.images.length ? `<section class="sect"><h3>Pictures</h3><div class="card">` +
+    p.images.map(im => `<figure><img src="${im.data}" alt="${esc(im.name)}"><figcaption><code>${esc(im.name)}</code>: upload it with the editor's image button where the Problem Statement says <code>UPLOAD ${esc(im.name)} HERE</code>. Right-click the picture and choose "Save image as", or get it from the <a href="${p.folderUrl}" target="_blank" rel="noopener">problem folder</a>.</figcaption></figure>`).join("") +
+    `</div></section>` : "";
+
+  const sols = Object.entries(p.solutions).map(([f, u]) => `<a href="${u}" target="_blank" rel="noopener">${esc(f)}</a>`).join("");
+
+  document.getElementById("main").innerHTML = `
+    <section class="phead">
+      <div>
+        <h2>${balloon(idx)}<span class="no">${p.num}</span> ${esc(p.name)} ${statusPill(p.status)}</h2>
+        <div class="tier">${esc(p.tier)}</div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="${p.zipUrl}" target="_blank" rel="noopener">Download tests.zip</a>
+        <a class="btn" href="${p.folderUrl}" target="_blank" rel="noopener">Problem folder</a>
+      </div>
+    </section>
+
+    <section class="sect"><h3>Create Challenge form</h3><div class="form">${rows}</div></section>
+
+    <section class="sect"><h3>Test Cases tab</h3>
+      <div class="form">
+        <div class="row"><div class="label">Steps</div><div class="field prose">${prose(p.testsNote)}</div></div>
+        <div class="row"><div class="label">Test cases<small>${p.tests.length} in tests.zip</small></div>
+          <div class="field tablewrap"><table><thead><tr><th>#</th><th>Type</th><th>Input size</th><th>How it was made</th></tr></thead><tbody>${testRows}</tbody></table></div></div>
+        <div class="row"><div class="label">Sample preview<small>HackerRank should show exactly this</small></div>
+          <div class="field split">
+            <div class="box"><div class="bar"><span class="kind">Sample Input 0</span></div><pre>${p.sampleIn ? esc(p.sampleIn) : "(empty: this problem has no input)"}</pre></div>
+            <div class="box"><div class="bar"><span class="kind">Sample Output 0</span></div><pre>${esc(p.sampleOut)}</pre></div>
+          </div></div>
+        <div class="row"><div class="label">Explanation<small>for test case 0</small></div><div class="field">${copyBox(p.explanation, "Markdown")}</div></div>
+      </div>
+    </section>
+
+    <section class="sect"><h3>Settings</h3><div class="card prose">${prose(p.settings)}</div></section>
+    ${pics}
+    <section class="sect"><h3>For judges</h3><div class="card">
+      <p class="prose" style="margin:0 0 10px">Reference solutions (submit one on HackerRank to confirm the setup): </p>
+      <div class="links">${sols}</div>
+      <details style="margin-top:14px"><summary>Editorial</summary>${copyBox(p.editorial, "Markdown")}</details>
+    </div></section>`;
+  try { localStorage.setItem("desk-problem", p.num); } catch (_) {}
+  if (location.hash !== "#p" + p.num) history.replaceState(null, "", "#p" + p.num);
+}
+
+function start() {
+  const rail = document.getElementById("rail");
+  DATA.problems.forEach((p, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "pick";
+    b.innerHTML = `<span class="num">${balloon(i)}${p.num}</span><span class="nm">${esc(p.name)}</span>` +
+      `<span class="sub">${esc(p.tier)} · ${esc(p.status)}</span>`;
+    b.addEventListener("click", () => { render(i); window.scrollTo({ top: 0 }); });
+    rail.appendChild(b);
+  });
+  document.getElementById("build").innerHTML =
+    `${DATA.problems.length} problems · branch <code>${esc(DATA.branch)}</code> · commit <code>${esc(DATA.commit)}</code>`;
+  let want = (location.hash.match(/^#p(\d\d)$/) || [])[1];
+  if (!want) { try { want = localStorage.getItem("desk-problem"); } catch (_) {} }
+  const idx = Math.max(0, DATA.problems.findIndex(p => p.num === want));
+  render(idx);
+}
+start();
+</script>

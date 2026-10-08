@@ -18,7 +18,8 @@ problems/NN-slug/
   challenge.md        # copy-paste blocks, one per HackerRank Create Challenge field (see below)
   sol.cpp             # reference solution (intended complexity)
   sol.py              # Python solution: must pass within the Python time limit
-  Sol.java            # Java solution (Java is an allowed language)
+  Solution.java       # Java solution; HackerRank requires `public class Solution` (compiled as Java 8)
+  sol.c               # C solution (C is an allowed language)
   brute.cpp           # obviously-correct slow solution, used only for small inputs
   wrong_*.cpp         # common mistakes (overflow, O(n^2), off-by-one) that the tests MUST reject
   gen.py              # `python3 gen.py <mode> <seed> [args]` -> one input on stdout;

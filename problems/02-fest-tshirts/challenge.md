@@ -66,12 +66,14 @@ Math, Implementation, Giveaway
 - **Scenario 1:** 2 teams have 6 contestants. With 3 volunteers and 2 judges,
   11 people need T-shirts. Two packs of 5 give only 10 T-shirts, so 3 packs are
   needed, costing 3 × 120 = 360 taka.
-- **Scenario 2:** 30 contestants. Four packs of 7 give only 28 T-shirts, so 5
-  packs are needed, costing 5 × 450 = 2250 taka.
+- **Scenario 2:** 10 teams have 30 contestants, and there are no volunteers or
+  judges. Four packs of 7 give only 28 T-shirts, so 5 packs are needed, costing
+  5 × 450 = 2250 taka.
 - **Scenario 3:** 3 + 1 + 1 = 5 people, and one pack of 5 is exactly enough.
 ~~~
 
 ## Settings
 - Languages: C, C++, Java, Python 3
-- Time and memory limit: HackerRank default
+- Time and memory limit: keep HackerRank's defaults (C/C++ 2 s, Java 8 4 s, Python 3 longer).
+  The reference solutions in every language finish each test in under 0.3 s.
 - Scoring: binary (all or nothing)

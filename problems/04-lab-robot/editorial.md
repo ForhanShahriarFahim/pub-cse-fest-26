@@ -3,7 +3,7 @@
 **Idea.** Simulate the commands exactly as written.
 
 1. Find the `S` cell; that is the current position `(x, y)` (0-based in code).
-2. Keep a boolean array `seen[R][C]`. Mark the start as seen and set `count = 1`.
+2. Keep a boolean array `seen[N][M]`. Mark the start as seen and set `count = 1`.
 3. For each command, compute the target cell `(nx, ny)`.
    - If it is outside the grid or a `#`, skip the command (`continue`, **not** `break`).
    - Otherwise move there. If the cell was not seen before, mark it and increase `count`.
@@ -22,4 +22,4 @@
 | Printing column before row | The output order is wrong. |
 | Indexing `grid[nx][ny]` before the bounds check | A crash, or garbage, at the border. |
 
-**Complexity:** O(R·C + K) time and O(R·C) memory.
+**Complexity:** O(N·M + K) time and O(N·M) memory.

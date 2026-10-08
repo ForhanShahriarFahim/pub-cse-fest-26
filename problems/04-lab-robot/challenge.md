@@ -20,8 +20,8 @@ placeholder line.
 During PUB CSE Fest-26, the robotics club lends the contest hall a small robot
 named **Robu**, which carries water bottles to the teams.
 
-The contest lab is a grid of **R** rows and **C** columns. Rows are numbered
-1 to R from **top** to **bottom**, and columns 1 to C from **left** to
+The contest lab is a grid of **N** rows and **M** columns. Rows are numbered
+1 to N from **top** to **bottom**, and columns 1 to M from **left** to
 **right**. Each cell is one of:
 
 - `.`: free floor
@@ -40,24 +40,25 @@ After all commands are done, report:
 1. Robu's final position (row and column), and
 2. how many **different** cells Robu has stood on, **including the starting cell**.
 
-The picture below shows Robu's walk for Sample Input 0. The orange line is the
-path, the shaded cells are the visited cells, and a red ✕ marks an ignored command.
+The picture below shows Robu's walk for Sample Input 0. **S** is the start and
+**E** is where Robu ends. The orange line is the path, the shaded cells are the
+visited cells, and a red ✕ marks an ignored command.
 
 ![Robu's walk in Sample Input 0](UPLOAD sample.png HERE)
 ~~~
 
 ## Input Format
 ~~~markdown
-- The first line contains two integers **R** and **C**.
-- Each of the next **R** lines contains a string of **C** characters describing
-  one row of the lab, from row 1 to row R.
+- The first line contains two integers **N** and **M**.
+- Each of the next **N** lines contains a string of **M** characters describing
+  one row of the lab, from row 1 to row N.
 - The next line contains an integer **K**.
 - The last line contains a string of **K** characters, the commands.
 ~~~
 
 ## Constraints
 ~~~markdown
-- 1 ≤ R, C ≤ 100
+- 1 ≤ N, M ≤ 100
 - Each grid character is `.`, `#` or `S`, and there is exactly one `S`.
 - 1 ≤ K ≤ 10⁵
 - Each command is `U`, `D`, `L` or `R`.
@@ -96,5 +97,6 @@ Robu ends at row 4, column 5. The cells it stood on are (1,1), (1,2), (1,3),
 
 ## Settings
 - Languages: C, C++, Java, Python 3
-- Time and memory limit: HackerRank default
+- Time and memory limit: keep HackerRank's defaults (C/C++ 2 s, Java 8 4 s, Python 3 longer).
+  The reference solutions in every language finish each test in under 0.3 s.
 - Scoring: binary (all or nothing)

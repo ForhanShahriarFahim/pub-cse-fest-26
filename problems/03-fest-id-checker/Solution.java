@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Sol {
+public class Solution {
     static boolean valid(String s) {
         if (s.length() != 11) return false;
         if (!s.startsWith("CSE")) return false;

@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Build, verify and package one problem.
+"""Build, verify, audit and package one problem.
 
 Usage: python3 tools/check.py problems/01-slug [--stress N]
 
 Expects in the problem directory:
   sol.cpp            reference solution (produces the official outputs)
-  sol.py             Python solution (must agree with sol.cpp)
-  Sol.java           optional Java solution (must agree with sol.cpp)
+  sol.c              C solution          \
+  Solution.java      Java solution        > must agree with sol.cpp on every test
+  sol.py             Python 3 solution   /
   brute.cpp          optional slow solution, compared on small random tests
   wrong_*.cpp        solutions that MUST fail at least one official test
   gen.py             `python3 gen.py <mode> <seed> [args...]` prints one input
@@ -14,17 +15,26 @@ Expects in the problem directory:
   testplan.txt       one official test per line:
                        file <path>          copy a hand-written input
                        gen <mode> <seed> .. run gen.py with these args
-  config.json        optional: {"tl_cpp": 2, "tl_py": 10, "tl_java": 4}
+  challenge.md       HackerRank form (linted by tools/challenge.py)
+  config.json        optional time limits in seconds, e.g. {"tl_cpp": 2}
 """
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
 import time
 import zipfile
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import challenge  # noqa: E402
+
 BUILD = ".build"
+# HackerRank limits: C/C++ 2 s and Java 8 4 s are documented. Python 3 has
+# historically been 10 s; we only rely on half of each limit (see MARGIN).
+DEFAULT_LIMITS = {"tl_c": 2, "tl_cpp": 2, "tl_java": 4, "tl_py": 10}
+MARGIN = 0.5
 
 
 def die(msg):
@@ -51,11 +61,26 @@ def same(a, b):
     return norm(a) == norm(b)
 
 
-def compile_cpp(src, out):
-    r = subprocess.run(["g++", "-O2", "-std=c++17", "-o", out, src],
-                       capture_output=True, text=True)
+def build(cmd, what):
+    r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode != 0:
-        die(f"compile {src}\n{r.stderr}")
+        die(f"compile {what}\n{r.stderr}")
+
+
+def hygiene(text, name, allow_empty=False):
+    """Test files must be plain LF text: no CR, no tabs, no trailing spaces, final newline."""
+    if text == "":
+        if not allow_empty:
+            die(f"{name} is empty")
+        return
+    if "\r" in text or "\t" in text:
+        die(f"{name} contains CR or TAB")
+    if not text.endswith("\n") or text.endswith("\n\n"):
+        die(f"{name} must end with exactly one newline")
+    if re.search(r" +$", text, re.M):
+        die(f"{name} has trailing spaces")
+    if not text.isascii():
+        die(f"{name} has non-ASCII characters")
 
 
 def main():
@@ -63,25 +88,31 @@ def main():
     stress = 1000
     if "--stress" in sys.argv:
         stress = int(sys.argv[sys.argv.index("--stress") + 1])
-    cfg = {"tl_cpp": 2, "tl_py": 10, "tl_java": 4}
+    cfg = dict(DEFAULT_LIMITS)
     if os.path.exists(f"{pdir}/config.json"):
         cfg.update(json.load(open(f"{pdir}/config.json")))
 
     bdir = f"{pdir}/{BUILD}"
     os.makedirs(bdir, exist_ok=True)
-    compile_cpp(f"{pdir}/sol.cpp", f"{bdir}/sol")
-    sols = {"sol.py": (["python3", f"{pdir}/sol.py"], cfg["tl_py"])}
+
+    # 0. Compile everything the way HackerRank's default environments would.
+    build(["g++", "-O2", "-std=c++14", "-o", f"{bdir}/sol", f"{pdir}/sol.cpp"], "sol.cpp (C++14)")
+    for std in ("c++11", "c++20"):
+        build(["g++", "-fsyntax-only", f"-std={std}", f"{pdir}/sol.cpp"], f"sol.cpp ({std})")
+    sols = {}
+    for f in ("sol.c", "Solution.java", "sol.py"):
+        if not os.path.exists(f"{pdir}/{f}"):
+            die(f"{f} is missing")
+    build(["gcc", "-O2", "-std=gnu11", "-o", f"{bdir}/sol_c", f"{pdir}/sol.c", "-lm"], "sol.c")
+    sols["sol.c"] = ([f"{bdir}/sol_c"], cfg["tl_c"])
+    build(["javac", "--release", "8", "-d", bdir, f"{pdir}/Solution.java"], "Solution.java (Java 8)")
+    sols["Solution.java"] = (["java", "-Xss256m", "-cp", bdir, "Solution"], cfg["tl_java"])
+    sols["sol.py"] = (["python3", f"{pdir}/sol.py"], cfg["tl_py"])
     if os.path.exists(f"{pdir}/brute.cpp"):
-        compile_cpp(f"{pdir}/brute.cpp", f"{bdir}/brute")
-    if os.path.exists(f"{pdir}/Sol.java"):
-        r = subprocess.run(["javac", "-d", bdir, f"{pdir}/Sol.java"],
-                           capture_output=True, text=True)
-        if r.returncode != 0:
-            die(f"compile Sol.java\n{r.stderr}")
-        sols["Sol.java"] = (["java", "-Xss256m", "-cp", bdir, "Sol"], cfg["tl_java"])
+        build(["g++", "-O2", "-std=c++17", "-o", f"{bdir}/brute", f"{pdir}/brute.cpp"], "brute.cpp")
     wrongs = sorted(f for f in os.listdir(pdir) if f.startswith("wrong_") and f.endswith(".cpp"))
     for w in wrongs:
-        compile_cpp(f"{pdir}/{w}", f"{bdir}/{w[:-4]}")
+        build(["g++", "-O2", "-std=c++17", "-o", f"{bdir}/{w[:-4]}", f"{pdir}/{w}"], w)
 
     def gen(args):
         out, _, st = run(["python3", f"{pdir}/gen.py", *args], None, 120)
@@ -90,10 +121,9 @@ def main():
         return out
 
     def validate(inp, name):
-        _, _, st = run(["python3", f"{pdir}/validator.py"], inp, 60)
-        if st != "OK":
-            r = subprocess.run(["python3", f"{pdir}/validator.py"], input=inp,
-                               capture_output=True, text=True)
+        r = subprocess.run(["python3", f"{pdir}/validator.py"], input=inp,
+                           capture_output=True, text=True, timeout=60)
+        if r.returncode != 0:
             die(f"validator rejected {name}: {r.stderr.strip()[-500:]}")
 
     # 1. Build official tests.
@@ -113,18 +143,23 @@ def main():
         else:
             die(f"bad testplan line: {line}")
         inputs.append((" ".join(parts), inp))
+    if inputs[0][0] != "file sample.txt":
+        die("test 00 must be sample.txt")
+    if len({inp for _, inp in inputs}) != len(inputs) and any(inp for _, inp in inputs):
+        print("  note: some official tests are identical")
 
     print(f"== {len(inputs)} official tests")
     worst = {"sol.cpp": 0.0, **{k: 0.0 for k in sols}}
+    no_input = all(inp == "" for _, inp in inputs)
     for i, (desc, inp) in enumerate(inputs):
         name = f"input{i:02d}.txt"
+        hygiene(inp, name, allow_empty=no_input)
         validate(inp, name)
         out, t, st = run([f"{bdir}/sol"], inp, cfg["tl_cpp"])
         if st != "OK":
             die(f"sol.cpp {st} on {name}")
         worst["sol.cpp"] = max(worst["sol.cpp"], t)
-        if not out.endswith("\n"):
-            out += "\n"
+        hygiene(out, f"output{i:02d}.txt")
         open(f"{tdir}/input/{name}", "w").write(inp)
         open(f"{tdir}/output/output{i:02d}.txt", "w").write(out)
         for k, (cmd, tl) in sols.items():
@@ -132,10 +167,14 @@ def main():
             if st2 != "OK" or not same(o, out):
                 die(f"{k} {st2 if st2 != 'OK' else 'WA'} on {name}")
             worst[k] = max(worst[k], t2)
-        size = len(inp.encode())
-        print(f"  {name}  {size/1024:9.1f} KB  sol.cpp {t:.3f}s  [{desc}]")
+        print(f"  {name}  {len(inp.encode())/1024:9.1f} KB  sol.cpp {t:.3f}s  [{desc}]")
+    limit_of = {"sol.cpp": cfg["tl_cpp"], "sol.c": cfg["tl_c"],
+                "Solution.java": cfg["tl_java"], "sol.py": cfg["tl_py"]}
     for k, t in worst.items():
-        print(f"   worst time {k}: {t:.3f}s")
+        ok = t <= MARGIN * limit_of[k]
+        print(f"   worst time {k:14s} {t:.3f}s  (limit {limit_of[k]}s){'' if ok else '  TOO SLOW'}")
+        if not ok:
+            die(f"{k} uses more than {int(MARGIN * 100)}% of its time limit")
 
     # 2. Wrong solutions must fail somewhere.
     for w in wrongs:
@@ -164,15 +203,34 @@ def main():
                     c, _, sc = run(cmd, inp, 30)
                     if sc != "OK" or not same(a, c):
                         die(f"stress mismatch sol.cpp vs {k} on seed {seed}:\n{inp}")
-        print(f"== stress: {stress} random small cases agree")
+        print(f"== stress: {stress} random small cases agree (all languages every 10th)")
 
-    # 4. Package for HackerRank.
+    # 4. Package for HackerRank, then re-open the zip and verify it byte for byte.
     zpath = f"{pdir}/tests.zip"
+    expected = {}
+    for i in range(len(inputs)):
+        for kind in ("input", "output"):
+            arc = f"{kind}/{kind}{i:02d}.txt"
+            expected[arc] = open(f"{tdir}/{arc}", "rb").read()
     with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:
-        for i in range(len(inputs)):
-            z.write(f"{tdir}/input/input{i:02d}.txt", f"input/input{i:02d}.txt")
-            z.write(f"{tdir}/output/output{i:02d}.txt", f"output/output{i:02d}.txt")
-    print(f"== packaged {zpath} ({os.path.getsize(zpath)/1024:.1f} KB)")
+        for arc, data in expected.items():
+            z.writestr(arc, data)
+    with zipfile.ZipFile(zpath) as z:
+        if z.testzip() is not None:
+            die("tests.zip is corrupt")
+        if sorted(z.namelist()) != sorted(expected):
+            die("tests.zip has unexpected entries")
+        for arc, data in expected.items():
+            if z.read(arc) != data:
+                die(f"tests.zip entry {arc} differs from tests/")
+    print(f"== packaged and verified {zpath} ({os.path.getsize(zpath)/1024:.1f} KB, "
+          f"{len(inputs)} test cases)")
+
+    # 5. Lint the HackerRank form.
+    errors = challenge.lint(pdir, len(inputs))
+    if errors:
+        die("challenge.md:\n  " + "\n  ".join(errors))
+    print("== challenge.md matches the HackerRank form")
     print("ALL CHECKS PASSED")
 
 
