@@ -5,22 +5,30 @@ description: Workflow for setting, testing and packaging ICPC-style contest prob
 
 # HackerRank ICPC-style problem setting
 
-Every problem lives in `problems/<letter>-<slug>/` and is not "done" until every
-step below passes.
+Every problem lives in `problems/<NN>-<slug>/` (NN = difficulty rank; contest
+letters are assigned at the end, since the contest order is shuffled except the two
+giveaways). A problem is not "done" until `python3 tools/check.py problems/<NN>-<slug>`
+prints ALL CHECKS PASSED. Problems are produced one at a time, and the next one is
+started only after the user approves the current one.
 
 ## Directory layout per problem
 
 ```
-problems/A-slug/
+problems/NN-slug/
   statement.md        # HackerRank sections, in this order (see below)
   sol.cpp             # reference solution (intended complexity)
   sol.py              # Python solution: must pass within the Python time limit
+  Sol.java            # Java solution (Java is an allowed language)
   brute.cpp           # obviously-correct slow solution, used only for small inputs
   wrong_*.cpp         # common mistakes (overflow, O(n^2), off-by-one) that the tests MUST reject
-  gen.py              # seeded generator: `python3 gen.py <seed> <mode>` -> stdout
+  gen.py              # `python3 gen.py <mode> <seed> [args]` -> one input on stdout;
+                      #   mode `small` is used by the stress test
   validator.py        # reads one input from stdin, asserts every constraint and format detail
+  sample.txt          # hand-written sample (becomes input00)
+  testplan.txt        # one official test per line: `file sample.txt` or `gen <mode> <seed> ...`
+  config.json         # time limits used by the checker {"tl_cpp", "tl_py", "tl_java"}
   tests/input/inputNN.txt, tests/output/outputNN.txt
-  tests.zip           # what gets uploaded to HackerRank
+  tests.zip           # what gets uploaded to HackerRank (built by tools/check.py)
   editorial.md        # short solution idea + complexity
 ```
 

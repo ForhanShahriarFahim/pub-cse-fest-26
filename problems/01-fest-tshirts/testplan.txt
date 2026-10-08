@@ -1,0 +1,8 @@
+file sample.txt
+gen edge 1
+gen random 2 10
+gen random 3 10000
+gen divisible 4 10000
+gen big 5 10000
+gen floatkill 6 10000
+gen max 7 10000
