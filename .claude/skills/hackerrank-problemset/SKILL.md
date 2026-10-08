@@ -15,7 +15,7 @@ started only after the user approves the current one.
 
 ```
 problems/NN-slug/
-  statement.md        # HackerRank sections, in this order (see below)
+  challenge.md        # copy-paste blocks, one per HackerRank Create Challenge field (see below)
   sol.cpp             # reference solution (intended complexity)
   sol.py              # Python solution: must pass within the Python time limit
   Sol.java            # Java solution (Java is an allowed language)
@@ -37,18 +37,26 @@ Images: draw them with a script that reads the sample, so the picture always mat
 data. Look at the PNG before shipping. On HackerRank, upload the PNG in the statement
 editor where `![...](file.png)` appears.
 
-## Statement format (HackerRank sections)
+## challenge.md format (mirrors HackerRank's Create Challenge form)
 
-1. Problem statement (story + precise task; define every term)
-2. Input Format
-3. Constraints (exact numeric bounds; say "sum of N over all test cases ≤ ..." when multi-test)
-4. Output Format (exact; say what to print per test case)
-5. Sample Input / Sample Output (input00 / output00 are the samples)
-6. Explanation of the sample
+Sections in this order, each followed by a `~~~` fenced block holding the exact text
+to paste (use ```` ```markdown ```` inside rich fields, `~~~` outside):
+
+1. Challenge Name
+2. Description (plain text, at most 140 characters)
+3. Problem Statement (story + precise task; define every term; NO samples here,
+   because HackerRank renders the samples from the test cases marked Sample)
+4. Input Format
+5. Constraints (Unicode for math: ≤, 10⁵, ×; no LaTeX or images of formulas)
+6. Output Format
+7. Tags
+8. Test Cases tab: number of cases, which ones are Sample, the explanation text for each sample
+9. Settings: languages, limits, binary scoring
 
 Rules: no floating-point output unless a custom checker is set up; exactly one correct
-output per input (otherwise a custom checker is required); state when answers exceed
-32-bit; give a modulus when answers are huge.
+output per input (otherwise a custom checker is required); give a modulus when answers
+are huge. Update the problem index table in README.md whenever a problem is added,
+renumbered or approved.
 
 ## Testing checklist
 

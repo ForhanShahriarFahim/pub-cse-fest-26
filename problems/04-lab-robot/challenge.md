@@ -1,9 +1,22 @@
-# Lab Robot
+# 04 · Lab Robot (Easy: implementation)
 
-**Difficulty:** Easy &nbsp;|&nbsp; **Time limit:** HackerRank default &nbsp;|&nbsp; **Scoring:** Binary
+Copy each block into the matching field of **HackerRank → Manage Challenges → Create Challenge**.
+
+## Challenge Name
+~~~
+Lab Robot
+~~~
+
+## Description
+~~~
+Simulate a robot walking through the contest lab and count the cells it visits.
+~~~
 
 ## Problem Statement
-
+Before you paste: put the cursor on the `![...]` line, click the **image** button
+in the editor toolbar, and upload `sample.png` from this folder. Then delete the
+placeholder line.
+~~~markdown
 During PUB CSE Fest-26, the robotics club lends the contest hall a small robot
 named **Robu**, which carries water bottles to the teams.
 
@@ -27,52 +40,47 @@ After all commands are done, report:
 1. Robu's final position (row and column), and
 2. how many **different** cells Robu has stood on, **including the starting cell**.
 
-## Input Format
+The picture below shows Robu's walk for Sample Input 0. The orange line is the
+path, the shaded cells are the visited cells, and a red ✕ marks an ignored command.
 
+![Robu's walk in Sample Input 0](UPLOAD sample.png HERE)
+~~~
+
+## Input Format
+~~~markdown
 - The first line contains two integers **R** and **C**.
-- Each of the next **R** lines contains a string of **C** characters describing one
-  row of the lab, from row 1 to row R.
+- Each of the next **R** lines contains a string of **C** characters describing
+  one row of the lab, from row 1 to row R.
 - The next line contains an integer **K**.
 - The last line contains a string of **K** characters, the commands.
+~~~
 
 ## Constraints
-
+~~~markdown
 - 1 ≤ R, C ≤ 100
 - Each grid character is `.`, `#` or `S`, and there is exactly one `S`.
-- 1 ≤ K ≤ 10<sup>5</sup>
+- 1 ≤ K ≤ 10⁵
 - Each command is `U`, `D`, `L` or `R`.
+~~~
 
 ## Output Format
-
+~~~markdown
 Print two lines:
 
 - The first line contains two integers: Robu's final row and column.
 - The second line contains one integer: the number of different cells Robu has stood on.
+~~~
 
-## Sample Input 0
+## Tags
+~~~
+Implementation, Simulation, Grid
+~~~
 
-```
-5 7
-S..#...
-.#.#.#.
-.#.....
-...#.#.
-##.....
-12
-URRRDDRRUDDL
-```
-
-## Sample Output 0
-
-```
-4 5
-9
-```
-
-## Explanation 0
-
-![Robu's walk in the sample](sample.png)
-
+## Test Cases tab
+- Upload `tests.zip` (13 test cases).
+- Mark **test case 0** as **Sample**.
+- Explanation for test case 0:
+~~~markdown
 Robu starts at (1, 1).
 
 - `U` is ignored, because it would leave the lab.
@@ -84,6 +92,9 @@ Robu starts at (1, 1).
 Robu ends at row 4, column 5. The cells it stood on are (1,1), (1,2), (1,3),
 (2,3), (3,3), (3,4), (3,5), (2,5) and (4,5). That is **9** different cells;
 (3, 5) was visited twice but is counted once.
+~~~
 
-In the picture, the orange line is Robu's path, the shaded cells are the visited
-cells, and a red ✕ marks an ignored command.
+## Settings
+- Languages: C, C++, Java, Python 3
+- Time and memory limit: HackerRank default
+- Scoring: binary (all or nothing)

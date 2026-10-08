@@ -45,7 +45,10 @@ def run(cmd, inp, timeout, cwd=None):
 
 
 def same(a, b):
-    return a.split() == b.split()
+    """Line-by-line comparison that ignores trailing spaces and trailing blank lines."""
+    def norm(s):
+        return [line.rstrip() for line in s.rstrip().split("\n")]
+    return norm(a) == norm(b)
 
 
 def compile_cpp(src, out):
