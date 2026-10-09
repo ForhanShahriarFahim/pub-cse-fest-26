@@ -1,0 +1,18 @@
+file sample.txt
+gen single 1
+gen pairfit 2
+gen pairnofit 3
+gen random 4 10 50
+gen random 5 1000 1000
+gen realistic 6 200000
+gen random 7 200000 1000000000
+gen allx 8 200000 1
+gen half 9 199999
+gen ones 10 199999
+gen nearhalf 11 200000
+gen exact 12 50000 1000000
+gen antiadj 13 50000 1000000
+gen antilight 14 50000 1000000
+gen heavy 15 200000 1000000000
+gen sorted 16 200000 1000000
+gen reversed 17 100000 1000000
