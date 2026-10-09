@@ -25,8 +25,8 @@ Each problem folder has:
 | 05 | Fest Scoreboard | Easy · implementation (ICPC rules) | [challenge](problems/05-fest-scoreboard/challenge.md) | [editorial](problems/05-fest-scoreboard/editorial.md) | [tests.zip](problems/05-fest-scoreboard/tests.zip) (12) | Approved |
 | 06 | Love Letter | Easy · strings, Caesar cipher (for fun) | [challenge](problems/06-love-letter/challenge.md) | [editorial](problems/06-love-letter/editorial.md) | [tests.zip](problems/06-love-letter/tests.zip) (8) + [image](problems/06-love-letter/alphabet.png) | Approved |
 | 07 | Rickshaw Ride | Easy · sorting, greedy, two pointers (classic) | [challenge](problems/07-rickshaw-ride/challenge.md) | [editorial](problems/07-rickshaw-ride/editorial.md) | [tests.zip](problems/07-rickshaw-ride/tests.zip) (18) | Approved |
-| 08 | Lucky Raffle | Medium · number theory, sieve, prefix counts (classic) | [challenge](problems/08-lucky-raffle/challenge.md) | [editorial](problems/08-lucky-raffle/editorial.md) | [tests.zip](problems/08-lucky-raffle/tests.zip) (14) | Drafted |
-| 09 | — | Medium · BFS on a campus-buildings graph | — | — | — | Planned |
+| 08 | Lucky Raffle | Medium · number theory, sieve, prefix counts (classic) | [challenge](problems/08-lucky-raffle/challenge.md) | [editorial](problems/08-lucky-raffle/editorial.md) | [tests.zip](problems/08-lucky-raffle/tests.zip) (14) | Approved |
+| 09 | Fest Treasure Hunt | Medium · graphs, BFS shortest path | [challenge](problems/09-treasure-hunt/challenge.md) | [editorial](problems/09-treasure-hunt/editorial.md) | [tests.zip](problems/09-treasure-hunt/tests.zip) (19) + [image](problems/09-treasure-hunt/sample.png) | Drafted |
 | 10 | — | Medium–Hard · DP with a twist (classic) | — | — | — | Planned |
 | 11 | — | Hard · Dijkstra with extra state, or DSU | — | — | — | Planned |
 
