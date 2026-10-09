@@ -40,7 +40,9 @@ After all commands are done, report:
 1. Robu's final position (row and column), and
 2. how many **different** cells Robu has stood on, **including the starting cell**.
 
-The picture below shows Robu's walk for Sample Input 0.
+The picture below shows Robu's walk for Sample Input 0. A red bar with a ✕ inside
+Robu's cell marks a command that was ignored, because that move would leave the
+lab or enter a desk.
 
 ![Robu's walk in Sample Input 0](UPLOAD sample.png HERE)
 ~~~

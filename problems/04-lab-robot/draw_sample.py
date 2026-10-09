@@ -17,12 +17,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # Palette (light only: the picture sits on HackerRank's white statement page).
 INK, MUTED, LINE = "#1f2638", "#5d6578", "#c9d0dd"
 FREE, VISITED, DESK, DESK_INK = "#ffffff", "#fff1c9", "#3f4759", "#a3adc2"
+FLOOR = "#f4f6fa"                 # floor under a desk tile
 MOVE, BAD, START, BADGE = "#2457c5", "#d23a2f", "#178a4c", "#9a6b08"
 HEAD_BG, ZEBRA = "#eef1f7", "#f7f8fb"
 SANS = "Inter, 'DejaVu Sans', sans-serif"
 MONO = "'DejaVu Sans Mono', monospace"
 
-CELL = 56
+CELL = 72
 GX, GY = 42, 44                 # grid origin (room for row / column numbers)
 
 STEP = {"U": (-1, 0), "D": (1, 0), "L": (0, -1), "R": (0, 1)}
@@ -79,6 +80,24 @@ def cross(x, y, color, s=6):
             f'<line x1="{x - s}" y1="{y - s}" x2="{x + s}" y2="{y + s}"/>'
             f'<line x1="{x - s}" y1="{y + s}" x2="{x + s}" y2="{y - s}"/></g>')
 
+
+def blocked(bx, by, dx, dy, legend=False):
+    """Ignored command, drawn entirely inside Robu's cell: a red wall bar on the edge Robu
+    bumped into, with a cross badge pressed against it. (bx, by) is the middle of that
+    edge and (dx, dy) the direction Robu tried to move."""
+    r = 7 if legend else 7.5
+    bar = 10 if legend else 16
+    wx, wy = bx - dx * 4, by - dy * 4               # wall bar, just inside the cell
+    gap = 4 + 2.25 + r + 1.5
+    cx, cy = bx - dx * gap, by - dy * gap           # badge, touching the bar
+    px, py = -dy, dx
+    k = r * 0.38
+    return (f'<line x1="{wx - px * bar:.1f}" y1="{wy - py * bar:.1f}" x2="{wx + px * bar:.1f}" y2="{wy + py * bar:.1f}" '
+            f'stroke="{BAD}" stroke-width="4.5" stroke-linecap="round"/>'
+            f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r}" fill="{BAD}" stroke="#ffffff" stroke-width="2"/>'
+            f'<g stroke="#ffffff" stroke-width="2.2" stroke-linecap="round">'
+            f'<line x1="{cx - k:.1f}" y1="{cy - k:.1f}" x2="{cx + k:.1f}" y2="{cy + k:.1f}"/>'
+            f'<line x1="{cx - k:.1f}" y1="{cy + k:.1f}" x2="{cx + k:.1f}" y2="{cy - k:.1f}"/></g>')
 
 def text(x, y, s, size=12, color=INK, weight=400, anchor="start", family=SANS):
     return (f'<text x="{x:.1f}" y="{y:.1f}" font-family="{family}" font-size="{size}" font-weight="{weight}" '
@@ -214,9 +233,10 @@ def draw(grid, moves):
 
 
 def draw_simple(grid, moves):
-    """Grid only: visited cells shaded and one arrow per move (ignored commands are not drawn)."""
+    """Grid with visited cells shaded, one arrow per move, and a blocked marker for every
+    ignored command: a dashed line from Robu's own cell to a wall bar with a cross badge."""
     n, m = len(grid), len(grid[0])
-    order, _, arrows, _, end = simulate(grid, moves)
+    order, _, arrows, bumps, end = simulate(grid, moves)
     start = next(iter(order))
     gw, gh = m * CELL, n * CELL
     out = []
@@ -228,12 +248,13 @@ def draw_simple(grid, moves):
         for j in range(m):
             x, y = GX + j * CELL, GY + i * CELL
             if grid[i][j] == "#":
-                out.append(f'<rect x="{x}" y="{y}" width="{CELL}" height="{CELL}" fill="{DESK}" stroke="#ffffff" stroke-width="1.5"/>')
+                out.append(f'<rect x="{x}" y="{y}" width="{CELL}" height="{CELL}" fill="{FLOOR}" stroke="{LINE}" stroke-width="1"/>')
+                out.append(f'<rect x="{x + 4}" y="{y + 4}" width="{CELL - 8}" height="{CELL - 8}" rx="7" fill="{DESK}"/>')
                 out.append(text(x + CELL / 2, y + CELL / 2 + 1, "#", 18, DESK_INK, 700, "middle", MONO))
             else:
                 fill = VISITED if (i, j) in order else FREE
                 out.append(f'<rect x="{x}" y="{y}" width="{CELL}" height="{CELL}" fill="{fill}" stroke="{LINE}" stroke-width="1"/>')
-    out.append(f'<rect x="{GX}" y="{GY}" width="{gw}" height="{gh}" fill="none" stroke="{INK}" stroke-width="2"/>')
+    out.append(f'<rect x="{GX}" y="{GY}" width="{gw}" height="{gh}" fill="none" stroke="{INK}" stroke-width="2.5"/>')
 
     undirected = {}
     for a, b in arrows:
@@ -243,18 +264,22 @@ def draw_simple(grid, moves):
         dx, dy = (x2 - x1) / CELL, (y2 - y1) / CELL
         off = 6 if undirected[frozenset((a, b))] > 1 else 0
         ox, oy = -dy * off, dx * off
-        trim_a = 17 if a in (start, end) else 3
-        trim_b = 18 if b in (start, end) else 5
+        trim_a = 16 if a in (start, end) else 3
+        trim_b = 17 if b in (start, end) else 5
         out.append(arrow(x1 + dx * trim_a + ox, y1 + dy * trim_a + oy,
                          x2 - dx * trim_b + ox, y2 - dy * trim_b + oy, MOVE))
+    for cell, ch in bumps:
+        di, dj = STEP[ch]
+        cx, cy = center(cell)
+        out.append(blocked(cx + dj * CELL / 2, cy + di * CELL / 2, dj, di))
     sx, sy = center(start)
-    out.append(f'<circle cx="{sx}" cy="{sy}" r="14" fill="{START}"/>')
-    out.append(text(sx, sy + 0.5, "S", 14, "#ffffff", 700, "middle"))
+    out.append(f'<circle cx="{sx}" cy="{sy}" r="12" fill="{START}" stroke="#ffffff" stroke-width="2.5"/>')
+    out.append(text(sx, sy + 0.5, "S", 13, "#ffffff", 700, "middle"))
     ex, ey = center(end)
-    out.append(f'<circle cx="{ex}" cy="{ey}" r="14" fill="{MOVE}"/>')
-    out.append(text(ex, ey + 0.5, "E", 14, "#ffffff", 700, "middle"))
+    out.append(f'<circle cx="{ex}" cy="{ey}" r="12" fill="{MOVE}" stroke="#ffffff" stroke-width="2.5"/>')
+    out.append(text(ex, ey + 0.5, "E", 13, "#ffffff", 700, "middle"))
 
-    ly = GY + gh + 30
+    ly = GY + gh + 34
     lx = GX
 
     def item(mark, mark_w, label):
@@ -266,6 +291,7 @@ def draw_simple(grid, moves):
     item(lambda x: f'<circle cx="{x + 9}" cy="{ly}" r="9" fill="{START}"/>' + text(x + 9, ly + 0.5, "S", 10, "#ffffff", 700, "middle"), 18, "start")
     item(lambda x: f'<circle cx="{x + 9}" cy="{ly}" r="9" fill="{MOVE}"/>' + text(x + 9, ly + 0.5, "E", 10, "#ffffff", 700, "middle"), 18, "end")
     item(lambda x: arrow(x, ly, x + 26, ly, MOVE, 2.8), 26, "move")
+    item(lambda x: blocked(x + 26, ly, 1, 0, legend=True), 26, "blocked move (ignored)")
     item(lambda x: f'<rect x="{x}" y="{ly - 8}" width="16" height="16" fill="{VISITED}" stroke="{LINE}"/>', 16, "visited")
     ry = ly + 28
     out.append(text(GX, ry, f"Ends at row {end[0] + 1}, column {end[1] + 1} · {len(order)} different cells", 14, INK, 600))
