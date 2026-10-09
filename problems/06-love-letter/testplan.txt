@@ -1,0 +1,8 @@
+file sample.txt
+gen minimal 1
+gen keys 2
+gen letters 3 20
+gen symbols 4 30
+gen letters 5 100
+gen symbols 6 100
+gen max 7 100
