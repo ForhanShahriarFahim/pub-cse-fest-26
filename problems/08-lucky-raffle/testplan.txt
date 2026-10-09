@@ -1,0 +1,14 @@
+file sample.txt
+gen fixed 1
+gen small 2
+gen singles 3 0 1 100000
+gen singles 4 0 900001 1000000
+gen random 5 1000
+gen short 6 50000
+gen prefix 7 50000
+gen primeends 8 50000
+gen gaps 9 20000
+gen squares 10 20000
+gen top 11 50000
+gen random 12 100000
+gen full 13 100000

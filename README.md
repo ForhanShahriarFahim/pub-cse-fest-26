@@ -24,13 +24,11 @@ Each problem folder has:
 | 04 | Lab Robot | Easy · implementation, grid simulation | [challenge](problems/04-lab-robot/challenge.md) | [editorial](problems/04-lab-robot/editorial.md) | [tests.zip](problems/04-lab-robot/tests.zip) (13) + [image](problems/04-lab-robot/sample.png) | Approved |
 | 05 | Fest Scoreboard | Easy · implementation (ICPC rules) | [challenge](problems/05-fest-scoreboard/challenge.md) | [editorial](problems/05-fest-scoreboard/editorial.md) | [tests.zip](problems/05-fest-scoreboard/tests.zip) (12) | Approved |
 | 06 | Love Letter | Easy · strings, Caesar cipher (for fun) | [challenge](problems/06-love-letter/challenge.md) | [editorial](problems/06-love-letter/editorial.md) | [tests.zip](problems/06-love-letter/tests.zip) (8) + [image](problems/06-love-letter/alphabet.png) | Approved |
-| 07 | Rickshaw Ride | Easy · sorting, greedy, two pointers (classic) | [challenge](problems/07-rickshaw-ride/challenge.md) | [editorial](problems/07-rickshaw-ride/editorial.md) | [tests.zip](problems/07-rickshaw-ride/tests.zip) (18) | Drafted |
-| 08 | — | Easy–Medium · prefix sums or frequency counting | — | — | — | Planned |
-| 09 | — | Medium · number theory, GCD or sieve (classic) | — | — | — | Planned |
-| 10 | — | Medium · BFS on a campus-buildings graph | — | — | — | Planned |
-| 11 | — | Medium · binary search on the answer (classic) | — | — | — | Planned |
-| 12 | — | Medium–Hard · DP with a twist (classic) | — | — | — | Planned |
-| 13 | — | Hard · Dijkstra with extra state, or DSU | — | — | — | Planned |
+| 07 | Rickshaw Ride | Easy · sorting, greedy, two pointers (classic) | [challenge](problems/07-rickshaw-ride/challenge.md) | [editorial](problems/07-rickshaw-ride/editorial.md) | [tests.zip](problems/07-rickshaw-ride/tests.zip) (18) | Approved |
+| 08 | Lucky Raffle | Medium · number theory, sieve, prefix counts (classic) | [challenge](problems/08-lucky-raffle/challenge.md) | [editorial](problems/08-lucky-raffle/editorial.md) | [tests.zip](problems/08-lucky-raffle/tests.zip) (14) | Drafted |
+| 09 | — | Medium · BFS on a campus-buildings graph | — | — | — | Planned |
+| 10 | — | Medium–Hard · DP with a twist (classic) | — | — | — | Planned |
+| 11 | — | Hard · Dijkstra with extra state, or DSU | — | — | — | Planned |
 
 Contest order: the giveaways first, then the rest shuffled. Final contest letters are
 assigned at the end.
