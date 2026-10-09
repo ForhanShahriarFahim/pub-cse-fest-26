@@ -13,6 +13,9 @@ Find the secret key and decrypt the love letters of a shy PUB CSE student.
 ~~~
 
 ## Problem Statement
+Before you paste: put the cursor on the `![...]` line, click the **image** button
+in the editor toolbar, and upload `alphabet.png` from this folder. Then delete the
+placeholder line.
 ~~~markdown
 Every evening during **PUB CSE Fest-26**, a shy student drops a secret love letter
 into the notice box of the CSE department. The whole department wants to know who
@@ -27,6 +30,8 @@ going around from `z` back to `a` (and from `Z` back to `A`):
 
 For example, with K = 3, `a` becomes `d`, `x` becomes `a`, `C` becomes `F`, and
 `I love C++ <3` becomes `L oryh F++ <3`.
+
+![How a shift with K = 3 works](UPLOAD alphabet.png HERE)
 
 The key can be **different for every letter**, and nobody knows it. But the student
 always signs off the same way: the **last five characters** of every original
