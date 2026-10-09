@@ -1,6 +1,6 @@
 # Facebook post: contest registration (short version)
 
-Replace `https://forms.gle/aX68EVFkmn93pMC79` before posting.
+Ready to post.
 
 ```
 💻 PUB CSE Fest-26 Programming Contest: Team Registration Open! 🏆
