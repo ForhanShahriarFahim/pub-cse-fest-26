@@ -20,3 +20,36 @@ Form your team and compete ICPC-style!
 
 #PUBCSEFest26 #ProgrammingContest #ICPC
 ```
+
+# Facebook post: professional version
+
+```
+PUB CSE FEST 2026 | Programming Contest Registration Is Now Open
+
+The Department of Computer Science & Engineering, Pundra University of Science & Technology, invites teams to register for the Programming Contest of PUB CSE FEST 2026.
+
+Eligibility and Team Composition
+• Each team must have exactly three members, including at least one first-year student (HSC Batch 28 or 29, or Diploma Batch 22 or 23).
+• The contest is open only to CSE students who have registered for PUB CSE FEST 2026.
+• A student may be a member of only one team.
+• Team composition cannot be changed after registration.
+
+Registration
+Only the Team Leader needs to complete the registration form, providing the details of all three members.
+Registration Form: https://forms.gle/kE9VzWY1hdZvYSb69
+Deadline: 13 October 2026 (Tuesday), 11:59 PM
+
+Contest Format
+• Follows ICPC guidelines
+• Duration: 2.5 hours, held onsite in the PUB CSE labs
+• Languages: C, C++, Java, Python
+• Use of the internet, AI tools and mobile phones is strictly prohibited
+
+The contest date and venue will be announced on this page. Seats are limited.
+
+For further information, please contact:
+M. Z. I. Juwel
+Radha Rani Paul
+
+#PUBCSEFest2026 #ProgrammingContest #ICPC #PUBCSE
+```
