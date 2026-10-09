@@ -9,7 +9,7 @@ Form your team and compete ICPC-style!
 
 👥 3 members per team, with at least one 1st-year student (1st/2nd semester)
 ✅ Open only to CSE students registered for PUB CSE FEST 2026
-📝 Only the Team Leader registers, with all three members' details: https://forms.gle/kE9VzWY1hdZvYSb69
+📝 Only the Team Leader registers, with all three members' details: https://forms.gle/k5R4jSXDCn2ktFY39
 ⏰ Deadline: 13 October 2026 (Tuesday), 11:59 PM
 
 ⚖️ ICPC guidelines | C, C++, Java, Python | No internet, AI or phones
@@ -36,7 +36,7 @@ Eligibility and Team Composition
 
 Registration
 Only the Team Leader needs to complete the registration form, providing the details of all three members.
-Registration Form: https://forms.gle/kE9VzWY1hdZvYSb69
+Registration Form: https://forms.gle/k5R4jSXDCn2ktFY39
 Deadline: 13 October 2026 (Tuesday), 11:59 PM
 
 Contest Format
