@@ -1,6 +1,6 @@
 # Editorial: Love Letter (Easy, strings)
 
-**Finding the key.** The original letter ends with `Coder`, so the 5th character
+**Finding the key.** The original string ends with `Coder`, so the 5th character
 from the end was a `C` before encryption. If it is now the character `c`, the key is
 
 ```
@@ -18,7 +18,7 @@ if 'a' <= ch <= 'z':  ch = (ch - 'a' - K + 26) % 26 + 'a'
 if 'A' <= ch <= 'Z':  ch = (ch - 'A' - K + 26) % 26 + 'A'
 ```
 
-**Reading the input.** Each letter contains spaces, so read whole lines:
+**Reading the input.** Each string contains spaces, so read whole lines:
 `getline` in C++ (after reading T, skip the rest of that first line), `fgets` in C,
 `BufferedReader.readLine()` in Java, `input()` in Python.
 
@@ -32,9 +32,9 @@ if 'A' <= ch <= 'Z':  ch = (ch - 'A' - K + 26) % 26 + 'A'
 | Printing in all uppercase | The case must be kept. |
 | Treating the symbols between `Z` and `a` in ASCII (`[`, `\`, `]`, `^`, `_` and the backtick) as letters | Those symbols must not change. |
 | Shifting digits too | Digits must not change. |
-| Using the first letter's key for every letter | Each letter has its own key. |
+| Using the first string's key for every string | Each string has its own key. |
 | Computing the key as `'C' - c` | The wrong sign: it shifts the wrong way. |
 | Taking the key from the first character | Only the signature `Coder` is known. |
-| `cin >> T` followed by `getline` without skipping the newline | The first "letter" read is empty. |
+| `cin >> T` followed by `getline` without skipping the newline | The first string read is empty. |
 
-**Complexity:** O(total length of all letters).
+**Complexity:** O(total length of all strings).
