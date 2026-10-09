@@ -23,6 +23,10 @@ contest name, date and Sign Up button in the middle, so the banner keeps the mid
 clear and puts the fest logo on the right. `contest/banner-preview.png` shows the
 expected result. Regenerate with `python3 contest/draw_banner.py`.
 
+HackerRank shows these sections **centered**, so they are written as short
+paragraphs (one blank line between them) instead of bullet lists, which look ragged
+when centered.
+
 Contest URL (slug):
 ```
 pub-cse-fest-26
@@ -37,23 +41,17 @@ Description:
 ```
 Welcome to the **PUB CSE Fest-26 Programming Contest**, the coding battle of PUB CSE Fest-26!
 
-For **2 hours and 30 minutes**, teams of three race against the clock on **11 problems**
-written specially for this fest. The set opens with friendly warm-ups that every team
-can solve, moves on to puzzles inspired by the fest itself, and ends with a couple of
-tough challenges for the brave.
+**Teams of 3  ·  2 hours 30 minutes  ·  11 problems  ·  C, C++, Java, Python 3**
 
-**How it works**
+From friendly warm-ups to a couple of tough challenges, every problem is written specially for this fest.
 
-- Teams of three, and every team has one 1st-year student.
-- Onsite in the PUB CSE labs: no internet, no AI tools, just your team and your code.
-- Languages: C, C++, Java and Python 3.
-- ICPC rules: a problem counts only when your submission passes every test case.
-  Teams are ranked by problems solved, then by penalty time.
-- The problems are **not** sorted by difficulty (only the first two are warm-ups),
-  so read them all and choose your battles wisely.
+The problems are **not** sorted by difficulty, so read them all and choose your battles wisely.
 
-Whether you are writing your very first program or chasing your next "Accepted",
-this is your stage. Think fast, code clean, and trust your teammates.
+**ICPC rules:** a problem counts only when it passes every test case. Teams are ranked by problems solved, then by penalty time.
+
+Onsite in the PUB CSE labs. No internet, no AI tools: just your team and your code.
+
+Whether you are writing your very first program or chasing your next "Accepted", this is your stage.
 
 **Code. Compete. Celebrate.**
 ```
@@ -65,26 +63,26 @@ Prizes for the top teams will be announced at PUB CSE Fest-26.
 
 Rules:
 ```
-1. Each team has exactly three members, including one 1st-year student.
-2. Each team competes from one HackerRank account, in the PUB CSE lab.
-3. Allowed languages: C, C++, Java and Python 3.
-4. No internet access other than this contest page, and no AI tools of any kind.
-   Mobile phones must be switched off.
-5. Teams must not communicate with other teams during the contest.
-6. Read input from standard input and write output to standard output, exactly
-   in the format the problem asks for. Do not print extra messages such as
-   "Enter a number".
-7. In Java, the class must be named Solution.
-8. Any form of cheating leads to disqualification. The judges' decision is final.
+**Teams:** exactly three members, including one 1st-year student, on one HackerRank account in the PUB CSE lab.
+
+**Languages:** C, C++, Java and Python 3. In Java, the class must be named Solution.
+
+**Input and output:** read from standard input and write to standard output, exactly in the format the problem asks for. Do not print extra messages such as "Enter a number".
+
+**Fair play:** no internet other than this contest page, no AI tools, and no talking to other teams. Mobile phones must be switched off.
+
+Any form of cheating leads to disqualification. The judges' decision is final.
 ```
 
 Scoring:
 ```
-ICPC style. A problem is solved only when a submission passes all test cases.
-Teams are ranked by the number of problems solved. Ties are broken by penalty
-time: for each solved problem, the minutes from the start of the contest to the
-accepted submission, plus 20 minutes for every wrong submission on that problem
-before it was accepted. Wrong submissions on unsolved problems cost nothing.
+A problem is solved only when a submission passes **all** of its test cases.
+
+Teams are ranked by the **number of problems solved**. Ties are broken by **penalty time**.
+
+Penalty time: for each solved problem, the minutes from the start of the contest to its accepted submission, plus **20 minutes** for every wrong submission on it before that.
+
+Wrong submissions on problems you never solve cost nothing, and compilation errors cost nothing.
 ```
 
 ## Advanced Settings tab: Leaderboard Configurations
