@@ -67,7 +67,7 @@ function createHackathonForm() {
     'PUB CSE FEST 2026 · CSE @ 12: Celebrating 12 Years of CSE'
   );
   // Verified: the signed-in Google email is recorded, so there is no email box to type in.
-  if (typeof form.setEmailCollectionType === 'function') {
+  if (typeof form.setEmailCollectionType === 'function' && FormApp.EmailCollectionType) {
     form.setEmailCollectionType(FormApp.EmailCollectionType.VERIFIED);
   } else {
     form.setCollectEmail(true);
