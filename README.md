@@ -30,6 +30,8 @@ Each problem folder has:
 | 10 | — | Medium–Hard · DP with a twist (classic) | — | — | — | Planned |
 | 11 | — | Hard · Dijkstra with extra state, or DSU | — | — | — | Planned |
 
+Contest page setup (name, dates, description, rules): see [CONTEST.md](CONTEST.md).
+
 Contest order: the giveaways first, then the rest shuffled. Final contest letters are
 assigned at the end.
 
