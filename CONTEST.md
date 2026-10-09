@@ -76,14 +76,37 @@ before it was accepted. Wrong submissions on unsolved problems cost nothing.
 
 | Field | Value |
 |---|---|
-| Leaderboard | the **ACM**-style option (not "Default HackerRank Leaderboard") |
-| Penalty for a wrong submission (appears after choosing ACM) | **20** minutes |
-| Freeze leaderboard (appears after choosing ACM) | optional: freeze for the **last 30 minutes** if you will reveal the final standings at the prize-giving; otherwise no freeze |
+| Leaderboard | **ACM Leaderboard** |
+| Penalty (in seconds) | **1200** (20 minutes) |
+| Penalize Compilation Error | **unticked** (ICPC does not penalize compile errors) |
+| Freeze Leaderboard at | **leave empty for now**; fill it in once the date is fixed (see below) |
 | Tiebreaker | keep **Sum of time of the first (accepted) submissions** |
 | Time Used for Tiebreaking | keep **Start of the Contest** |
 | Hide Challenge Difficulty Tags | **ticked** (the problems are shuffled, as in ICPC) |
 
 Then click **Save Draft**, not *Publish*.
+
+### Freeze time (only once the real date is fixed)
+
+"Freeze Leaderboard at" takes a **Unix timestamp** (seconds since 1970-01-01 UTC).
+Freeze 30 minutes before the end, i.e. at 2:00 into the 2:30 contest. BDT is UTC+6.
+
+For the placeholder date it would be:
+
+| Moment (BDT) | Unix time |
+|---|---|
+| Start: 31 Dec 2026, 10:00 | 1798689600 |
+| Freeze: 31 Dec 2026, 12:00 | 1798696800 |
+| End: 31 Dec 2026, 12:30 | 1798698600 |
+
+For the real date, compute it in Python, replacing the date and time:
+
+```
+python3 -c "from datetime import *; print(int(datetime(2026,12,31,12,0,tzinfo=timezone(timedelta(hours=6))).timestamp()))"
+```
+
+Do not leave a placeholder freeze time in place: if the real contest is later than
+that moment, the leaderboard would be frozen from the very start.
 
 ## When adding the challenges (Challenges tab)
 
