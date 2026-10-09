@@ -18,6 +18,11 @@ public before the problems are ready.
 
 ## Page 2: Contest details
 
+Background image: upload `contest/banner.png` (1920 × 480). HackerRank prints the
+contest name, date and Sign Up button in the middle, so the banner keeps the middle
+clear and puts the fest logo on the right. `contest/banner-preview.png` shows the
+expected result. Regenerate with `python3 contest/draw_banner.py`.
+
 Contest URL (slug):
 ```
 pub-cse-fest-26
@@ -30,17 +35,27 @@ Code. Compete. Celebrate.
 
 Description:
 ```
-Welcome to the PUB CSE Fest-26 Programming Contest!
+Welcome to the **PUB CSE Fest-26 Programming Contest**, the coding battle of PUB CSE Fest-26!
 
-Teams of three compete for 2 hours 30 minutes on a set of 11 problems, from
-warm-up giveaways to a couple of real challenges. The problems are NOT sorted by
-difficulty (except the first two), so read all of them and pick the ones your
-team can solve.
+For **2 hours and 30 minutes**, teams of three race against the clock on **11 problems**
+written specially for this fest. The set opens with friendly warm-ups that every team
+can solve, moves on to puzzles inspired by the fest itself, and ends with a couple of
+tough challenges for the brave.
 
-A problem counts as solved only when a submission passes every test case.
-Ranking follows ICPC rules: most problems solved first, then the least penalty time.
+**How it works**
 
-Good luck, and have fun!
+- Teams of three, and every team has one 1st-year student.
+- Onsite in the PUB CSE labs: no internet, no AI tools, just your team and your code.
+- Languages: C, C++, Java and Python 3.
+- ICPC rules: a problem counts only when your submission passes every test case.
+  Teams are ranked by problems solved, then by penalty time.
+- The problems are **not** sorted by difficulty (only the first two are warm-ups),
+  so read them all and choose your battles wisely.
+
+Whether you are writing your very first program or chasing your next "Accepted",
+this is your stage. Think fast, code clean, and trust your teammates.
+
+**Code. Compete. Celebrate.**
 ```
 
 Prizes:
