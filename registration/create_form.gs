@@ -50,7 +50,7 @@ function createRegistrationForm() {
     '• Organizers may rename any inappropriate team name.\n' +
     '• The contest follows ICPC guidelines.\n\n' +
     'Deadline: ' + DEADLINE + '\n' +
-    'Contact: M.Z.I. Jewel, Radha Rani Paul\n' +
+    'Contact: M. Z. I. Juwel, Radha Rani Paul\n' +
     'Updates: https://www.facebook.com/pubcsefest\n\n' +
     'PUB CSE FEST 2026 · CSE @ 12: Celebrating 12 Years of CSE'
   );

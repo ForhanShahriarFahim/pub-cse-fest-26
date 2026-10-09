@@ -16,7 +16,7 @@ Form your team and compete ICPC-style!
 ⚠️ One team per student. Teams can't be changed after registration. Seats are limited!
 🎁 Exciting prizes for the top teams!
 
-📞 Contact: M.Z.I. Jewel, Radha Rani Paul
+📞 Contact: M. Z. I. Juwel, Radha Rani Paul
 
 #PUBCSEFest26 #ProgrammingContest #ICPC
 ```
