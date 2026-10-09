@@ -66,7 +66,12 @@ function createHackathonForm() {
     'Updates: https://www.facebook.com/pubcsefest\n\n' +
     'PUB CSE FEST 2026 · CSE @ 12: Celebrating 12 Years of CSE'
   );
-  form.setCollectEmail(true);
+  // Verified: the signed-in Google email is recorded, so there is no email box to type in.
+  if (typeof form.setEmailCollectionType === 'function') {
+    form.setEmailCollectionType(FormApp.EmailCollectionType.VERIFIED);
+  } else {
+    form.setCollectEmail(true);
+  }
   form.setLimitOneResponsePerUser(true);
   form.setAllowResponseEdits(true);
   form.setProgressBar(true);
@@ -79,8 +84,7 @@ function createHackathonForm() {
 
   // Section 1: Team & Team Leader (the form's first page, before any page break)
   form.addSectionHeaderItem()
-    .setTitle('Team & Team Leader')
-    .setHelpText('Your email is collected automatically.');
+    .setTitle('Team & Team Leader');
 
   form.addTextItem()
     .setTitle('Team Name')
