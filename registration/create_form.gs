@@ -17,11 +17,19 @@ const SEMESTERS = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
 const HSC_BATCHES = [22, 23, 24, 25, 26, 27, 28, 29];
 const DIPLOMA_BATCHES = [16, 17, 18, 19, 20, 21, 22, 23];
 
+// 1st-year batches in the Summer 26 session.
+const HSC_FIRST_YEAR = [28, 29];
+const DIPLOMA_FIRST_YEAR = [22, 23];
+const FIRST_YEAR_TEXT = '1st year = HSC Batch 28, 29 or Diploma Batch 22, 23';
+
 // One dropdown per member covers both streams, so the sheet gets one clean
 // column per member and nobody can pick a batch from the wrong stream.
+// 1st-year options are tagged so the team rule can be checked from the sheet.
 const PROGRAM_BATCH_CHOICES = []
-  .concat(HSC_BATCHES.map(b => 'B.Sc. in CSE (HSC), Batch ' + b))
-  .concat(DIPLOMA_BATCHES.map(b => 'B.Sc. in CSE (Diploma), Batch ' + b));
+  .concat(HSC_BATCHES.map(b => 'B.Sc. in CSE (HSC), Batch ' + b +
+    (HSC_FIRST_YEAR.includes(b) ? ' (1st year)' : '')))
+  .concat(DIPLOMA_BATCHES.map(b => 'B.Sc. in CSE (Diploma), Batch ' + b +
+    (DIPLOMA_FIRST_YEAR.includes(b) ? ' (1st year)' : '')));
 
 function createRegistrationForm() {
   const form = FormApp.create('PUB CSE Fest 2026: Programming Contest Registration');
@@ -34,7 +42,8 @@ function createRegistrationForm() {
     'Other members do not need to submit anything.\n\n' +
     'Rules:\n' +
     '• Each team has exactly 3 members.\n' +
-    '• Each team must include at least one 1st-year student (1st or 2nd semester).\n' +
+    '• Each team must include at least one 1st-year student (1st or 2nd semester):\n' +
+    '   HSC Batch 28, 29 or Diploma Batch 22, 23.\n' +
     '• Only CSE students registered for PUB CSE FEST 2026 can take part.\n' +
     '• A student can be a member of only one team.\n' +
     '• Team members cannot be changed after registration.\n' +
@@ -76,7 +85,7 @@ function createRegistrationForm() {
 
   form.addCheckboxItem()
     .setTitle('Which member(s) are from 1st or 2nd semester?')
-    .setHelpText('Every team needs at least one 1st-year member.')
+    .setHelpText('Every team needs at least one 1st-year member (' + FIRST_YEAR_TEXT + ').')
     .setChoiceValues(['Team Leader', 'Member 2', 'Member 3'])
     .setRequired(true);
 
