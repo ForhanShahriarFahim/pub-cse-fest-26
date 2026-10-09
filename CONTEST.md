@@ -37,8 +37,8 @@ warm-up giveaways to a couple of real challenges. The problems are NOT sorted by
 difficulty (except the first two), so read all of them and pick the ones your
 team can solve.
 
-Every problem has the same score and is all-or-nothing: a submission must pass
-every test case to get any points.
+A problem counts as solved only when a submission passes every test case.
+Ranking follows ICPC rules: most problems solved first, then the least penalty time.
 
 Good luck, and have fun!
 ```
@@ -65,12 +65,27 @@ Rules:
 
 Scoring:
 ```
-Every problem is worth 100 points, and a submission gets the points only if it
-passes all test cases. Teams are ranked by total score. Ties are broken by time,
-as shown on the HackerRank leaderboard.
+ICPC style. A problem is solved only when a submission passes all test cases.
+Teams are ranked by the number of problems solved. Ties are broken by penalty
+time: for each solved problem, the minutes from the start of the contest to the
+accepted submission, plus 20 minutes for every wrong submission on that problem
+before it was accepted. Wrong submissions on unsolved problems cost nothing.
 ```
+
+## Advanced Settings tab: Leaderboard Configurations
+
+| Field | Value |
+|---|---|
+| Leaderboard | the **ACM**-style option (not "Default HackerRank Leaderboard") |
+| Penalty for a wrong submission (appears after choosing ACM) | **20** minutes |
+| Freeze leaderboard (appears after choosing ACM) | optional: freeze for the **last 30 minutes** if you will reveal the final standings at the prize-giving; otherwise no freeze |
+| Tiebreaker | keep **Sum of time of the first (accepted) submissions** |
+| Time Used for Tiebreaking | keep **Start of the Contest** |
+| Hide Challenge Difficulty Tags | **ticked** (the problems are shuffled, as in ICPC) |
+
+Then click **Save Draft**, not *Publish*.
 
 ## When adding the challenges (Challenges tab)
 
-- Give every challenge the same max score (100) so the ranking counts solved problems.
+- Give every challenge the same max score (100).
 - Order: the two giveaways (01 Welcome, 02 Fest T-Shirts) first, the rest shuffled.
