@@ -18,11 +18,11 @@ Each problem folder has:
 
 | # | Problem | Tier · Topic | HackerRank form | Editorial | Test cases | Status |
 |---|---------|--------------|-----------------|-----------|------------|--------|
-| 01 | Welcome to CSE Fest-26 | Giveaway · printing | [challenge](problems/01-welcome/challenge.md) | [editorial](problems/01-welcome/editorial.md) | [tests.zip](problems/01-welcome/tests.zip) (2) | Drafted |
+| 01 | Welcome to CSE Fest-26 | Giveaway · printing | [challenge](problems/01-welcome/challenge.md) | [editorial](problems/01-welcome/editorial.md) | [tests.zip](problems/01-welcome/tests.zip) (2) | Approved |
 | 02 | Fest T-Shirts | Giveaway · arithmetic, `long long` | [challenge](problems/02-fest-tshirts/challenge.md) | [editorial](problems/02-fest-tshirts/editorial.md) | [tests.zip](problems/02-fest-tshirts/tests.zip) (8) | Approved |
 | 03 | Fest ID Checker | Giveaway · strings, conditionals | [challenge](problems/03-fest-id-checker/challenge.md) | [editorial](problems/03-fest-id-checker/editorial.md) | [tests.zip](problems/03-fest-id-checker/tests.zip) (6) | Approved |
-| 04 | Lab Robot | Easy · implementation, grid simulation | [challenge](problems/04-lab-robot/challenge.md) | [editorial](problems/04-lab-robot/editorial.md) | [tests.zip](problems/04-lab-robot/tests.zip) (13) + [image](problems/04-lab-robot/sample.png) | Drafted |
-| 05 | Mini ICPC Scoreboard | Easy · implementation | — | — | — | Next |
+| 04 | Lab Robot | Easy · implementation, grid simulation | [challenge](problems/04-lab-robot/challenge.md) | [editorial](problems/04-lab-robot/editorial.md) | [tests.zip](problems/04-lab-robot/tests.zip) (13) + [image](problems/04-lab-robot/sample.png) | Approved |
+| 05 | Fest Scoreboard | Easy · implementation (ICPC rules) | [challenge](problems/05-fest-scoreboard/challenge.md) | [editorial](problems/05-fest-scoreboard/editorial.md) | [tests.zip](problems/05-fest-scoreboard/tests.zip) (12) | Drafted |
 | 06 | — | Easy · sorting + greedy (classic) | — | — | — | Planned |
 | 07 | — | Easy–Medium · prefix sums or frequency counting | — | — | — | Planned |
 | 08 | — | Medium · number theory, GCD or sieve (classic) | — | — | — | Planned |
@@ -30,6 +30,8 @@ Each problem folder has:
 | 10 | — | Medium · binary search on the answer (classic) | — | — | — | Planned |
 | 11 | — | Medium–Hard · DP with a twist (classic) | — | — | — | Planned |
 | 12 | — | Hard · Dijkstra with extra state, or DSU | — | — | — | Planned |
+
+Also planned: **Love Letter**, a string encryption problem (number assigned once its design is settled).
 
 Contest order: the giveaways first, then the rest shuffled. Final contest letters are
 assigned at the end.

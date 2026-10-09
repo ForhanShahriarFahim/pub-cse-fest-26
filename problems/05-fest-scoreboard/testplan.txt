@@ -1,0 +1,12 @@
+file sample.txt
+gen empty 1 5 3
+gen edge 2
+gen nosolve 3 7 5 40
+gen tie 4 10 5
+gen tie 5 100 26
+gen random 6 8 5 200
+gen ce 7 20 8 3000
+gen realistic 8 20 10 2000
+gen realistic 9 100 26 100000
+gen random 10 100 26 100000
+gen realistic 11 1 1 500
