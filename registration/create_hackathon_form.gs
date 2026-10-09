@@ -137,7 +137,6 @@ function createHackathonForm() {
 function addMemberQuestions(form, label) {
   form.addTextItem()
     .setTitle(label + ': Full Name')
-    .setHelpText('As it should appear on the certificate.')
     .setRequired(true);
 
   form.addTextItem()
