@@ -121,37 +121,73 @@ function rule(after = 120) {
 }
 
 // ---------- cover ----------
+const GREY = "404040";
+const NO_BORDER = { style: BorderStyle.NONE, size: 0, color: "FFFFFF" };
+
+// Short centred rule: a paragraph bottom border narrowed by indents.
+function shortRule(indent, after = 0, size = 6) {
+  return new Paragraph({
+    indent: { left: indent, right: indent },
+    spacing: { after },
+    border: { bottom: { style: BorderStyle.SINGLE, size, color: "000000", space: 1 } },
+    children: [],
+  });
+}
+
 function cover() {
-  const c = (text, size, o = {}) => para([run(text, { size, ...o })], { alignment: AlignmentType.CENTER, spacing: { after: o.after ?? 80 } });
+  const c = (text, size, o = {}) => new Paragraph({
+    alignment: AlignmentType.CENTER,
+    spacing: { before: o.before ?? 0, after: o.after ?? 0 },
+    children: [run(text, { size, bold: o.bold, italics: o.italics, color: o.color, characterSpacing: o.spacing })],
+  });
   const info = [
-    ["Development Period", "14 October 2026 to 30 October 2026"],
-    ["Final Presentation and Judging", "30 October 2026"],
-    ["Team Size", "5 students per team"],
-    ["Tracks", "5 tracks, 19 problems"],
+    ["DEVELOPMENT PERIOD", "14 to 30 October 2026"],
+    ["PROJECT EVALUATION", "30 October 2026"],
+    ["TEAM SIZE", "5 Students"],
+    ["PROBLEMS", "19 in 5 Tracks"],
   ];
+  const colW = CONTENT_W / 4;
+  const rowRule = { style: BorderStyle.SINGLE, size: 12, color: "000000" };
+  const sep = { style: BorderStyle.SINGLE, size: 4, color: "808080" };
+  const infoTable = new Table({
+    width: { size: CONTENT_W, type: WidthType.DXA },
+    columnWidths: info.map(() => colW),
+    borders: { top: rowRule, bottom: rowRule, left: NO_BORDER, right: NO_BORDER, insideHorizontal: NO_BORDER, insideVertical: sep },
+    rows: [new TableRow({ children: info.map(([k, v], i) => new TableCell({
+      width: { size: colW, type: WidthType.DXA },
+      borders: { top: rowRule, bottom: rowRule, left: i ? sep : NO_BORDER, right: i < 3 ? sep : NO_BORDER },
+      margins: { top: 160, bottom: 160, left: 80, right: 80 },
+      verticalAlign: VerticalAlign.CENTER,
+      children: [c(k, 16, { color: GREY, spacing: 20, after: 60 }), c(v, 23, { bold: true })],
+    })) })],
+  });
   return [
-    para([], { spacing: { before: 600 } }),
-    c("Pundra University of Science & Technology", 30, { bold: true }),
-    c("Department of Computer Science and Engineering", 25, { after: 500 }),
+    c("PUNDRA UNIVERSITY OF SCIENCE & TECHNOLOGY", 28, { bold: true, spacing: 30, before: 700, after: 60 }),
+    c("Department of Computer Science and Engineering", 24, { color: GREY, after: 160 }),
+    shortRule(3600, 800),
     new Paragraph({
       alignment: AlignmentType.CENTER,
-      spacing: { after: 400 },
-      children: [new ImageRun({ type: "jpg", data: fs.readFileSync(LOGO), transformation: { width: 150, height: 150 } })],
+      spacing: { after: 600 },
+      children: [new ImageRun({ type: "jpg", data: fs.readFileSync(LOGO), transformation: { width: 196, height: 196 } })],
     }),
-    c("PUB CSE FEST-26", 32, { bold: true, after: 120 }),
-    c("HACKATHON 2026", 56, { bold: true, after: 120 }),
-    c("Problem Set", 34, { after: 700 }),
-    new Table({
-      width: { size: 7200, type: WidthType.DXA },
-      columnWidths: [3000, 4200],
+    c("PUB CSE FEST-26", 30, { bold: true, spacing: 120, after: 120 }),
+    c("HACKATHON 2026", 72, { bold: true, spacing: 20, after: 200 }),
+    new Paragraph({
       alignment: AlignmentType.CENTER,
-      rows: info.map(([k, v]) => new TableRow({
-        children: [cell(k, 3000, { bold: true, fill: SHADE }), cell(v, 4200)],
-      })),
+      indent: { left: 2900, right: 2900 },
+      spacing: { after: 480 },
+      border: {
+        top: { style: BorderStyle.SINGLE, size: 6, color: "000000", space: 6 },
+        bottom: { style: BorderStyle.SINGLE, size: 6, color: "000000", space: 6 },
+      },
+      children: [run("PROBLEM SET", { size: 32, characterSpacing: 100 })],
     }),
-    para([], { spacing: { after: 2600 } }),
-    c("Organised by the Department of Computer Science and Engineering", 21, { italics: true, after: 40 }),
-    c("Pundra University of Science & Technology, Bogura", 21, { italics: true }),
+    c("Blockchain and Cybersecurity   ·   Artificial Intelligence and Machine Learning", 21, { italics: true, color: GREY, after: 40 }),
+    c("Smart Campus Services   ·   Academic and EdTech Platforms   ·   Animated Short Film", 21, { italics: true, color: GREY, after: 1300 }),
+    infoTable,
+    c("ORGANISED BY", 16, { color: GREY, spacing: 40, before: 2000, after: 60 }),
+    c("Department of Computer Science and Engineering", 23, { bold: true, after: 20 }),
+    c("Pundra University of Science & Technology, Bogura", 22),
   ];
 }
 
@@ -292,7 +328,7 @@ function filmGuidelines() {
       "Credits name every team member and any external assets.",
     ]),
     heading("Use of AI Tools"),
-    para("AI tools may help with brainstorming, rough visual references, temporary narration for the animatic, noise removal, subtitles, and repetitive production tasks. The script, storyboard, shot composition, character acting, animation decisions, editing and final creative direction must remain the team's own work. Judges will review the storyboard, animatic and project files along with the final film.",
+    para("AI tools may help with brainstorming, rough visual references, temporary narration for the animatic, noise removal, subtitles, and repetitive production tasks. The script, storyboard, shot composition, character acting, animation decisions, editing and final creative direction must remain the team's own work. Evaluators will review the storyboard, animatic and project files along with the final film.",
       { alignment: AlignmentType.JUSTIFIED }),
   ];
 }
@@ -323,18 +359,20 @@ function filmPage(f) {
   ];
 }
 
-// ---------- rules, submission and judging ----------
+// ---------- rules, evaluation, submission and judging ----------
 function rulesPages() {
+  const centre = [undefined, AlignmentType.CENTER];
+  const total = [para([run("Total", { bold: true })]), para([run("100", { bold: true })], { alignment: AlignmentType.CENTER }), ""];
   return [
     pageBreak(),
-    para([run("Rules, Submission and Judging", { bold: true, size: 32 })], { spacing: { after: 40 } }),
+    para([run("Rules, Evaluation and Submission", { bold: true, size: 32 })], { spacing: { after: 40 } }),
     rule(60),
     heading("Timeline", 80),
     table([4200, CONTENT_W - 4200], null, [
       ["Problem set release and team registration", "14 October 2026"],
       ["Development period", "14 October 2026 to 30 October 2026"],
-      ["Final submission", "30 October 2026, before the presentation session (time will be announced)"],
-      ["Final presentation, demonstration and judging", "30 October 2026"],
+      ["Submission of repository link", "30 October 2026, before evaluation starts (time will be announced)"],
+      ["Project evaluation", "30 October 2026"],
     ], { boldFirst: true, size: 21 }),
     heading("General Rules"),
     ...numbered([
@@ -342,58 +380,83 @@ function rulesPages() {
       "Each team works on one problem from this problem set, subject to allocation by the organising committee.",
       "Teams may use any programming language, framework, database, cloud service or blockchain platform, and any web, mobile or desktop platform.",
       "Open-source libraries and frameworks are allowed. Simply combining existing tools without meaningful implementation of your own will receive limited marks.",
-      "Teams may use any tools, including AI assistants, but every member must be able to explain the design, code and decisions of the project during judging.",
+      "Teams may use any tools, including AI assistants, but every member must be able to explain the design, code and decisions of the project during evaluation.",
       "Copying an existing project and presenting it as the team's own work leads to disqualification.",
       "External people must not develop any part of the solution for a team.",
       "No real money may be collected and no real personal, medical or financial data may be used. Use simulated or synthetic data.",
-      "The decision of the judges is final.",
+      "There is no late submission. All projects are evaluated on 30 October 2026.",
+      "The decision of the evaluation team is final.",
     ]),
     heading("Cybersecurity Safety Notice"),
     shaded("All security testing and attack simulation must be performed only on systems, applications, datasets and networks owned by the team or explicitly authorised by the organisers. Participants must not scan, exploit, attack, disrupt or attempt unauthorised access to any external system, website, server, network or account. Any violation leads to immediate disqualification."),
-    heading("Submission Requirements: Tracks A to D"),
-    ...bullets([
-      "Source code in a Git repository (preferred) or a ZIP archive.",
-      "README with problem ID, team name, members, solution description, technology stack, installation and usage instructions, and known limitations.",
-      "Architecture or design diagram, and database schema or smart-contract design where applicable.",
-      "A working prototype demonstrated live during judging. A screen-recorded demo video (3 to 5 minutes) is recommended as a backup.",
-      "Presentation slides covering the problem, solution, architecture, implementation, demonstration, innovation and future work.",
+    pageBreak(),
+    heading("Project Evaluation", 0),
+    para("There is no formal presentation and no slides are required. On 30 October 2026 the evaluation team will visit and check every project in person. Plan for about 20 to 30 minutes per project. All five members must be present at their station and take part.",
+      { alignment: AlignmentType.JUSTIFIED, spacing: { after: 80 } }),
+    para([run("Tracks A to D", { bold: true, italics: true, size: 21 })], { keepNext: true, spacing: { after: 20 } }),
+    ...numbered([
+      "The team gives a short overview of the problem, the solution and the system design (about 3 minutes).",
+      "The team demonstrates every required feature live, role by role, using prepared sample data.",
+      "Everything shown will be tested. Evaluators will use the system themselves, enter invalid data, try to reach pages or data without permission, and check edge cases.",
+      "Any evaluator may question any member about any part of the project, and may ask to see the source code, database, smart contract or model training code.",
+      "A feature that does not work during evaluation is counted as not implemented. The demo video in the README is for reference and does not replace the live check.",
+      "The version evaluated must be the one in the submitted repository.",
+      "Teams set up their own laptops, phones and other devices before their evaluation slot. Internet access may be unreliable, so keep a local setup ready.",
     ]),
+    para([run("Track E (Animated Short Film)", { bold: true, italics: true, size: 21 })], { keepNext: true, spacing: { before: 80, after: 20 } }),
+    ...numbered([
+      "The full film is screened.",
+      "The team shows its script, storyboard, animatic and project files open in the animation software, and explains how the film was made.",
+      "Evaluators may ask any member about their role and how specific scenes were produced.",
+    ]),
+    heading("Submission Requirements: Tracks A to D"),
+    para("Only a Git repository with a complete README is required. No report or slides are needed.", { spacing: { after: 60 } }),
+    ...bullets([
+      "Git repository (GitHub or GitLab) with the complete source code. If the repository is private, give access to the evaluators. The commit history should show work across the development period. Do not commit passwords, API keys or .env files.",
+      "README.md in the root of the repository containing:",
+    ]),
+    ...[
+      "Problem ID and title, team name, and members with name, student ID and role.",
+      "Demo video: a link at the top of the README to a 3 to 5 minute screen recording (YouTube unlisted or Google Drive) showing the main features.",
+      "A short description of the solution and the technology stack.",
+      "Feature status table: each required feature marked Done, Partial or Not done, followed by the team's additional features.",
+      "Step-by-step setup and run instructions, an example environment file, and sample login accounts for every role.",
+      "Screenshots of the main screens, and an architecture or database diagram where applicable.",
+      "Deployed link or installable build (for example an Android APK), if available.",
+      "Known limitations and team contribution (who did what).",
+    ].map((t) => new Paragraph({
+      numbering: { reference: "sub", level: 0 },
+      spacing: { after: 30, line: 266 },
+      children: [run(t)],
+    })),
     heading("Submission Requirements: Track E"),
     ...bullets([
-      "Final film as MP4 (H.264), 1920 × 1080, 7 to 10 minutes.",
-      "Script, character sheets, storyboard and animatic.",
-      "Editable project files (for example Blender, Krita, OpenToonz or DaVinci Resolve projects).",
-      "A one-page production note listing team roles, tools used and any external assets.",
+      "Final film as MP4 (H.264), 1920 × 1080, 7 to 10 minutes, shared through a Google Drive link.",
+      "A folder with the script, character sheets, storyboard, animatic and editable project files.",
+      "A README listing team members and roles, tools used, and any external assets with their source or licence.",
     ]),
     pageBreak(),
-    heading("Presentation and Demonstration", 0),
-    ...bullets([
-      "Each team has about 10 minutes: 7 minutes for presentation and live demonstration and 3 minutes for questions.",
-      "Teams should give priority to a live demonstration of the working prototype.",
-      "A slides-only presentation without a working implementation is not eligible for prizes.",
-      "Track E teams screen their film and explain their production process.",
-    ]),
-    heading("Judging Criteria: Tracks A to D", 240),
-    table([3600, 1400, CONTENT_W - 5000], ["Criterion", "Marks", "What judges look for"], [
+    heading("Evaluation Criteria: Tracks A to D", 0),
+    table([3600, 1400, CONTENT_W - 5000], ["Criterion", "Marks", "What evaluators look for"], [
       ["Problem Understanding", "10", "Clear grasp of the problem, users and requirements."],
-      ["Functionality", "25", "Required features work correctly in the live demonstration."],
+      ["Functionality", "25", "Required features work correctly when tested by the evaluators."],
       ["Technical Implementation", "20", "Sound architecture, code quality and appropriate use of technology."],
-      ["Security and Reliability", "15", "Authentication, access control, data protection and error handling."],
+      ["Security and Reliability", "15", "Authentication, access control, data protection and handling of invalid input."],
       ["Innovation", "10", "Original ideas, useful additions and creative modifications beyond the minimum scope."],
       ["UI/UX", "10", "Ease of use, clarity and accessibility of the interface."],
-      ["Presentation and Demo", "10", "Clear explanation, confident demonstration and answers to questions."],
-      [para([run("Total", { bold: true })]), para([run("100", { bold: true })], { alignment: AlignmentType.CENTER }), ""],
-    ], { boldFirst: true, size: 21, align: [undefined, AlignmentType.CENTER], headAlign: [undefined, AlignmentType.CENTER] }),
-    heading("Judging Criteria: Track E (Animated Short Film)", 240),
-    table([3600, 1400, CONTENT_W - 5000], ["Criterion", "Marks", "What judges look for"], [
+      ["Explanation and Q&A", "10", "Every member explains the work clearly and answers questions correctly."],
+      total,
+    ], { boldFirst: true, size: 21, align: centre, headAlign: centre }),
+    heading("Evaluation Criteria: Track E (Animated Short Film)", 240),
+    table([3600, 1400, CONTENT_W - 5000], ["Criterion", "Marks", "What evaluators look for"], [
       ["Story and Script", "25", "Originality, structure, emotional impact and clarity."],
       ["Animation and Visual Quality", "25", "Movement, composition, consistency and visual design."],
       ["Sound and Editing", "15", "Dialogue, Foley, music, pacing and mixing."],
       ["Technical Execution", "15", "Production pipeline, storyboard and animatic, project files, export quality."],
       ["Creativity and CSE Integration", "10", "Effective and original use of the university and CSE setting."],
-      ["Presentation", "10", "Explanation of the process and the final screening."],
-      [para([run("Total", { bold: true })]), para([run("100", { bold: true })], { alignment: AlignmentType.CENTER }), ""],
-    ], { boldFirst: true, size: 21, align: [undefined, AlignmentType.CENTER], headAlign: [undefined, AlignmentType.CENTER] }),
+      ["Explanation of Process", "10", "Every member explains their role and how the film was made."],
+      total,
+    ], { boldFirst: true, size: 21, align: centre, headAlign: centre }),
     heading("Final Note to Participants", 240),
     para("The aim of this hackathon is not only to build a working application or film, but to show problem-solving ability, technical understanding, teamwork, creativity and responsible engineering. Keep your scope realistic, finish the core requirements first, and then use the remaining time to add the ideas that make your work stand out. A polished, working prototype is worth more than an unfinished system with many features.",
       { alignment: AlignmentType.JUSTIFIED }),
@@ -437,10 +500,18 @@ const doc = new Document({
         style: { paragraph: { indent: { left: 400, hanging: 400 } } } }] },
       { reference: "bul", levels: [{ level: 0, format: LevelFormat.BULLET, text: "•", alignment: AlignmentType.LEFT,
         style: { paragraph: { indent: { left: 400, hanging: 280 } } } }] },
+      { reference: "sub", levels: [{ level: 0, format: LevelFormat.BULLET, text: "\u2013", alignment: AlignmentType.LEFT,
+        style: { paragraph: { indent: { left: 800, hanging: 280 } } } }] },
     ],
   },
   sections: [
-    { properties: pageProps, children: cover() },
+    { properties: { ...pageProps, page: { ...pageProps.page, borders: {
+        pageBorders: { display: "allPages", offsetFrom: "page" },
+        pageBorderTop: { style: BorderStyle.DOUBLE, size: 6, color: "000000", space: 24 },
+        pageBorderLeft: { style: BorderStyle.DOUBLE, size: 6, color: "000000", space: 24 },
+        pageBorderBottom: { style: BorderStyle.DOUBLE, size: 6, color: "000000", space: 24 },
+        pageBorderRight: { style: BorderStyle.DOUBLE, size: 6, color: "000000", space: 24 },
+      } } }, children: cover() },
     { properties: { ...pageProps, page: { ...pageProps.page, pageNumbers: { start: 1 } } }, headers: { default: header }, footers: { default: footer }, children: body },
   ],
 });
