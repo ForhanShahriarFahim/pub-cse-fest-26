@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PUB CSE Fest-26 Hackathon Problem Set (Draft)</title>
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --ink: #1b2430;
+    --muted: #5b6573;
+    --accent: #1f4e79;
+    --accent-soft: #e8eff7;
+    --rule: #c9d3df;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; color: var(--ink); }
+  body { font-family: "Liberation Sans", Arial, Helvetica, sans-serif; font-size: 10.2pt; line-height: 1.36; }
+
+  .page {
+    width: 210mm; height: 297mm; padding: 16mm 18mm 14mm;
+    position: relative; overflow: hidden; page-break-after: always;
+    display: flex; flex-direction: column;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* ---------- cover ---------- */
+  .cover { padding-top: 14mm; }
+  .cover .org { text-align: center; color: var(--muted); font-size: 11pt; letter-spacing: .04em; }
+  .cover .org b { color: var(--ink); font-size: 12.5pt; letter-spacing: .02em; display: block; margin-bottom: 1mm; }
+  .cover .logo { display: block; width: 32mm; height: 32mm; margin: 7mm auto 6mm; }
+  .cover .fest { text-align: center; font-size: 13pt; letter-spacing: .32em; color: var(--accent); font-weight: bold; }
+  .cover h1 { text-align: center; font-size: 34pt; margin: 2mm 0 0; letter-spacing: .04em; }
+  .cover .sub { text-align: center; font-size: 15pt; color: var(--muted); margin-top: 1mm; }
+  .cover .tag { text-align: center; font-style: italic; color: var(--muted); margin-top: 3mm; }
+  .cover .meta { display: flex; justify-content: center; gap: 0; margin: 7mm auto 0; border: 1px solid var(--rule); width: fit-content; }
+  .cover .meta div { padding: 2.2mm 6mm; text-align: center; border-right: 1px solid var(--rule); }
+  .cover .meta div:last-child { border-right: 0; }
+  .cover .meta span { display: block; font-size: 8pt; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .cover .meta b { font-size: 10.5pt; }
+  .index-title { margin: 8mm 0 3mm; font-size: 11pt; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); border-bottom: 1.5px solid var(--accent); padding-bottom: 1.2mm; }
+  .index { columns: 2; column-gap: 9mm; font-size: 9.3pt; }
+  .track { break-inside: avoid; margin-bottom: 3mm; }
+  .track h3 { margin: 0 0 1mm; font-size: 9.5pt; color: var(--accent); }
+  .track ol { list-style: none; margin: 0; padding: 0; }
+  .track li { display: flex; gap: 2mm; padding: .5mm 0; }
+  .track li b { min-width: 6.5mm; }
+  .cover .foot { margin-top: auto; text-align: center; font-size: 8.5pt; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 2mm; }
+
+  /* ---------- problem page ---------- */
+  .runhead { display: flex; justify-content: space-between; font-size: 8.5pt; color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: 1.5mm; }
+  .titlebar { display: flex; align-items: stretch; gap: 4mm; margin: 5mm 0 4mm; }
+  .pid { background: var(--accent); color: #fff; font-weight: bold; font-size: 20pt; display: flex; align-items: center; justify-content: center; min-width: 17mm; }
+  .titlebar h2 { margin: 0; font-size: 17pt; line-height: 1.15; }
+  .titlebar .subtitle { font-size: 11pt; color: var(--muted); margin-top: .8mm; }
+  .titlebar .merged { font-size: 8.5pt; color: var(--muted); margin-top: 1mm; font-style: italic; }
+  h4 { margin: 3mm 0 1.1mm; font-size: 10pt; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); }
+  p { margin: 0 0 1.2mm; }
+  .desc { background: var(--accent-soft); padding: 2.6mm 3.4mm; border-left: 3px solid var(--accent); }
+  ol.req { margin: 0; padding-left: 6mm; }
+  ol.req li { margin-bottom: .9mm; padding-left: 1mm; }
+  .module { font-weight: bold; font-size: 9.5pt; margin: 1.8mm 0 .6mm; color: var(--ink); }
+  .module:first-child { margin-top: 0; }
+  table.roles { width: 100%; border-collapse: collapse; font-size: 9.6pt; }
+  table.roles td { border: 1px solid var(--rule); padding: 1.2mm 2.2mm; vertical-align: top; }
+  table.roles td:first-child { width: 30%; font-weight: bold; background: #f6f8fb; }
+  ul.tight { margin: 0; padding-left: 5mm; }
+  ul.tight li { margin-bottom: .5mm; }
+  .note { margin-top: auto; font-size: 8.5pt; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 1.8mm; display: flex; justify-content: space-between; gap: 6mm; }
+</style>
+</head>
+<body>
+
+<!-- ================= COVER ================= -->
+<section class="page cover">
+  <div class="org">
+    <b>Pundra University of Science &amp; Technology</b>
+    Department of Computer Science &amp; Engineering
+  </div>
+  <img class="logo" src="../contest/fest-logo.jpg" alt="PUB CSE Fest-26 logo">
+  <div class="fest">PUB CSE FEST-26</div>
+  <h1>HACKATHON</h1>
+  <div class="sub">Problem Set</div>
+  <div class="tag">Build. Break. Innovate.</div>
+
+  <div class="meta">
+    <div><span>Tracks</span><b>5</b></div>
+    <div><span>Problems</span><b>19</b></div>
+    <div><span>Duration</span><b>36 hours</b></div>
+    <div><span>Date</span><b>TBA</b></div>
+  </div>
+
+  <div class="index-title">Problem Index</div>
+  <div class="index">
+    <div class="track">
+      <h3>Track A: Blockchain &amp; Cybersecurity</h3>
+      <ol>
+        <li><b>A1</b>PUB CertChain: Academic Certificate Verification</li>
+        <li><b>A2</b>PUB Helping Hand: Transparent Fundraising &amp; Student Assistance</li>
+        <li><b>A3</b>PUB PhishGuard: Phishing Detection &amp; Awareness</li>
+        <li><b>A4</b>PUB MediVault: Secure Health Record &amp; Consent Management</li>
+      </ol>
+    </div>
+    <div class="track">
+      <h3>Track B: Artificial Intelligence &amp; Machine Learning</h3>
+      <ol>
+        <li><b>B1</b>PUB NoticeLens: Bengali/English Notice &amp; Document Intelligence</li>
+        <li><b>B2</b>PUB AssessAI: Question Preparation, Assessment &amp; Learning</li>
+        <li><b>B3</b>PUB SkillSync: Skill Matching, Productivity &amp; Early Warning</li>
+        <li><b>B4</b>PUB AttendEye: Computer-Vision-Based Smart Attendance</li>
+      </ol>
+    </div>
+    <div class="track">
+      <h3>Track C: Smart Campus Services</h3>
+      <ol>
+        <li><b>C1</b>PUB CampusMate: Campus Companion, Academic Planning &amp; AI Helpdesk</li>
+        <li><b>C2</b>PUB SafeCampus: Emergency Response &amp; Campus Safety</li>
+        <li><b>C3</b>SmartRent BD: Student Housing &amp; Roommate Matching</li>
+        <li><b>C4</b>PUB CampusRide: Transport Scheduling &amp; Operations</li>
+        <li><b>C5</b>PUB FestHub: Event, Competition &amp; Coding Contest Operations</li>
+      </ol>
+    </div>
+    <div class="track">
+      <h3>Track D: Academic &amp; EdTech Platforms</h3>
+      <ol>
+        <li><b>D1</b>PUB ThesisHub: Project &amp; Thesis Supervision</li>
+        <li><b>D2</b>PUB GradPath: Higher-Study Discovery &amp; Applications</li>
+        <li><b>D3</b>PUB RoboRoute: Delivery Robot Programming Game</li>
+      </ol>
+    </div>
+    <div class="track">
+      <h3>Track E: Animated Short Film</h3>
+      <ol>
+        <li><b>E1</b>A Day in the Life of a CSE Student</li>
+        <li><b>E2</b>From Student to Software Engineer</li>
+        <li><b>E3</b>The Code That Changed Our Department</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="foot">Each team chooses one problem, subject to organizer allocation. General rules and judging criteria are given at the end.</div>
+</section>
+
+<!-- ================= C1 (merged sample) ================= -->
+<section class="page">
+  <div class="runhead"><span>PUB CSE Fest-26 Hackathon · Problem Set</span><span>Track C · Smart Campus Services</span></div>
+  <div class="titlebar">
+    <div class="pid">C1</div>
+    <div>
+      <h2>PUB CampusMate</h2>
+      <div class="subtitle">Smart Campus Companion with Academic Planning, Course Registration &amp; AI Helpdesk</div>
+    </div>
+  </div>
+
+  <h4>Problem Description</h4>
+  <p class="desc">Students find class routines, exam schedules, notices and academic rules spread across notice boards, social media groups and office visits. Course registration and routine preparation are handled by hand, so clashes are found late. Build one platform where students follow their academic life, the department plans the semester and registers students without conflicts, and an AI helpdesk answers academic questions from official documents.</p>
+
+  <h4>Required Features</h4>
+  <div class="module">Student Companion</div>
+  <ol class="req">
+    <li>Secure login and a personal dashboard showing class schedule, exam schedule, personal timetable and room locations.</li>
+    <li>Notices, event notifications and a faculty directory.</li>
+  </ol>
+  <div class="module">Academic Planning &amp; Registration</div>
+  <ol class="req" start="3">
+    <li>Manage curricula, prerequisites, semester offerings, sections, rooms and teacher availability.</li>
+    <li>Course registration with prerequisite, credit-limit, seat-capacity and timetable-clash checks; advisor approval and add/drop requests.</li>
+    <li>Assign teachers and calculate normal/extra teaching workload using configurable rules.</li>
+    <li>Create and revise routines; detect teacher, room, section and registered-student conflicts before publishing; coordinate make-up classes.</li>
+    <li>Publish approved schedules, notify affected users and keep the revision history.</li>
+  </ol>
+  <div class="module">AI Helpdesk</div>
+  <ol class="req" start="8">
+    <li>Chat assistant that answers questions on courses, prerequisites, faculty, labs, notices and the academic calendar, using retrieval over official department documents.</li>
+    <li>Every answer shows its source; Bangla and English questions are supported; the assistant says so when the documents do not contain the answer.</li>
+  </ol>
+
+  <h4>Users &amp; Roles</h4>
+  <table class="roles">
+    <tr><td>Student</td><td>Views schedules and notices, registers for courses, asks the helpdesk.</td></tr>
+    <tr><td>Teacher</td><td>Sets availability, views assigned courses and workload, proposes make-up classes.</td></tr>
+    <tr><td>Academic Advisor</td><td>Approves registrations and add/drop requests.</td></tr>
+    <tr><td>Department Coordinator</td><td>Manages offerings, routines, notices and helpdesk documents.</td></tr>
+  </table>
+
+  <h4>Restrictions &amp; Scope</h4>
+  <ul class="tight">
+    <li>Any platform: web, mobile or both. Authentication and role-based access must be enforced on the server.</li>
+    <li>Demonstrate one department and one semester with sample student histories.</li>
+  </ul>
+
+  <h4>Optional Features</h4>
+  <p>Campus map, push notifications, automatic timetable generation, conflict-repair suggestions, waitlists, calendar export.</p>
+
+  <div class="note"><span>These requirements define the minimum scope; teams are encouraged to add unique, useful features.</span><span>2</span></div>
+</section>
+
+<!-- ================= B4 (new topic sample) ================= -->
+<section class="page">
+  <div class="runhead"><span>PUB CSE Fest-26 Hackathon · Problem Set</span><span>Track B · Artificial Intelligence &amp; Machine Learning</span></div>
+  <div class="titlebar">
+    <div class="pid">B4</div>
+    <div>
+      <h2>PUB AttendEye</h2>
+      <div class="subtitle">Computer-Vision-Based Smart Attendance System</div>
+    </div>
+  </div>
+
+  <h4>Problem Description</h4>
+  <p class="desc">Calling a roll wastes class time and paper sign-in sheets allow proxy attendance. Build a system that takes attendance from a camera image or live video of the class, recognizes enrolled students, lets the teacher confirm uncertain cases, and keeps reliable attendance records for every course.</p>
+
+  <h4>Required Features</h4>
+  <ol class="req">
+    <li>Student enrollment with consent, capturing several face samples per student and linking them to student ID, course and section.</li>
+    <li>Teacher starts a class session (course, section, time window) and captures attendance from a live camera feed or an uploaded classroom photo.</li>
+    <li>Detect and recognize multiple faces in one frame; mark matched students present.</li>
+    <li>Confidence threshold: unknown or low-confidence faces are flagged for teacher review instead of being marked automatically.</li>
+    <li>Basic liveness / anti-spoofing check against a printed photo or a phone screen.</li>
+    <li>Teacher can correct attendance manually; every correction is logged with time and reason.</li>
+    <li>Students see their own attendance percentage per course; low-attendance alerts below a configurable limit.</li>
+    <li>Course-wise and date-wise reports with CSV or PDF export.</li>
+    <li>Report the recognition accuracy (e.g. precision/recall or false-accept/false-reject rate) on a small test set under different lighting and angles.</li>
+  </ol>
+
+  <h4>Users &amp; Roles</h4>
+  <table class="roles">
+    <tr><td>Student</td><td>Enrolls face samples with consent; views own attendance.</td></tr>
+    <tr><td>Teacher</td><td>Runs sessions, reviews flagged faces, corrects records, exports reports.</td></tr>
+    <tr><td>Administrator</td><td>Manages courses, sections, users and the attendance threshold.</td></tr>
+  </table>
+
+  <h4>Restrictions</h4>
+  <ul class="tight">
+    <li>Use only faces of consenting volunteers (e.g. team members); no public or scraped face datasets of real students.</li>
+    <li>Store face embeddings rather than raw photos where possible, and protect stored biometric data.</li>
+    <li>Pretrained detection/recognition models are allowed, but the team must explain its full pipeline and threshold choice.</li>
+  </ul>
+
+  <h4>Optional Features</h4>
+  <p>Mask or partial-occlusion handling, QR + face two-factor check-in, CCTV/IP-camera stream, offline mobile mode, attendance analytics dashboard.</p>
+
+  <div class="note"><span>These requirements define the minimum scope; teams are encouraged to add unique, useful features.</span><span>3</span></div>
+</section>
+
+</body>
+</html>
