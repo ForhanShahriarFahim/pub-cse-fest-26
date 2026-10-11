@@ -1,0 +1,16 @@
+file sample.txt
+gen single 1 0
+gen single 2 1
+gen small 3
+gen random 4 10 100
+gen allfit 5 100 50000
+gen ratio 6 99 50000
+gen random 7 100 50000
+gen halves 8 100 50000
+gen pricey 9 100 50000
+gen even 10 100 49999
+gen cheapstar 11 100 50000
+gen smallvals 12 100 1000
+gen sameratio 13 100 50000
+gen random 14 100 20000
+gen random 15 60 777

@@ -26,8 +26,8 @@ Each problem folder has:
 | 06 | Love Letter | Easy · strings, Caesar cipher (for fun) | [challenge](problems/06-love-letter/challenge.md) | [editorial](problems/06-love-letter/editorial.md) | [tests.zip](problems/06-love-letter/tests.zip) (8) + [image](problems/06-love-letter/alphabet.png) | Approved |
 | 07 | Rickshaw Ride | Easy · sorting, greedy, two pointers (classic) | [challenge](problems/07-rickshaw-ride/challenge.md) | [editorial](problems/07-rickshaw-ride/editorial.md) | [tests.zip](problems/07-rickshaw-ride/tests.zip) (18) | Approved |
 | 08 | Lucky Raffle | Medium · number theory, sieve, prefix counts (classic) | [challenge](problems/08-lucky-raffle/challenge.md) | [editorial](problems/08-lucky-raffle/editorial.md) | [tests.zip](problems/08-lucky-raffle/tests.zip) (14) | Approved |
-| 09 | Fest Treasure Hunt | Medium · graphs, BFS shortest path | [challenge](problems/09-treasure-hunt/challenge.md) | [editorial](problems/09-treasure-hunt/editorial.md) | [tests.zip](problems/09-treasure-hunt/tests.zip) (19) + [image](problems/09-treasure-hunt/sample.png) | Drafted |
-| 10 | — | Medium–Hard · DP with a twist (classic) | — | — | — | Planned |
+| 09 | Fest Treasure Hunt | Medium · graphs, BFS shortest path | [challenge](problems/09-treasure-hunt/challenge.md) | [editorial](problems/09-treasure-hunt/editorial.md) | [tests.zip](problems/09-treasure-hunt/tests.zip) (19) + [image](problems/09-treasure-hunt/sample.png) | Approved |
+| 10 | Fest Budget | Medium–Hard · DP, 0/1 knapsack (classic) | [challenge](problems/10-fest-budget/challenge.md) | [editorial](problems/10-fest-budget/editorial.md) | [tests.zip](problems/10-fest-budget/tests.zip) (16) | Drafted |
 | 11 | — | Hard · Dijkstra with extra state, or DSU | — | — | — | Planned |
 
 Contest page setup (name, dates, description, rules): see [CONTEST.md](CONTEST.md).
