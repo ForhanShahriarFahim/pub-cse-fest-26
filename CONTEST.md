@@ -70,7 +70,7 @@ The prizes for the top teams of the PUB CSE Fest-26 Programming Contest will be 
 
 Stay tuned, keep practising, and get ready to compete for them.
 
-**Every team that solves a problem leaves with something to be proud of.**
+**Code. Compete. Celebrate.**
 ```
 
 Rules:
