@@ -41,23 +41,9 @@ Description:
 ```
 **Celebrating 12 years of PUB CSE!**
 
-Twelve years ago, PUB CSE wrote its very first line of code. Since then, class after class has learned to think in loops, debug late into the night and turn ideas into working programs.
+The programming contest of **PUB CSE Fest-26**: teams of three, 2 hours 30 minutes, 11 problems.
 
-**PUB CSE Fest-26** celebrates that journey, and the programming contest is where it comes alive.
-
-**Teams of 3  ·  2 hours 30 minutes  ·  11 problems  ·  C, C++, Java, Python 3**
-
-Every team includes a first-year student, because the next twelve years begin with them.
-
-Every problem is written specially for this fest, from friendly warm-ups to a couple of tough challenges for the brave.
-
-The problems are **not** sorted by difficulty, so read them all and choose your battles wisely.
-
-**ICPC rules:** a problem counts only when it passes every test case. Teams are ranked by problems solved, then by penalty time.
-
-Onsite in the PUB CSE labs. No internet, no AI tools: just your team, your code and twelve years of PUB CSE spirit.
-
-Whether you are writing your very first program or chasing your next "Accepted", this is your stage.
+From friendly warm-ups to a couple of tough challenges, read every problem and choose your battles wisely.
 
 **Code. Compete. Celebrate.**
 ```
