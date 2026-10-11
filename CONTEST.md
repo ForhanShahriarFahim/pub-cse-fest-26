@@ -90,13 +90,15 @@ Rules:
 
 Scoring:
 ```
-A problem is solved only when a submission passes **all** of its test cases.
+**ICPC style:** a problem is solved only when a submission passes **all** of its test cases. There is no partial credit.
 
-Teams are ranked by the **number of problems solved**. Ties are broken by **penalty time**.
+**Ranking:** teams are ranked by the **number of problems solved**. Teams with the same number are ranked by **penalty time**, and less is better.
 
-Penalty time: for each solved problem, the minutes from the start of the contest to its accepted submission, plus **20 minutes** for every wrong submission on it before that.
+**Penalty time:** for each solved problem, the minutes from the start of the contest to its accepted submission, plus **20 minutes** for every wrong submission on that problem before it was accepted.
 
-Wrong submissions on problems you never solve cost nothing, and compilation errors cost nothing.
+**Example:** a team solves a problem at minute 35 after 2 wrong submissions. That problem adds 35 + 2 × 20 = **75** penalty minutes.
+
+**Free mistakes:** wrong submissions on problems you never solve cost nothing, and compilation errors cost nothing.
 ```
 
 ## Advanced Settings tab: Leaderboard Configurations
