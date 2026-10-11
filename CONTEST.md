@@ -75,15 +75,17 @@ Stay tuned, keep practising, and get ready to compete for them.
 
 Rules:
 ```
-**Teams:** exactly three members, including one 1st-year student, on one HackerRank account in the PUB CSE lab.
+**Teams:** exactly three members, including one 1st-year student. Each team competes from one HackerRank account in the PUB CSE lab.
 
-**Languages:** C, C++, Java and Python 3. In Java, the class must be named Solution.
+**Languages:** C, C++, Java and Python 3. In Java, the class must be named **Solution**.
 
 **Input and output:** read from standard input and write to standard output, exactly in the format the problem asks for. Do not print extra messages such as "Enter a number".
 
-**Fair play:** no internet other than this contest page, no AI tools, and no talking to other teams. Mobile phones must be switched off.
+**Fair play:** no internet other than this contest page, no AI tools, and no talking to other teams. Mobile phones must be switched off during the contest.
 
-Any form of cheating leads to disqualification. The judges' decision is final.
+**Questions:** if a statement is unclear, raise your hand and ask a judge. Judges will only clarify the statement; they will not help with solutions.
+
+**Respect the spirit of the fest:** any form of cheating leads to disqualification, and the judges' decision is final.
 ```
 
 Scoring:
