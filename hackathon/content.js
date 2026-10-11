@@ -400,7 +400,7 @@ const PROBLEMS = [
       "Certificates, sponsor tracking, equipment allocation, plagiarism check for code, AI feedback on submissions.",
   },
   {
-    id: "D1", track: "D", name: "PUB ThesisHub",
+    id: "D1", track: "D", name: "PUB SuperVise",
     subtitle: "Project and Thesis Supervision and Collaboration Portal",
     description:
       "Final-year projects and theses are managed through email, chat groups and printed forms. Coordinators cannot see which projects are behind schedule, feedback gets lost, and earlier versions of a report are overwritten. Build a portal that manages projects, theses and research work from proposal to final evaluation.",

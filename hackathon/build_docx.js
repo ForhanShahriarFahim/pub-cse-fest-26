@@ -417,7 +417,7 @@ function rulesPages() {
     ]),
     ...[
       "Problem ID and title, team name, and members with name, student ID and role.",
-      "Demo video: a link at the top of the README to a 3 to 5 minute screen recording (YouTube unlisted or Google Drive) showing the main features.",
+      "Demo video: a link at the top of the README to a 5 to 10 minute screen recording (YouTube unlisted or Google Drive) showing the main features.",
       "A short description of the solution and the technology stack.",
       "Feature status table: each required feature marked Done, Partial or Not done, followed by the team's additional features.",
       "Step-by-step setup and run instructions, an example environment file, and sample login accounts for every role.",
