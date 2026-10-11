@@ -13,14 +13,14 @@ import subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOL = os.path.join(HERE, "..", "tools", "svg2png.js")
 
-W, H = 1920, 480
+W, H = 1920, 640
 EDGE, MID, GLOW = "#021637", "#04184d", "#0c1a66"   # sampled from the logo background
 CYAN, WHITE = "#3fb4e8", "#ffffff"
 
 LOGO_SIZE = 988                       # fest-logo.jpg is 988 x 988
 ART_CX, ART_CY, ART_H = 471, 508, 592  # centre and height of the artwork inside it
-SHOW_ART_H = 250                       # artwork height on the banner
-LOGO_AT = (1520, 240)                  # where the artwork centre goes on the banner
+SHOW_ART_H = 260                       # artwork height on the banner
+LOGO_AT = (1650, 370)                  # where the artwork centre goes on the banner
 
 
 def logo_layer():
@@ -39,8 +39,8 @@ def logo_layer():
 def code_motif():
     """Faint code symbols on the left, fading out before the centre."""
     out = []
-    glyphs = [("{ }", 250, 150, 64), ("</>", 420, 330, 92), ("01", 140, 380, 40), (";", 560, 120, 54),
-              ("()", 330, 70, 40), ("[ ]", 610, 410, 40), ("#", 120, 230, 48), ("++", 520, 250, 40)]
+    glyphs = [("{ }", 250, 230, 64), ("</>", 420, 430, 92), ("01", 140, 500, 40), (";", 560, 200, 54),
+              ("()", 330, 150, 40), ("[ ]", 610, 530, 40), ("#", 120, 320, 48), ("++", 520, 340, 40)]
     for g, x, y, size in glyphs:
         out.append(f'<text x="{x}" y="{y}" font-family="DejaVu Sans Mono, monospace" font-size="{size}" '
                    f'font-weight="700" fill="{CYAN}" text-anchor="middle" dominant-baseline="central">'
@@ -63,7 +63,7 @@ def banner_svg():
   <radialGradient id="bg" cx="0.5" cy="0.5" r="0.75">
     <stop offset="0" stop-color="{MID}"/><stop offset="1" stop-color="{EDGE}"/>
   </radialGradient>
-  <radialGradient id="glowR" cx="{LOGO_AT[0] / W}" cy="0.5" r="0.32" gradientTransform="translate({LOGO_AT[0] / W} 0.5) scale(1 4) translate({-LOGO_AT[0] / W} -0.5)">
+  <radialGradient id="glowR" cx="{LOGO_AT[0] / W}" cy="{LOGO_AT[1] / H}" r="0.32" gradientTransform="translate({LOGO_AT[0] / W} 0.5) scale(1 4) translate({-LOGO_AT[0] / W} -0.5)">
     <stop offset="0" stop-color="{GLOW}" stop-opacity="1"/><stop offset="1" stop-color="{GLOW}" stop-opacity="0"/>
   </radialGradient>
   <radialGradient id="glowL" cx="0.2" cy="0.5" r="0.25" gradientTransform="translate(0.2 0.5) scale(1 4) translate(-0.2 -0.5)">
@@ -85,20 +85,24 @@ def banner_svg():
 </svg>'''
 
 
-def preview_svg(view_w=1536, view_h=300):
-    """Roughly how HackerRank shows it: banner centred at natural size, text on top.
-    Text sizes are measured from a screenshot of the real landing page."""
-    x0 = (W - view_w) / 2
-    y0 = (H - view_h) / 2
+def preview_svg(view_w=1520, box_h=454, header=76):
+    """How HackerRank showed the banner on a 1520 px wide window (measured from a screenshot):
+    the image covers a box that starts behind the white header, anchored at the top left,
+    so anything beyond the box width on the right is cut off."""
+    scale = max(view_w / W, box_h / H)
     img = base64.b64encode(open(os.path.join(HERE, "banner.png"), "rb").read()).decode()
     font = "Inter, 'DejaVu Sans', sans-serif"
     cx = view_w / 2
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {view_w} {view_h}" width="{view_w}" height="{view_h}">
-<image href="data:image/png;base64,{img}" x="{-x0}" y="{-y0}" width="{W}" height="{H}"/>
-<text x="{cx}" y="78" font-family="{font}" font-size="34" fill="#fff" text-anchor="middle">PUB CSE Fest-26 Programming Contest</text>
-<text x="{cx}" y="140" font-family="{font}" font-size="18" font-weight="600" fill="#fff" text-anchor="middle">Oct 31 2026, 10:00 am BDT to Oct 31 2026, 12:30 pm BDT</text>
-<rect x="{cx - 54}" y="172" width="108" height="48" fill="#1ba94c"/>
-<text x="{cx}" y="203" font-family="{font}" font-size="19" font-weight="600" fill="#fff" text-anchor="middle">Sign Up</text>
+    top = 150
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {view_w} {box_h}" width="{view_w}" height="{box_h}">
+<image href="data:image/png;base64,{img}" x="0" y="0" width="{W * scale:.1f}" height="{H * scale:.1f}"/>
+<rect width="{view_w}" height="{header}" fill="#ffffff"/>
+<text x="24" y="{header / 2 + 8}" font-family="{font}" font-size="28" font-weight="800" fill="#39424e">HackerRank</text>
+<text x="{cx}" y="{top}" font-family="{font}" font-size="34" fill="#fff" text-anchor="middle">PUB CSE Fest-26 Programming Contest</text>
+<text x="{cx}" y="{top + 44}" font-family="{font}" font-size="24" fill="#fff" text-anchor="middle">Celebrating 12 years of PUB CSE · Code. Compete. Celebrate.</text>
+<text x="{cx}" y="{top + 98}" font-family="{font}" font-size="17" font-weight="600" fill="#fff" text-anchor="middle">Oct 31 2026, 10:00 am BDT to Oct 31 2026, 12:30 pm BDT</text>
+<rect x="{cx - 54}" y="{top + 130}" width="108" height="50" fill="#2ec866"/>
+<text x="{cx}" y="{top + 162}" font-family="{font}" font-size="19" font-weight="600" fill="#fff" text-anchor="middle">Sign Up</text>
 </svg>'''
 
 

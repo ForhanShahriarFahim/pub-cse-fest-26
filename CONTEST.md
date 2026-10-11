@@ -18,7 +18,7 @@ public before the problems are ready.
 
 ## Page 2: Contest details
 
-Background image: upload `contest/banner.png` (1920 × 480). HackerRank prints the
+Background image: upload `contest/banner.png` (1920 × 640). HackerRank prints the
 contest name, date and Sign Up button in the middle, so the banner keeps the middle
 clear and puts the fest logo on the right. `contest/banner-preview.png` shows the
 expected result. Regenerate with `python3 contest/draw_banner.py`.
