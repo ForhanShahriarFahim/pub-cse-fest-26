@@ -85,6 +85,8 @@ Rules:
 
 **Questions:** if a statement is unclear, raise your hand and ask a judge. Judges will only clarify the statement; they will not help with solutions.
 
+**Frozen leaderboard:** the leaderboard freezes 30 minutes before the end. Keep solving: every accepted problem in the last 30 minutes still counts, and the final results are announced at the prize-giving ceremony.
+
 **Respect the spirit of the fest:** any form of cheating leads to disqualification, and the judges' decision is final.
 ```
 
@@ -99,6 +101,8 @@ Scoring:
 **Example:** a team solves a problem at minute 35 after 2 wrong submissions. That problem adds 35 + 2 × 20 = **75** penalty minutes.
 
 **Free mistakes:** wrong submissions on problems you never solve cost nothing, and compilation errors cost nothing.
+
+**Frozen leaderboard:** the leaderboard freezes **30 minutes before the end** of the contest. During the last 30 minutes you still see your own verdicts, but the public standings stop changing. The final standings are revealed at the prize-giving ceremony.
 ```
 
 ## Advanced Settings tab: Leaderboard Configurations
