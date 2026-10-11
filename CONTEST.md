@@ -64,7 +64,13 @@ Whether you are writing your very first program or chasing your next "Accepted",
 
 Prizes:
 ```
-Prizes for the top teams will be announced at PUB CSE Fest-26.
+**Exciting prizes are on the way!**
+
+The prizes for the top teams of the PUB CSE Fest-26 Programming Contest will be announced very soon.
+
+Stay tuned, keep practising, and get ready to compete for them.
+
+**Every team that solves a problem leaves with something to be proud of.**
 ```
 
 Rules:
