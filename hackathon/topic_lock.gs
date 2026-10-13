@@ -127,6 +127,48 @@ function setup() {
   log.hideSheet();
 }
 
+// Assign one pending choice (cell filled, status not Locked). Caller holds the script lock.
+function assign_(ts, sh, row, by) {
+  const cell = ts.getRange(row, COL_CHOICE);
+  const choice = cell.getDisplayValue().trim();
+  const team = ts.getRange(row, COL_NAME).getDisplayValue().trim();
+  if (!choice || ts.getRange(row, COL_STATUS).getDisplayValue() === 'Locked') return;
+
+  const tr = findTopicRow_(sh, choice);
+  if (!tr) { cell.clearContent(); cell.setNote('Rejected: choose a topic from the list.'); return; }
+
+  const free = TEAM_COLS.map(c => sh.getRange(tr, c)).find(c => c.getDisplayValue().trim() === '');
+  if (!free) {
+    cell.clearContent();
+    cell.setNote(`${choice.split(' ')[0]} already has 2 teams. Please choose another topic.`);
+    log_('REJECTED (full)', team, choice, by);
+    return;
+  }
+  removeTeamFromTopics_(sh, team);                       // a team appears only once
+  free.setValue(team);
+  lockChoice_(ts, row);
+  log_('CHOSEN', team, choice, by);
+}
+
+// Safety net: handle any choice whose trigger run failed or timed out.
+function processPending_(ts, sh) {
+  teamRows_(ts).forEach(r => assign_(ts, sh, r, 'pending'));
+}
+
+// Owner menu.
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('Hackathon')
+    .addItem('Process pending choices', 'processPendingNow')
+    .addToUi();
+}
+
+function processPendingNow() {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(300000);
+  try { processPending_(ss_().getSheetByName(TEAMS_SHEET), ss_().getSheetByName(TOPIC_SHEET)); }
+  finally { lock.releaseLock(); }
+}
+
 // Installable on-edit trigger: runs as the owner, so it may change protections.
 function onChoice(e) {
   const r = e.range, ts = r.getSheet();
@@ -135,7 +177,7 @@ function onChoice(e) {
   if (!teamRows_(ts).includes(row)) return;
 
   const lock = LockService.getScriptLock();
-  lock.waitLock(30000);                                  // one choice at a time: first come, first served
+  lock.waitLock(300000);                                 // queue up to 5 min: one choice at a time
   try {
     const sh = ss_().getSheetByName(TOPIC_SHEET);
     const team = ts.getRange(row, COL_NAME).getDisplayValue().trim();
@@ -145,28 +187,15 @@ function onChoice(e) {
 
     if (e.oldValue && owner) {                           // organiser changed or cancelled a choice
       removeTeamFromTopics_(sh, team);
+      ts.getRange(row, COL_STATUS).setValue('Not yet chosen');
       if (!choice) { openForLeader_(ts, row); log_('CANCELLED', team, e.oldValue, 'organiser'); return; }
     } else if (e.oldValue) {                             // cannot normally happen (cell is locked)
       r.setValue(e.oldValue);
       return;
     }
-    if (!choice) return;
 
-    const tr = findTopicRow_(sh, choice);
-    if (!tr) { r.clearContent(); r.setNote('Rejected: choose a topic from the list.'); return; }
-
-    const free = TEAM_COLS.map(c => sh.getRange(tr, c)).find(c => c.getDisplayValue().trim() === '');
-    if (!free) {
-      r.clearContent();
-      r.setNote(`${choice.split(' ')[0]} already has 2 teams. Please choose another topic.`);
-      log_('REJECTED (full)', team, choice, owner ? 'organiser' : (who || 'leader'));
-      return;
-    }
-
-    removeTeamFromTopics_(sh, team);                     // a team appears only once
-    free.setValue(team);
-    lockChoice_(ts, row);
-    log_('CHOSEN', team, choice, owner ? 'organiser' : (who || 'leader'));
+    assign_(ts, sh, row, owner ? 'organiser' : (who || 'leader'));   // this edit first
+    processPending_(ts, sh);                                         // then anything left behind
   } finally {
     lock.releaseLock();
   }
