@@ -1,21 +1,25 @@
-// PUB CSE Fest-26 Hackathon: topic selection sheet with auto-lock.
+// PUB CSE Fest-26 Hackathon: topic selection, one choice per team leader.
 // Paste into Extensions > Apps Script of the Google Sheet, save, run setup() once as the owner.
 //
-// Layout (as in PUB_CSE_Fest_2026_Hackathon_Topic_selection.xlsx):
-//   column A = problem ID (A1..E3), B = topic, C = Team 1, D = Team 2, E = count formula.
-//   Track heading rows and the header row are detected and stay locked.
-//   Sheet 'Teams' lists the registered team names (column B); team cells accept only those names.
+// How it works
+//   Sheet "Teams": A #, B Team Name, C Leader Email, D Choose Topic, E Status.
+//     Each D cell can be edited ONLY by that team's leader (Google range protection,
+//     so identity is enforced by Google itself).
+//   When a leader picks a topic in D, the script (running as the owner):
+//     - rejects it if the topic already has 2 teams (the cell stays open to choose again);
+//     - writes the team name into Team 1 / Team 2 of that topic on "Sheet1";
+//     - removes the leader's edit right on that cell, so the choice is final.
+//   "Sheet1" (topic list) is read-only for everyone except the owner.
+//   Owner: delete a team's D cell to cancel its choice; the leader can then choose again.
 
-const SHEET = 'Sheet1';            // tab name of the topic list
-const TEAM_COLS = [3, 4];          // C = Team 1, D = Team 2
-const ID_PATTERN = /^[A-E]\d$/;    // rows whose column A looks like "C1" are topic rows
-const TEAMS_SHEET = 'Teams';       // registered team names in column B, from row 2
+const TOPIC_SHEET = 'Sheet1';
+const TEAMS_SHEET = 'Teams';
+const TEAM_COLS = [3, 4];            // Sheet1: C = Team 1, D = Team 2
+const ID_PATTERN = /^[A-E]\d$/;      // Sheet1 rows whose column A is a problem ID
+const COL_NAME = 2, COL_EMAIL = 3, COL_CHOICE = 4, COL_STATUS = 5;   // Teams sheet
 
-function registeredTeams_() {
-  const ts = SpreadsheetApp.getActive().getSheetByName(TEAMS_SHEET);
-  return ts.getRange(2, 2, Math.max(ts.getLastRow() - 1, 1), 1).getDisplayValues()
-    .map(v => v[0].trim()).filter(Boolean);
-}
+function ss_() { return SpreadsheetApp.getActive(); }
+function me_() { return Session.getEffectiveUser().getEmail(); }
 
 function topicRows_(sh) {
   const ids = sh.getRange(1, 1, sh.getLastRow(), 1).getDisplayValues();
@@ -24,134 +28,145 @@ function topicRows_(sh) {
   return rows;
 }
 
+function topicLabels_(sh) {          // "C1 PUB CampusMate: ..." for the dropdown
+  return topicRows_(sh).map(r =>
+    sh.getRange(r, 1).getDisplayValue().trim() + ' ' + sh.getRange(r, 2).getDisplayValue().trim());
+}
+
+function teamRows_(ts) {
+  const rows = [];
+  for (let r = 2; r <= ts.getLastRow(); r++) if (ts.getRange(r, COL_NAME).getDisplayValue().trim()) rows.push(r);
+  return rows;
+}
+
 function ownerOnly_(p) {
-  const me = Session.getEffectiveUser();
-  p.addEditor(me);
-  p.removeEditors(p.getEditors().filter(u => u.getEmail() !== me.getEmail()));
+  p.addEditor(me_());
+  p.removeEditors(p.getEditors().filter(u => u.getEmail() !== me_()));
   if (p.canDomainEdit()) p.setDomainEdit(false);
 }
 
-// Run ONCE (and again after you clear test entries): protects the sheet,
-// leaves only empty team cells editable, installs the trigger, creates the log.
-function setup() {
-  const ss = SpreadsheetApp.getActive();
-  const sh = ss.getSheetByName(SHEET);
-  sh.getProtections(SpreadsheetApp.ProtectionType.SHEET).forEach(p => p.remove());
-  sh.getProtections(SpreadsheetApp.ProtectionType.RANGE).forEach(p => p.remove());
+function choiceProtection_(ts, row) {
+  const a1 = ts.getRange(row, COL_CHOICE).getA1Notation();
+  let p = ts.getProtections(SpreadsheetApp.ProtectionType.RANGE).find(x => x.getRange().getA1Notation() === a1);
+  if (!p) p = ts.getRange(row, COL_CHOICE).protect().setDescription('Choice: ' + ts.getRange(row, COL_NAME).getDisplayValue());
+  return p;
+}
 
-  const p = sh.protect().setDescription('Topic list: only empty team cells are editable');
+function openForLeader_(ts, row) {   // only owner + this team's leader may edit the choice cell
+  const p = choiceProtection_(ts, row);
   ownerOnly_(p);
-  syncOpenCells_(sh);
+  const email = ts.getRange(row, COL_EMAIL).getDisplayValue().trim();
+  if (email) p.addEditor(email);
+  ts.getRange(row, COL_STATUS).setValue('Not yet chosen');
+  ts.getRange(row, COL_CHOICE).setBackground(null);
+}
 
-  // Team cells accept only registered team names (dropdown, invalid input rejected).
+function lockChoice_(ts, row) {      // owner only from now on
+  ownerOnly_(choiceProtection_(ts, row));
+  ts.getRange(row, COL_STATUS).setValue('Locked');
+  ts.getRange(row, COL_CHOICE).setBackground('#d9ead3').setNote(null);
+}
+
+function log_(what, team, topic, who) {
+  ss_().getSheetByName('Log').appendRow([new Date(), what, team, topic, who]);
+}
+
+function findTopicRow_(sh, choice) {
+  const id = String(choice).trim().split(/\s+/)[0];
+  return topicRows_(sh).find(r => sh.getRange(r, 1).getDisplayValue().trim() === id);
+}
+
+function removeTeamFromTopics_(sh, team) {
+  topicRows_(sh).forEach(r => TEAM_COLS.forEach(c => {
+    const cell = sh.getRange(r, c);
+    if (cell.getDisplayValue().trim().toLowerCase() === team.toLowerCase()) cell.clearContent();
+  }));
+}
+
+// Run ONCE as the owner (safe to run again): protections, dropdown, trigger, log.
+function setup() {
+  const ss = ss_();
+  const sh = ss.getSheetByName(TOPIC_SHEET);
   const ts = ss.getSheetByName(TEAMS_SHEET);
+
+  [sh, ts].forEach(s => {
+    s.getProtections(SpreadsheetApp.ProtectionType.SHEET).forEach(p => p.remove());
+    s.getProtections(SpreadsheetApp.ProtectionType.RANGE).forEach(p => p.remove());
+  });
+
+  // Topic list: filled by the script only.
+  sh.getRange(1, TEAM_COLS[0], sh.getMaxRows(), TEAM_COLS.length).clearDataValidations();
+  ownerOnly_(sh.protect().setDescription('Topic list (filled automatically)'));
+
+  // Teams sheet: locked, except each choice cell, which only its own leader may edit.
+  const rows = teamRows_(ts);
+  const tp = ts.protect().setDescription('Teams (owner only)');
+  ownerOnly_(tp);
+  tp.setUnprotectedRanges(rows.map(r => ts.getRange(r, COL_CHOICE)));
+
   const rule = SpreadsheetApp.newDataValidation()
-    .requireValueInRange(ts.getRange(2, 2, Math.max(ts.getLastRow() - 1, 1), 1), true)
+    .requireValueInList(topicLabels_(sh), true)
     .setAllowInvalid(false)
-    .setHelpText('Choose your registered team name.')
+    .setHelpText('Choose your topic. Your choice is final once accepted.')
     .build();
-  topicRows_(sh).forEach(r => TEAM_COLS.forEach(c => sh.getRange(r, c).setDataValidation(rule)));
-  ts.getProtections(SpreadsheetApp.ProtectionType.SHEET).forEach(x => x.remove());
-  ownerOnly_(ts.protect().setDescription('Registered teams'));
+  rows.forEach(r => {
+    ts.getRange(r, COL_CHOICE).setDataValidation(rule);
+    if (ts.getRange(r, COL_CHOICE).getDisplayValue().trim()) lockChoice_(ts, r);
+    else openForLeader_(ts, r);
+  });
 
   ScriptApp.getProjectTriggers().forEach(t => ScriptApp.deleteTrigger(t));
-  ScriptApp.newTrigger('onTeamEntry').forSpreadsheet(ss).onEdit().create();
+  ScriptApp.newTrigger('onChoice').forSpreadsheet(ss).onEdit().create();
 
   let log = ss.getSheetByName('Log');
   if (!log) {
     log = ss.insertSheet('Log');
-    log.appendRow(['Time', 'Cell', 'Problem', 'Team', 'Editor']);
+    log.appendRow(['Time', 'Action', 'Team', 'Topic', 'By']);
     ownerOnly_(log.protect().setDescription('Log'));
   }
   log.hideSheet();
 }
 
-// Every empty team cell is editable; every filled one is locked.
-function syncOpenCells_(sh) {
-  const p = sh.getProtections(SpreadsheetApp.ProtectionType.SHEET)[0];
-  const open = [];
-  topicRows_(sh).forEach(r => TEAM_COLS.forEach(c => {
-    const cell = sh.getRange(r, c);
-    if (String(cell.getValue()).trim() === '') {
-      open.push(cell);
-      cell.setBackground(null).setNote(null);
-    }
-  }));
-  p.setUnprotectedRanges(open);
-}
-
-function isOwner_(e) {
-  const who = e.user && e.user.getEmail ? e.user.getEmail() : '';
-  return who !== '' && who === Session.getEffectiveUser().getEmail();
-}
-
-function log_(cellA1, problem, team, who) {
-  SpreadsheetApp.getActive().getSheetByName('Log').appendRow([new Date(), cellA1, problem, team, who]);
-}
-
-// Owner menu: after clearing cells by hand, reopen them for selection.
-function onOpen() {
-  SpreadsheetApp.getUi().createMenu('Hackathon')
-    .addItem('Reopen cleared cells', 'reopenClearedCells')
-    .addToUi();
-}
-
-function reopenClearedCells() {
-  syncOpenCells_(SpreadsheetApp.getActive().getSheetByName(SHEET));
-}
-
-// Installable on-edit trigger: runs as the owner, so it may change protection.
-function onTeamEntry(e) {
-  const r = e.range, sh = r.getSheet();
-  if (sh.getName() !== SHEET) return;
+// Installable on-edit trigger: runs as the owner, so it may change protections.
+function onChoice(e) {
+  const r = e.range, ts = r.getSheet();
+  if (ts.getName() !== TEAMS_SHEET || r.getColumn() !== COL_CHOICE || r.getNumRows() > 1 || r.getNumColumns() > 1) return;
+  const row = r.getRow();
+  if (!teamRows_(ts).includes(row)) return;
 
   const lock = LockService.getScriptLock();
-  lock.waitLock(30000);                                  // one edit at a time
+  lock.waitLock(30000);                                  // one choice at a time: first come, first served
   try {
-    const owner = isOwner_(e);
-    if (r.getNumRows() > 1 || r.getNumColumns() > 1) {   // multi-cell edit
-      if (owner) syncOpenCells_(sh);                     // organiser cleared a block: reopen it
-      else r.clearContent();                             // students may not paste or drag
+    const sh = ss_().getSheetByName(TOPIC_SHEET);
+    const team = ts.getRange(row, COL_NAME).getDisplayValue().trim();
+    const who = e.user && e.user.getEmail ? e.user.getEmail() : '';
+    const owner = who !== '' && who === me_();
+    const choice = r.getDisplayValue().trim();
+
+    if (e.oldValue && owner) {                           // organiser changed or cancelled a choice
+      removeTeamFromTopics_(sh, team);
+      if (!choice) { openForLeader_(ts, row); log_('CANCELLED', team, e.oldValue, 'organiser'); return; }
+    } else if (e.oldValue) {                             // cannot normally happen (cell is locked)
+      r.setValue(e.oldValue);
       return;
     }
-    const row = r.getRow(), col = r.getColumn();
-    if (!TEAM_COLS.includes(col) || !topicRows_(sh).includes(row)) return;
-    const problem = sh.getRange(row, 1).getValue() + ' ' + sh.getRange(row, 2).getValue();
+    if (!choice) return;
 
-    if (!owner && e.oldValue) r.setValue(e.oldValue);    // first writer wins
-    let name = String(r.getValue()).trim();
-    if (!name) {
-      if (owner && e.oldValue) {                         // organiser cleared a selection
-        syncOpenCells_(sh);
-        log_(r.getA1Notation(), problem, `CLEARED (was ${e.oldValue})`, 'organiser');
-      }
-      return;
-    }
+    const tr = findTopicRow_(sh, choice);
+    if (!tr) { r.clearContent(); r.setNote('Rejected: choose a topic from the list.'); return; }
 
-    // Only registered team names (also catches anything that slips past the dropdown).
-    const official = registeredTeams_().find(t => t.toLowerCase() === name.toLowerCase());
-    if (!official) {
+    const free = TEAM_COLS.map(c => sh.getRange(tr, c)).find(c => c.getDisplayValue().trim() === '');
+    if (!free) {
       r.clearContent();
-      r.setNote(`Rejected: "${name}" is not a registered team name.`);
+      r.setNote(`${choice.split(' ')[0]} already has 2 teams. Please choose another topic.`);
+      log_('REJECTED (full)', team, choice, owner ? 'organiser' : (who || 'leader'));
       return;
     }
-    if (official !== name) { r.setValue(official); name = official; }
 
-    if (!e.oldValue || owner) {                          // one team, one topic
-      const taken = topicRows_(sh)
-        .flatMap(rr => TEAM_COLS.map(c => sh.getRange(rr, c).getDisplayValue().trim().toLowerCase()));
-      if (taken.filter(v => v === name.toLowerCase()).length > 1) {
-        r.clearContent();
-        r.setNote(`Rejected: "${name}" has already chosen a topic.`);
-        return;
-      }
-    }
-
-    const p = sh.getProtections(SpreadsheetApp.ProtectionType.SHEET)[0];
-    p.setUnprotectedRanges(p.getUnprotectedRanges().filter(u => u.getA1Notation() !== r.getA1Notation()));
-    r.setBackground('#d9ead3').setNote(null);
-
-    log_(r.getA1Notation(), problem, name, owner ? 'organiser' : (e.user && e.user.getEmail ? e.user.getEmail() : ''));
+    removeTeamFromTopics_(sh, team);                     // a team appears only once
+    free.setValue(team);
+    lockChoice_(ts, row);
+    log_('CHOSEN', team, choice, owner ? 'organiser' : (who || 'leader'));
   } finally {
     lock.releaseLock();
   }
