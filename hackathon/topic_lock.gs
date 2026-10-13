@@ -40,13 +40,8 @@ function setup() {
   sh.getProtections(SpreadsheetApp.ProtectionType.RANGE).forEach(p => p.remove());
 
   const p = sh.protect().setDescription('Topic list: only empty team cells are editable');
-  const open = [];
-  topicRows_(sh).forEach(r => TEAM_COLS.forEach(c => {
-    const cell = sh.getRange(r, c);
-    if (String(cell.getValue()).trim() === '') open.push(cell);
-  }));
-  p.setUnprotectedRanges(open);
   ownerOnly_(p);
+  syncOpenCells_(sh);
 
   // Team cells accept only registered team names (dropdown, invalid input rejected).
   const ts = ss.getSheetByName(TEAMS_SHEET);
@@ -71,6 +66,40 @@ function setup() {
   log.hideSheet();
 }
 
+// Every empty team cell is editable; every filled one is locked.
+function syncOpenCells_(sh) {
+  const p = sh.getProtections(SpreadsheetApp.ProtectionType.SHEET)[0];
+  const open = [];
+  topicRows_(sh).forEach(r => TEAM_COLS.forEach(c => {
+    const cell = sh.getRange(r, c);
+    if (String(cell.getValue()).trim() === '') {
+      open.push(cell);
+      cell.setBackground(null).setNote(null);
+    }
+  }));
+  p.setUnprotectedRanges(open);
+}
+
+function isOwner_(e) {
+  const who = e.user && e.user.getEmail ? e.user.getEmail() : '';
+  return who !== '' && who === Session.getEffectiveUser().getEmail();
+}
+
+function log_(cellA1, problem, team, who) {
+  SpreadsheetApp.getActive().getSheetByName('Log').appendRow([new Date(), cellA1, problem, team, who]);
+}
+
+// Owner menu: after clearing cells by hand, reopen them for selection.
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('Hackathon')
+    .addItem('Reopen cleared cells', 'reopenClearedCells')
+    .addToUi();
+}
+
+function reopenClearedCells() {
+  syncOpenCells_(SpreadsheetApp.getActive().getSheetByName(SHEET));
+}
+
 // Installable on-edit trigger: runs as the owner, so it may change protection.
 function onTeamEntry(e) {
   const r = e.range, sh = r.getSheet();
@@ -79,16 +108,25 @@ function onTeamEntry(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);                                  // one edit at a time
   try {
-    if (r.getNumRows() > 1 || r.getNumColumns() > 1) {   // no multi-cell paste or delete
-      r.clearContent();
+    const owner = isOwner_(e);
+    if (r.getNumRows() > 1 || r.getNumColumns() > 1) {   // multi-cell edit
+      if (owner) syncOpenCells_(sh);                     // organiser cleared a block: reopen it
+      else r.clearContent();                             // students may not paste or drag
       return;
     }
     const row = r.getRow(), col = r.getColumn();
     if (!TEAM_COLS.includes(col) || !topicRows_(sh).includes(row)) return;
+    const problem = sh.getRange(row, 1).getValue() + ' ' + sh.getRange(row, 2).getValue();
 
-    if (e.oldValue) r.setValue(e.oldValue);              // first writer wins
+    if (!owner && e.oldValue) r.setValue(e.oldValue);    // first writer wins
     let name = String(r.getValue()).trim();
-    if (!name) return;
+    if (!name) {
+      if (owner && e.oldValue) {                         // organiser cleared a selection
+        syncOpenCells_(sh);
+        log_(r.getA1Notation(), problem, `CLEARED (was ${e.oldValue})`, 'organiser');
+      }
+      return;
+    }
 
     // Only registered team names (also catches anything that slips past the dropdown).
     const official = registeredTeams_().find(t => t.toLowerCase() === name.toLowerCase());
@@ -99,7 +137,7 @@ function onTeamEntry(e) {
     }
     if (official !== name) { r.setValue(official); name = official; }
 
-    if (!e.oldValue) {                                   // one team, one topic
+    if (!e.oldValue || owner) {                          // one team, one topic
       const taken = topicRows_(sh)
         .flatMap(rr => TEAM_COLS.map(c => sh.getRange(rr, c).getDisplayValue().trim().toLowerCase()));
       if (taken.filter(v => v === name.toLowerCase()).length > 1) {
@@ -113,10 +151,7 @@ function onTeamEntry(e) {
     p.setUnprotectedRanges(p.getUnprotectedRanges().filter(u => u.getA1Notation() !== r.getA1Notation()));
     r.setBackground('#d9ead3').setNote(null);
 
-    SpreadsheetApp.getActive().getSheetByName('Log').appendRow([
-      new Date(), r.getA1Notation(), sh.getRange(row, 1).getValue() + ' ' + sh.getRange(row, 2).getValue(), name,
-      e.user && e.user.getEmail ? e.user.getEmail() : '',
-    ]);
+    log_(r.getA1Notation(), problem, name, owner ? 'organiser' : (e.user && e.user.getEmail ? e.user.getEmail() : ''));
   } finally {
     lock.releaseLock();
   }
