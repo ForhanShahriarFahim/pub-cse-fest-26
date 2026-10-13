@@ -141,12 +141,12 @@ function cover() {
     children: [run(text, { size, bold: o.bold, italics: o.italics, color: o.color, characterSpacing: o.spacing })],
   });
   const info = [
-    ["DEVELOPMENT PERIOD", "14 to 30 October 2026"],
-    ["PROJECT EVALUATION", "30 October 2026"],
+    ["DEVELOPMENT PERIOD", "14 to 29 Oct 2026"],
+    ["SUBMISSION DEADLINE", "29 Oct 2026, 11:59 AM"],
+    ["PROJECT EVALUATION", "30 Oct 2026"],
     ["TEAM SIZE", "5 Students"],
-    ["PROBLEMS", "19 in 5 Tracks"],
   ];
-  const colW = CONTENT_W / 4;
+  const colW = CONTENT_W / info.length;
   const rowRule = { style: BorderStyle.SINGLE, size: 12, color: "000000" };
   const sep = { style: BorderStyle.SINGLE, size: 4, color: "808080" };
   const infoTable = new Table({
@@ -155,10 +155,10 @@ function cover() {
     borders: { top: rowRule, bottom: rowRule, left: NO_BORDER, right: NO_BORDER, insideHorizontal: NO_BORDER, insideVertical: sep },
     rows: [new TableRow({ children: info.map(([k, v], i) => new TableCell({
       width: { size: colW, type: WidthType.DXA },
-      borders: { top: rowRule, bottom: rowRule, left: i ? sep : NO_BORDER, right: i < 3 ? sep : NO_BORDER },
-      margins: { top: 160, bottom: 160, left: 80, right: 80 },
+      borders: { top: rowRule, bottom: rowRule, left: i ? sep : NO_BORDER, right: i < info.length - 1 ? sep : NO_BORDER },
+      margins: { top: 160, bottom: 160, left: 40, right: 40 },
       verticalAlign: VerticalAlign.CENTER,
-      children: [c(k, 16, { color: GREY, spacing: 20, after: 60 }), c(v, 23, { bold: true })],
+      children: [c(k, 15, { color: GREY, spacing: 10, after: 60 }), c(v, 21, { bold: true })],
     })) })],
   });
   return [
@@ -370,8 +370,8 @@ function rulesPages() {
     heading("Timeline", 80),
     table([4200, CONTENT_W - 4200], null, [
       ["Problem set release and team registration", "14 October 2026"],
-      ["Development period", "14 October 2026 to 30 October 2026"],
-      ["Submission of repository link", "30 October 2026, before evaluation starts (time will be announced)"],
+      ["Development period", "14 October 2026 to 29 October 2026"],
+      ["Submission deadline (GitHub repository link)", "29 October 2026, 11:59 AM"],
       ["Project evaluation", "30 October 2026"],
     ], { boldFirst: true, size: 21 }),
     heading("General Rules"),
@@ -384,7 +384,7 @@ function rulesPages() {
       "Copying an existing project and presenting it as the team's own work leads to disqualification.",
       "External people must not develop any part of the solution for a team.",
       "No real money may be collected and no real personal, medical or financial data may be used. Use simulated or synthetic data.",
-      "There is no late submission. All projects are evaluated on 30 October 2026.",
+      "The GitHub repository link must be submitted by 11:59 AM on 29 October 2026, with the demo video link included in its README. There is no late submission. All projects are evaluated on 30 October 2026.",
       "The decision of the evaluation team is final.",
     ]),
     heading("Cybersecurity Safety Notice"),
@@ -400,7 +400,7 @@ function rulesPages() {
       "Everything shown will be tested. Evaluators will use the system themselves, enter invalid data, try to reach pages or data without permission, and check edge cases.",
       "Any evaluator may question any member about any part of the project, and may ask to see the source code, database, smart contract or model training code.",
       "A feature that does not work during evaluation is counted as not implemented. The demo video in the README is for reference and does not replace the live check.",
-      "The version evaluated must be the one in the submitted repository.",
+      "Only the work committed to the submitted repository before the deadline is evaluated. Commits made after 11:59 AM on 29 October 2026 are not considered.",
       "Teams set up their own laptops, phones and other devices before their evaluation slot. Internet access may be unreliable, so keep a local setup ready.",
     ]),
     para([run("Track E (Animated Short Film)", { bold: true, italics: true, size: 21 })], { keepNext: true, spacing: { before: 80, after: 20 } }),
@@ -410,14 +410,14 @@ function rulesPages() {
       "Evaluators may ask any member about their role and how specific scenes were produced.",
     ]),
     heading("Submission Requirements: Tracks A to D"),
-    para("Only a Git repository with a complete README is required. No report or slides are needed.", { spacing: { after: 60 } }),
+    para("Only a GitHub repository with a complete README, including the demo video link, is required. No report or slides are needed.", { spacing: { after: 60 } }),
     ...bullets([
       "Git repository (GitHub or GitLab) with the complete source code. If the repository is private, give access to the evaluators. The commit history should show work across the development period. Do not commit passwords, API keys or .env files.",
       "README.md in the root of the repository containing:",
     ]),
     ...[
       "Problem ID and title, team name, and members with name, student ID and role.",
-      "Demo video: a link at the top of the README to a 5 to 10 minute screen recording (YouTube unlisted or Google Drive) showing the main features.",
+      "Demo video (mandatory): a link at the top of the README to a 5 to 10 minute screen recording (YouTube unlisted or Google Drive, viewable by anyone with the link) showing the main features. A repository without the video link in its README is treated as an incomplete submission.",
       "A short description of the solution and the technology stack.",
       "Feature status table: each required feature marked Done, Partial or Not done, followed by the team's additional features.",
       "Step-by-step setup and run instructions, an example environment file, and sample login accounts for every role.",
@@ -441,8 +441,8 @@ function rulesPages() {
       ["Problem Understanding", "10", "Clear grasp of the problem, users and requirements."],
       ["Functionality", "25", "Required features work correctly when tested by the evaluators."],
       ["Technical Implementation", "20", "Sound architecture, code quality and appropriate use of technology."],
-      ["Security and Reliability", "15", "Authentication, access control, data protection and handling of invalid input."],
-      ["Innovation", "10", "Original ideas, useful additions and creative modifications beyond the minimum scope."],
+      ["Security and Reliability", "10", "Authentication, access control, data protection and handling of invalid input."],
+      ["Innovation", "15", "Original ideas, useful additions and creative modifications beyond the minimum scope."],
       ["UI/UX", "10", "Ease of use, clarity and accessibility of the interface."],
       ["Explanation and Q&A", "10", "Every member explains the work clearly and answers questions correctly."],
       total,
