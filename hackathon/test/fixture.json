@@ -1,0 +1,384 @@
+{
+"Sheet1": [
+[
+"PUB CSE Fest 2026 Hackathon Topic List",
+"",
+"",
+"",
+""
+],
+[
+"Track",
+"Topic",
+"Team 1",
+"Team 2",
+"Teams (max 2)"
+],
+[
+"Track A: Blockchain and Cybersecurity",
+"",
+"",
+"",
+""
+],
+[
+"A1",
+"PUB CertChain: Blockchain-Based Academic Certificate Verification",
+"",
+"",
+""
+],
+[
+"A2",
+"PUB Helping Hand: Blockchain-Based Transparent Fundraising and Student Assistance Platform",
+"",
+"",
+""
+],
+[
+"A3",
+"PUB PhishGuard: Phishing Detection and Awareness Platform",
+"",
+"",
+""
+],
+[
+"A4",
+"PUB MediVault: Secure Digital Health Record and Consent Management",
+"",
+"",
+""
+],
+[
+"Track B: Artificial Intelligence and Machine Learning ",
+"",
+"",
+"",
+""
+],
+[
+"B1",
+"PUB NoticeLens: AI-Powered Bengali/English Notice and Document Intelligence",
+"",
+"",
+""
+],
+[
+"B2",
+"PUB AssessAI: AI Question Preparation, Assessment and Learning Portal",
+"",
+"",
+""
+],
+[
+"B3",
+"PUB SkillSync: AI-Powered Skill Matching, Productivity and Academic Early-Warning Platform",
+"",
+"",
+""
+],
+[
+"B4",
+"PUB AttendEye: Computer-Vision-Based Smart Attendance System",
+"",
+"",
+""
+],
+[
+"Track C: Smart Campus Services",
+"",
+"",
+"",
+""
+],
+[
+"C1",
+"PUB CampusMate: Smart Campus Companion with Academic Planning, Course Registration and AI Helpdesk",
+"",
+"",
+""
+],
+[
+"C2",
+"PUB SafeCampus: Emergency Response and Campus Safety Application",
+"",
+"",
+""
+],
+[
+"C3",
+"SmartRent BD: Student Housing and Roommate Matching Platform",
+"",
+"",
+""
+],
+[
+"C4",
+"PUB CampusRide: Campus Transport Scheduling and Operations Portal",
+"",
+"",
+""
+],
+[
+"C5",
+"PUB FestHub: Campus Event, Competition and Coding Contest Operations Platform",
+"",
+"",
+""
+],
+[
+"Track D: Academic and EdTech Platforms ",
+"",
+"",
+"",
+""
+],
+[
+"D1",
+"PUB SuperVise: Project and Thesis Supervision and Collaboration Portal",
+"",
+"",
+""
+],
+[
+"D2",
+"PUB GradPath: Higher-Study Discovery and Application Workspace",
+"",
+"",
+""
+],
+[
+"D3",
+"PUB RoboRoute: Campus Delivery Robot: A Programming and Logic Game",
+"",
+"",
+""
+],
+[
+"Track E: Animated Short Film",
+"",
+"",
+"",
+""
+],
+[
+"E1",
+"A Day in the Life of a CSE Student",
+"",
+"",
+""
+],
+[
+"E2",
+"From Student to Software Engineer",
+"",
+"",
+""
+],
+[
+"E3",
+"The Code That Changed Our Department",
+"",
+"",
+""
+]
+],
+"Teams": [
+[
+"#",
+"Team Name",
+"Leader Email",
+"Choose Topic (team leader only)",
+"Status"
+],
+[
+"1",
+"QUANTROX",
+"rakibsami17@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"2",
+"Syntax zero",
+"hafsakhatun5355@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"3",
+"Semicolon Survivors",
+"mdzisanulhaque989@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"4",
+"TEAM_HAIL_HYDRA",
+"mdahsanurrahaman2456@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"5",
+"LostOnceNowTwice",
+"amorto.goon.121@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"6",
+"PUB ByteNova",
+"mdatikur.contact@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"7",
+"Code Scout",
+"m.mehedihasan.personal@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"8",
+"Pentabyte",
+"per.rafiuli02@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"9",
+"StackForge",
+"mdshoaibfullstack@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"10",
+"Team Unpredictable",
+"akashislamcse6644@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"11",
+"Code Spark",
+"tasnimpushpita1@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"12",
+"Nova-Strike",
+"hossainalmas498@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"13",
+"NovaFive",
+"joykumar9556@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"14",
+"NotStrongEnough",
+"anikplsc@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"15",
+"The VARCHARs",
+"ath37215@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"16",
+"The Penta Labours",
+"ferozahmedafm@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"17",
+"Devnexus",
+"tpscarif@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"18",
+"BUG SLAYER",
+"nafiulsheak.pubcse@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"19",
+"SyntaxSpark",
+"samihashama2020@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"20",
+"FSociety",
+"sadinhaqe@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"21",
+"ASTRA-23",
+"mdtanzid.525@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"22",
+"Humpty Dumpty",
+"shariful.cse25.58@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"23",
+"DEMO Team 1",
+"mzijuwel.pub16@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"24",
+"DEMO Team 2",
+"mzijuwel@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"25",
+"DEMO Team 3",
+"dfahim432@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"26",
+"DEMO Team 4",
+"forhan.shahriar.fahim@gmail.com",
+"",
+"Not yet chosen"
+],
+[
+"27",
+"DEMO Team 5",
+"forhanshahriargemini@gmail.com",
+"",
+"Not yet chosen"
+]
+]
+}
