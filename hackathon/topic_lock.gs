@@ -4,10 +4,18 @@
 // Layout (as in PUB_CSE_Fest_2026_Hackathon_Topic_selection.xlsx):
 //   column A = problem ID (A1..E3), B = topic, C = Team 1, D = Team 2, E = count formula.
 //   Track heading rows and the header row are detected and stay locked.
+//   Sheet 'Teams' lists the registered team names (column B); team cells accept only those names.
 
 const SHEET = 'Sheet1';            // tab name of the topic list
 const TEAM_COLS = [3, 4];          // C = Team 1, D = Team 2
 const ID_PATTERN = /^[A-E]\d$/;    // rows whose column A looks like "C1" are topic rows
+const TEAMS_SHEET = 'Teams';       // registered team names in column B, from row 2
+
+function registeredTeams_() {
+  const ts = SpreadsheetApp.getActive().getSheetByName(TEAMS_SHEET);
+  return ts.getRange(2, 2, Math.max(ts.getLastRow() - 1, 1), 1).getDisplayValues()
+    .map(v => v[0].trim()).filter(Boolean);
+}
 
 function topicRows_(sh) {
   const ids = sh.getRange(1, 1, sh.getLastRow(), 1).getDisplayValues();
@@ -40,6 +48,17 @@ function setup() {
   p.setUnprotectedRanges(open);
   ownerOnly_(p);
 
+  // Team cells accept only registered team names (dropdown, invalid input rejected).
+  const ts = ss.getSheetByName(TEAMS_SHEET);
+  const rule = SpreadsheetApp.newDataValidation()
+    .requireValueInRange(ts.getRange(2, 2, Math.max(ts.getLastRow() - 1, 1), 1), true)
+    .setAllowInvalid(false)
+    .setHelpText('Choose your registered team name.')
+    .build();
+  topicRows_(sh).forEach(r => TEAM_COLS.forEach(c => sh.getRange(r, c).setDataValidation(rule)));
+  ts.getProtections(SpreadsheetApp.ProtectionType.SHEET).forEach(x => x.remove());
+  ownerOnly_(ts.protect().setDescription('Registered teams'));
+
   ScriptApp.getProjectTriggers().forEach(t => ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger('onTeamEntry').forSpreadsheet(ss).onEdit().create();
 
@@ -68,8 +87,17 @@ function onTeamEntry(e) {
     if (!TEAM_COLS.includes(col) || !topicRows_(sh).includes(row)) return;
 
     if (e.oldValue) r.setValue(e.oldValue);              // first writer wins
-    const name = String(r.getValue()).trim();
+    let name = String(r.getValue()).trim();
     if (!name) return;
+
+    // Only registered team names (also catches anything that slips past the dropdown).
+    const official = registeredTeams_().find(t => t.toLowerCase() === name.toLowerCase());
+    if (!official) {
+      r.clearContent();
+      r.setNote(`Rejected: "${name}" is not a registered team name.`);
+      return;
+    }
+    if (official !== name) { r.setValue(official); name = official; }
 
     if (!e.oldValue) {                                   // one team, one topic
       const taken = topicRows_(sh)
