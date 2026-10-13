@@ -125,6 +125,8 @@ function setup() {
     ownerOnly_(log.protect().setDescription('Log'));
   }
   log.hideSheet();
+  processPending_(ts, sh);                               // repair rows that do not match the topic list
+  SpreadsheetApp.flush();
 }
 
 // Assign one pending choice (cell filled, status not Locked). Caller holds the script lock.
@@ -132,7 +134,17 @@ function assign_(ts, sh, row, by) {
   const cell = ts.getRange(row, COL_CHOICE);
   const choice = cell.getDisplayValue().trim();
   const team = ts.getRange(row, COL_NAME).getDisplayValue().trim();
-  if (!choice || ts.getRange(row, COL_STATUS).getDisplayValue() === 'Locked') return;
+
+  // Already in the topic list: the choice is done. Make the Teams row match and stop.
+  const placed = topicRows_(sh).find(r => TEAM_COLS.some(c =>
+    sh.getRange(r, c).getDisplayValue().trim().toLowerCase() === team.toLowerCase()));
+  if (placed) {
+    const label = sh.getRange(placed, 1).getDisplayValue().trim() + ' ' + sh.getRange(placed, 2).getDisplayValue().trim();
+    if (cell.getDisplayValue().trim() !== label) cell.setValue(label);
+    if (ts.getRange(row, COL_STATUS).getDisplayValue() !== 'Locked') lockChoice_(ts, row);
+    return;
+  }
+  if (!choice) return;
 
   const tr = findTopicRow_(sh, choice);
   if (!tr) { cell.clearContent(); cell.setNote('Rejected: choose a topic from the list.'); return; }
@@ -166,7 +178,7 @@ function processPendingNow() {
   const lock = LockService.getScriptLock();
   lock.waitLock(300000);
   try { processPending_(ss_().getSheetByName(TEAMS_SHEET), ss_().getSheetByName(TOPIC_SHEET)); }
-  finally { lock.releaseLock(); }
+  finally { SpreadsheetApp.flush(); lock.releaseLock(); }
 }
 
 // Installable on-edit trigger: runs as the owner, so it may change protections.
@@ -197,6 +209,7 @@ function onChoice(e) {
     assign_(ts, sh, row, owner ? 'organiser' : (who || 'leader'));   // this edit first
     processPending_(ts, sh);                                         // then anything left behind
   } finally {
+    SpreadsheetApp.flush();                              // write everything before the next run reads
     lock.releaseLock();
   }
 }
