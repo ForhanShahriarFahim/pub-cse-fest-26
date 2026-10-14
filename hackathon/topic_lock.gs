@@ -30,7 +30,7 @@
  */
 
 // ===== Settings =====
-const SPREADSHEET_ID = '1BsZN4_hy8e-TowAwR6uZzUmM2C79luCtB3a0eKIuTrQ';  // from the sheet URL
+const SPREADSHEET_ID = 'PASTE_THE_GOOGLE_SHEET_ID_HERE';  // from the Google Sheet URL: .../spreadsheets/d/<ID>/edit
 const TOPIC_SHEET = 'Sheet1';
 const TEAMS_SHEET = 'Teams';
 const LOG_SHEET = 'Log';
@@ -46,7 +46,18 @@ const LOCKED = 'Locked';
 const GREEN = '#d9ead3', RED = '#f4cccc';
 
 // ===== Basics =====
-function book_() { return SPREADSHEET_ID ? SpreadsheetApp.openById(SPREADSHEET_ID) : SpreadsheetApp.getActive(); }
+function book_() {
+  if (!SPREADSHEET_ID || SPREADSHEET_ID.indexOf('PASTE') === 0) {
+    const active = SpreadsheetApp.getActive();
+    if (active) return active;
+    throw new Error('Set SPREADSHEET_ID at the top of the script to the Google Sheet ID (from its URL), then save.');
+  }
+  try { return SpreadsheetApp.openById(SPREADSHEET_ID); }
+  catch (err) {
+    throw new Error('Cannot open the spreadsheet ' + SPREADSHEET_ID + '. Use the ID of the Google Sheet ' +
+      '(green icon, has an Extensions menu), not of an .xlsx file, and run this as the sheet owner. (' + err.message + ')');
+  }
+}
 function props_() { return PropertiesService.getScriptProperties(); }
 function phase_() { return props_().getProperty('PHASE') || 'waiting'; }     // waiting | prepared | open | closed
 function leaderAccess_() { const p = phase_(); return p === 'prepared' || p === 'open'; }
@@ -570,7 +581,7 @@ function status() {
   const st = load_();
   const locked = st.teams.filter(t => t.status === LOCKED).length;
   const errors = st.teams.filter(t => t.status.indexOf('ERROR') === 0);
-  const lines = ['Phase: ' + phase_(), 'Teams: ' + st.teams.length + ', locked: ' + locked + ', not yet: ' + (st.teams.length - locked)];
+  const lines = ['Spreadsheet: ' + st.ss.getName(), 'Phase: ' + phase_(), 'Teams: ' + st.teams.length + ', locked: ' + locked + ', not yet: ' + (st.teams.length - locked)];
   errors.forEach(t => lines.push('Row ' + t.row + ' ' + t.name + ': ' + t.status));
   st.topics.forEach(t => { if (t.slots.filter(Boolean).length) lines.push(t.id + ': ' + t.slots.filter(Boolean).join(', ')); });
   console.log(lines.join('\n'));

@@ -130,6 +130,7 @@ function makeWorld({ noFlush = false, scriptPatch = s => s } = {}) {
     getOwner: () => user(OWNER),
     getEditors: () => [OWNER, ...W.fileEditors].map(user),
     getId: () => 'ID',
+    getName: () => 'PUB CSE FEST-26 Hackathon Team Selection',
   };
 
   // ---------- services ----------
