@@ -195,14 +195,17 @@ function makeWorld({ noFlush = false, scriptPatch = s => s } = {}) {
   function settle() { apply(W.deferred); W.deferred = []; }
   const owner = name => { W.activeUser = OWNER; run(() => ctx[name]()); settle(); };
 
-  function edit(email, sheetName, r, c, value) {   // a person edits one cell (committed at once)
+  // A person edits one cell (committed at once). paste: also wipes the cell's dropdown, as pasting does.
+  // hideUser: Google does not tell the script who edited (e.user email is empty).
+  function edit(email, sheetName, r, c, value, { paste = false, hideUser = false } = {}) {
     const sh = W.sheets[sheetName];
     if (!canEdit(email, sh, r, c)) return null;
-    const dv = (sh.cells.get(`${r},${c}`) || {}).dv;
-    if (dv && !dv.allowInvalid && value !== '' && !dv.values().includes(value)) return null;
+    const rec = cellRec(sh, r, c);
+    if (paste) rec.dv = null;
+    if (rec.dv && !rec.dv.allowInvalid && value !== '' && !rec.dv.values().includes(value)) return null;
     const old = read(sh, r, c, 'v');
     apply([{ sh, r, c, field: 'v', value }]);
-    return { range: new Range(sh, r, c), user: user(email), oldValue: old === '' ? undefined : old, value };
+    return { range: new Range(sh, r, c), user: user(hideUser ? '' : email), oldValue: old === '' ? undefined : old, value };
   }
   function trigger(e) { run(() => ctx.onChoice(e)); }
   function stamp(e) {                     // the part of onChoice that runs before waiting for the lock
@@ -524,6 +527,56 @@ test('full run: all 27 teams choose at once (random topics, random run order)', 
       });
     });
   }
+});
+
+test('owner deletes a Locked cell even when Google hides who edited', () => {
+  const T = fresh(); globalT = T; T.owner('openSelection');
+  const t = view(T).team('DEMO Team 4');
+  T.trigger(T.edit(t.email, 'Teams', t.r, D, label(T, 'A1')));
+  T.trigger(T.edit(OWNER, 'Teams', t.r, D, '', { hideUser: true }));
+  const V = view(T);
+  assert.strictEqual(V.topic('A1').slots.join(''), '');
+  assert.strictEqual(V.team('DEMO Team 4').status, 'Cancelled: choose again');
+  assert(T.canEdit(t.email, T.W.sheets.Teams, t.r, D));
+  checkConsistent(T, 'hidden owner cancel');
+});
+
+test('owner pastes an email over a Locked choice: restored and the dropdown comes back', () => {
+  const T = fresh(); globalT = T; T.owner('openSelection');
+  const t = view(T).team('DEMO Team 3');
+  T.trigger(T.edit(t.email, 'Teams', t.r, D, label(T, 'B2')));
+  T.trigger(T.edit(OWNER, 'Teams', t.r, D, 'dfahim432@gmail.com', { paste: true, hideUser: true }));
+  const V = view(T);
+  assert.strictEqual(V.team('DEMO Team 3').choice, label(T, 'B2'));
+  assert(T.W.sheets.Teams.cells.get(`${t.r},${D}`).dv, 'dropdown not restored');
+  checkConsistent(T, 'owner paste');
+});
+
+test('the broken sheet from the screenshot is cleaned by setup', () => {
+  const T = makeWorld(); globalT = T;
+  view(T).teams.forEach(t => T.W.fileEditors.add(t.email));
+  const ts = T.W.sheets.Teams, r3 = view(T).team('DEMO Team 3').r, r4 = view(T).team('DEMO Team 4').r;
+  ts.cells.set(`${r3},4`, { v: 'dfahim432@gmail.com' });                 // email pasted into the choice
+  ts.cells.set(`${r4},4`, { v: '', bg: '#d9ead3', note: 'old note' });   // green, empty, old note
+  view(T).teams.forEach(t => { ts.cells.set(`${t.r},5`, { v: 'Not yet chosen' }); });
+  T.owner('setup');
+  const V = view(T);
+  assert.strictEqual(V.team('DEMO Team 3').choice, '');
+  assert.strictEqual(ts.cells.get(`${r4},4`).bg, null);
+  V.teams.forEach(t => { assert.strictEqual(t.status, 'Opens at 11:00 AM'); assert(ts.cells.get(`${t.r},4`).dv, 'no dropdown on ' + t.name); });
+  checkConsistent(T, 'cleaned');
+});
+
+test('resetAllChoices() empties everything after a demo, but not while open', () => {
+  const T = fresh(); globalT = T; T.owner('openSelection');
+  ['DEMO Team 1', 'DEMO Team 2', 'QUANTROX'].forEach((n, i) => { const t = view(T).team(n); T.trigger(T.edit(t.email, 'Teams', t.r, D, view(T).topics[i].label)); });
+  assert.throws(() => T.owner('resetAllChoices'), /closeSelection/);
+  T.owner('closeSelection');
+  T.owner('resetAllChoices');
+  const V = view(T);
+  V.topics.forEach(tp => assert.strictEqual(tp.slots.join(''), ''));
+  V.teams.forEach(t => assert.strictEqual(t.status, 'Selection closed'));
+  checkConsistent(T, 'reset');
 });
 
 // ---------- report ----------

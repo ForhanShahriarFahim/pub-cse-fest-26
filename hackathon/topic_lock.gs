@@ -25,6 +25,7 @@
  *   closeSelection()  when done
  *   repair()          any time: fixes rows that disagree with the topic list, re-applies access
  *   cancelTeam()      cancels TEAM_TO_CANCEL (or just delete that team's D cell in the sheet)
+ *   resetAllChoices() clears every choice and the topic list (e.g. after the demo); not while open
  *   status()          prints a summary to the execution log
  */
 
@@ -275,6 +276,18 @@ function reconcile_(st, ownerRows, stamps) {
   });
 }
 
+// Dropdown on the choice cells (values from the hidden Lists sheet). Pasting removes a dropdown, so it is re-applied.
+function applyDropdown_(st, teams) {
+  const ls = st.ss.getSheetByName(LIST_SHEET);
+  if (!ls || !st.topics.length) return;
+  const rule = SpreadsheetApp.newDataValidation()
+    .requireValueInRange(ls.getRange(1, 1, st.topics.length, 1), true)
+    .setAllowInvalid(false)
+    .setHelpText('Choose your topic. Once accepted it is final.')
+    .build();
+  teams.forEach(t => st.ts.getRange(t.row, COL_CHOICE).setDataValidation(rule).setNote(''));
+}
+
 // ===== Locking and sending =====
 function ownerLock_(fn) {
   if (!withLock_(60000, fn)) throw new Error('The sheet is busy processing choices. Try again in a minute.');
@@ -314,7 +327,9 @@ function onChoice(e) {
     if (!inChoices && !inSlots) return;
 
     const who = normEmail_(e.user && e.user.getEmail ? e.user.getEmail() : '');
-    const byOwner = who !== '' && who === owner_();
+    // Google does not always tell the script who edited. Only the owner can edit the topic list,
+    // a Locked cell, or any cell while leaders have no access, so those edits are the owner's too.
+    const byOwner = (who !== '' && who === owner_()) || inSlots;
 
     if (inChoices && !byOwner) {                     // arrival time: queued choices are handled in this order
       const p = props_(), now = String(Date.now());
@@ -324,8 +339,12 @@ function onChoice(e) {
       const stamps = props_().getProperties();
       const st = load_();
       const ownerRows = new Set();
-      if (byOwner && inChoices) for (let r = r1; r <= r2; r++) ownerRows.add(r);
-      if (byOwner && inSlots && r1 === r2 && c1 === c2) keepOwnerPlacement_(st, r1, c1);
+      if (inChoices) st.teams.forEach(t => {
+        if (t.row < r1 || t.row > r2) return;
+        if (byOwner || t.status === LOCKED || !leaderAccess_()) ownerRows.add(t.row);
+      });
+      if (ownerRows.size) applyDropdown_(st, st.teams.filter(t => ownerRows.has(t.row)));
+      if (inSlots && r1 === r2 && c1 === c2) keepOwnerPlacement_(st, r1, c1);
       cleanTopicList_(st, false);
       reconcile_(st, ownerRows, stamps);
       return st;
@@ -406,12 +425,7 @@ function setup() {
     ls.getProtections(P.SHEET).forEach(p => p.remove());
     ownerOnly_(ls.protect().setDescription('Topic labels for the dropdown'));
     ls.hideSheet();
-    const rule = SpreadsheetApp.newDataValidation()
-      .requireValueInRange(ls.getRange(1, 1, st.topics.length, 1), true)
-      .setAllowInvalid(false)
-      .setHelpText('Choose your topic. Once accepted it is final.')
-      .build();
-    st.teams.forEach(t => st.ts.getRange(t.row, COL_CHOICE).setDataValidation(rule).setNote(''));
+    applyDropdown_(st, st.teams);
     st.topics.forEach(tp2 => TEAM_COLS.forEach(c => st.sh.getRange(tp2.row, c).clearDataValidations().setNote('')));
 
     let lg = st.ss.getSheetByName(LOG_SHEET);
@@ -500,9 +514,11 @@ function repair() {
     const stamps = props_().getProperties();
     const st = load_();
     cleanTopicList_(st, true);
+    applyDropdown_(st, st.teams);
     reconcile_(st, new Set(), stamps);
     st.teams.forEach(t => {
       if (t.status === LOCKED) { setAccess_(st, t, false); return; }
+      if (!placedTopic_(st, t) && t.choice) { setChoice_(st, t, ''); st.ts.getRange(t.row, COL_CHOICE).setBackground(null); }
       const problem = setAccess_(st, t, leaderAccess_());
       if (problem) setStatus_(st, t, problem, RED);
       else if (t.status === '' || t.status.indexOf('ERROR') === 0) setStatus_(st, t, idleText_(), null);
@@ -523,6 +539,28 @@ function cancelTeam() {
     unplace_(st, team);
     reopenRow_(st, team, phase_() === 'open' ? 'Cancelled: choose again' : idleText_());
     log_(st, 'CANCELLED', team.name, placed ? placed.label : '', 'organiser');
+    return st;
+  });
+  status();
+}
+
+// Clears every choice (for example after the demo test). Not allowed while selection is open.
+function resetAllChoices() {
+  requireOwner_();
+  if (phase_() === 'open') throw new Error('Selection is open. Run closeSelection() first.');
+  ownerLock_(() => {
+    const st = load_();
+    st.topics.forEach(tp => tp.slots.forEach((v, k) => { if (v) setSlot_(st, tp, k, ''); }));
+    Object.keys(props_().getProperties()).filter(k => k.indexOf('pending_') === 0).forEach(k => props_().deleteProperty(k));
+    applyDropdown_(st, st.teams);
+    st.teams.forEach(t => {
+      setChoice_(st, t, '');
+      st.ts.getRange(t.row, COL_CHOICE).setBackground(null);
+      const problem = setAccess_(st, t, leaderAccess_());
+      t.status = '';
+      setStatus_(st, t, problem || idleText_(), problem ? RED : null);
+    });
+    log_(st, 'RESET ALL CHOICES', '', '', 'organiser');
     return st;
   });
   status();
