@@ -32,6 +32,10 @@ Each problem folder has:
 
 Contest page setup (name, dates, description, rules): see [CONTEST.md](CONTEST.md).
 
+Printed problem set for the contestants (Word, one problem per page, page numbers):
+[contest/PUB-CSE-Fest-26-Problem-Set.docx](contest/PUB-CSE-Fest-26-Problem-Set.docx).
+Rebuild it with `python3 tools/build_print.py` (needs `pip install python-docx`).
+
 Contest order: the giveaways first, then the rest shuffled. Final contest letters are
 assigned at the end.
 
