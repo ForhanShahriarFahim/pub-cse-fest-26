@@ -1,14 +1,12 @@
 # HackerRank contest setup (PUB CSE Fest-26)
 
-The date below is a **placeholder** (after the fest). Change it once the real date is fixed.
-
 ## Page 1: Create Contest
 
 | Field | Value |
 |---|---|
 | Contest Name | `PUB CSE Fest-26 Programming Contest` |
-| Start Time | **31 Dec 2026** at **10:00 AM** BDT (placeholder) |
-| End Time | **31 Dec 2026** at **12:30 PM** BDT (2 h 30 min after the start) |
+| Start Time | **30 Oct 2026** at **10:00 AM** BDT |
+| End Time | **30 Oct 2026** at **1:00 PM** BDT (3 hours after the start) |
 | "This contest has no end time" | leave **unticked** |
 | Organization Type | the university / college option in the list |
 | Organization Name | `Pundra University of Science & Technology` |
@@ -18,14 +16,15 @@ public before the problems are ready.
 
 ## Page 2: Contest details
 
-Background image: upload `contest/banner.png` (1920 × 640). HackerRank prints the
-contest name, date and Sign Up button in the middle, so the banner keeps the middle
-clear and puts the fest logo on the right. `contest/banner-preview.png` shows the
-expected result. Regenerate with `python3 contest/draw_banner.py`.
+Background image: upload `contest/banner-v3.png` (1920 × 640, a copy of `banner.png`
+under a new name so browsers do not show a cached old banner). HackerRank prints the
+contest name, date and Sign Up button in the middle and crops the image from the right
+on narrower windows, so the banner keeps the middle clear, puts the fest logo on the
+left and the code symbols on the right. `contest/banner-preview.png` shows the expected
+result on a 1280 px wide window. Regenerate with `python3 contest/draw_banner.py`.
 
-HackerRank shows these sections **centered**, so they are written as short
-paragraphs (one blank line between them) instead of bullet lists, which look ragged
-when centered.
+HackerRank shows the Description (About) **centered**, so it is written as short
+paragraphs (one blank line between them). Prizes, Rules and Scoring are left-aligned.
 
 Contest URL (slug):
 ```
@@ -41,7 +40,7 @@ Description:
 ```
 **Celebrating 12 years of PUB CSE!**
 
-The programming contest of **PUB CSE Fest-26**: teams of three, 2 hours 30 minutes, 11 problems.
+The programming contest of **PUB CSE Fest-26**: teams of three, 3 hours, 10 problems.
 
 From friendly warm-ups to a couple of tough challenges, read every problem and choose your battles wisely.
 
@@ -71,8 +70,6 @@ Rules:
 
 **Questions:** if a statement is unclear, raise your hand and ask a judge. Judges will only clarify the statement; they will not help with solutions.
 
-**Frozen leaderboard:** the leaderboard freezes 30 minutes before the end. Keep solving: every accepted problem in the last 30 minutes still counts, and the final results are announced at the prize-giving ceremony.
-
 **Respect the spirit of the fest:** any form of cheating leads to disqualification, and the judges' decision is final.
 ```
 
@@ -98,34 +95,32 @@ Scoring:
 | Leaderboard | **ACM Leaderboard** |
 | Penalty (in seconds) | **1200** (20 minutes) |
 | Penalize Compilation Error | **unticked** (ICPC does not penalize compile errors) |
-| Freeze Leaderboard at | **leave empty for now**; fill it in once the date is fixed (see below) |
+| Freeze Leaderboard at | **1793341800** (30 Oct 2026, 12:30 PM BDT, see below) |
 | Tiebreaker | keep **Sum of time of the first (accepted) submissions** |
 | Time Used for Tiebreaking | keep **Start of the Contest** |
 | Hide Challenge Difficulty Tags | **ticked** (the problems are shuffled, as in ICPC) |
 
 Then click **Save Draft**, not *Publish*.
 
-### Freeze time (only once the real date is fixed)
+### Freeze time
 
 "Freeze Leaderboard at" takes a **Unix timestamp** (seconds since 1970-01-01 UTC).
-Freeze 30 minutes before the end, i.e. at 2:00 into the 2:30 contest. BDT is UTC+6.
-
-For the placeholder date it would be:
+Freeze 30 minutes before the end, i.e. at 2:30 into the 3-hour contest. BDT is UTC+6.
 
 | Moment (BDT) | Unix time |
 |---|---|
-| Start: 31 Dec 2026, 10:00 | 1798689600 |
-| Freeze: 31 Dec 2026, 12:00 | 1798696800 |
-| End: 31 Dec 2026, 12:30 | 1798698600 |
+| Start: 30 Oct 2026, 10:00 | 1793332800 |
+| Freeze: 30 Oct 2026, 12:30 | 1793341800 |
+| End: 30 Oct 2026, 13:00 | 1793343600 |
 
-For the real date, compute it in Python, replacing the date and time:
+If the date or time changes, recompute it in Python, replacing the date and time:
 
 ```
-python3 -c "from datetime import *; print(int(datetime(2026,12,31,12,0,tzinfo=timezone(timedelta(hours=6))).timestamp()))"
+python3 -c "from datetime import *; print(int(datetime(2026,10,30,12,30,tzinfo=timezone(timedelta(hours=6))).timestamp()))"
 ```
 
-Do not leave a placeholder freeze time in place: if the real contest is later than
-that moment, the leaderboard would be frozen from the very start.
+Keep the freeze time in step with the start time: if the contest moves later than the
+freeze moment, the leaderboard would be frozen from the very start.
 
 ## When adding the challenges (Challenges tab)
 
